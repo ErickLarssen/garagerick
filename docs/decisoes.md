@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-08 — Fontes em subset latin
+- **Contexto:** `@fontsource` traz vários subsets (latin, latin-ext, devanagari…).
+- **Decisão:** importar só `latin-<peso>.css` em `src/styles/global.css` (Poppins 400/500/600/700, Rajdhani 600/700). `site` fica literal no `astro.config.mjs` até a tarefa de `lib/site.ts`.
+- **Motivo:** o subset latin cobre o português (U+0000–00FF) com bem menos peso; meta de < 600 kB (`docs/07`).
+- **Impacto:** `src/styles/global.css`, `astro.config.mjs`.
+
 ### 2026-10-08 — Projeto inicializado com Astro 7
 - **Contexto:** `npm create astro` (template `minimal`) instalou Astro 7.3.8 e TypeScript 6; o template também traz `CLAUDE.md`/`AGENTS.md` genéricos.
 - **Decisão:** template gerado numa pasta temporária e copiado para a raiz (sem os `CLAUDE.md`/`AGENTS.md` dele, preservando os nossos). `tsconfig` estende `astro/tsconfigs/strict`. Script `check` provisório = `astro check` (ESLint/Prettier entram na tarefa de configuração). Node ≥ 22.12 (exigência do Astro).

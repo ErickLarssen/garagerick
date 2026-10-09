@@ -1,0 +1,9 @@
+@import 'tailwindcss';
+
+/* Fontes auto-hospedadas (subset latin cobre o português) — docs/02 e docs/04 */
+@import '@fontsource/poppins/latin-400.css';
+@import '@fontsource/poppins/latin-500.css';
+@import '@fontsource/poppins/latin-600.css';
+@import '@fontsource/poppins/latin-700.css';
+@import '@fontsource/rajdhani/latin-600.css';
+@import '@fontsource/rajdhani/latin-700.css';
