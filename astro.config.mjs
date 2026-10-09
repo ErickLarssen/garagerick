@@ -2,11 +2,11 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+import { SITE } from './src/lib/site.ts';
 
 // https://astro.build/config
 export default defineConfig({
-  // TODO: ler de SITE.url em src/lib/site.ts (tarefa "Criar lib/site.ts"). Domínio provisório.
-  site: 'https://garagerick.online',
+  site: SITE.url,
   output: 'static',
   integrations: [sitemap()],
   vite: {

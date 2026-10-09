@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-08 — `astro.config.mjs` importa `SITE` de `src/lib/site.ts`
+- **Contexto:** decisão de manter a URL do site numa fonte única.
+- **Decisão:** `import { SITE } from './src/lib/site.ts'` no `astro.config.mjs` (`site: SITE.url`); o Astro carrega o config via Vite, então o import de `.ts` funciona. Resolve o `site` literal provisório da tarefa de Tailwind/sitemap.
+- **Motivo:** trocar domínio = editar só `lib/site.ts`.
+- **Impacto:** `astro.config.mjs`, `src/lib/site.ts`.
+
 ### 2026-10-08 — Tokens em `@theme static`
 - **Contexto:** o Tailwind v4 só emite as variáveis de `@theme` que detecta em uso; tokens usados apenas em `<style>` de componentes ou em scripts (ex.: `--ease-garage`) sumiam do CSS.
 - **Decisão:** `@theme static` em `global.css`. Nomes adicionais: `--font-sans` (Poppins), `--font-display` (Rajdhani), `--ease-garage` (easing padrão) e utilitário `numeric` (Rajdhani 600 + `tabular-nums`). `--ambient` nasce em `:root` com `--color-ambient-default`. A regra global de `prefers-reduced-motion` zera só `animation` e `scroll-behavior` — transições ficam, para permitir o crossfade de 150 ms previsto no `docs/04`.

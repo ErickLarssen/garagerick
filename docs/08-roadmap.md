@@ -10,7 +10,7 @@
 - [x] Configurar alias `@/`, ESLint, Prettier e scripts do `package.json` (`docs/02`)
 - [x] Criar `.gitignore`, `.prettierignore`, atualizar `README.md` (como rodar e como adicionar veículo) e commit
 - [x] Criar `src/styles/global.css` com tokens de `docs/04` (cores, fontes, escala)
-- [ ] Criar `lib/site.ts`
+- [x] Criar `lib/site.ts`
 
 **Entrega:** página em branco estilizada com o fundo e as fontes corretas; `check` e `build` passando.
 

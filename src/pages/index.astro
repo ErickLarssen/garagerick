@@ -1,6 +1,7 @@
 ---
 // Página temporária da Fase 0 — será substituída pela vitrine de Populares.
 import '@/styles/global.css';
+import { SITE } from '@/lib/site';
 ---
 
 <html lang="pt-BR">
@@ -10,19 +11,18 @@ import '@/styles/global.css';
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>Garagerick</title>
+    <title>{SITE.name}</title>
+    <meta name="description" content={SITE.description} />
   </head>
   <body class="min-h-svh">
     <main class="px-[clamp(1.5rem,5vw,6rem)] py-16">
-      <p class="font-bold text-text">GARAGERICK</p>
+      <p class="font-bold text-text uppercase">{SITE.name}</p>
       <h1 class="mt-8 font-display text-display font-bold uppercase">Em construção</h1>
       <p class="mt-4 text-meta text-text-muted">
         <span class="numeric">2026</span> │ <span class="numeric text-accent">#01</span> │
         <span class="numeric text-gold">TOP 1</span>
       </p>
-      <p class="mt-6 max-w-[60ch]">
-        Meus carros e motos favoritos em contagem regressiva até o Top 1.
-      </p>
+      <p class="mt-6 max-w-[60ch]">{SITE.description}</p>
     </main>
   </body>
 </html>
