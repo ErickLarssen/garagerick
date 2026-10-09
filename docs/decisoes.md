@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-08 — Tokens em `@theme static`
+- **Contexto:** o Tailwind v4 só emite as variáveis de `@theme` que detecta em uso; tokens usados apenas em `<style>` de componentes ou em scripts (ex.: `--ease-garage`) sumiam do CSS.
+- **Decisão:** `@theme static` em `global.css`. Nomes adicionais: `--font-sans` (Poppins), `--font-display` (Rajdhani), `--ease-garage` (easing padrão) e utilitário `numeric` (Rajdhani 600 + `tabular-nums`). `--ambient` nasce em `:root` com `--color-ambient-default`. A regra global de `prefers-reduced-motion` zera só `animation` e `scroll-behavior` — transições ficam, para permitir o crossfade de 150 ms previsto no `docs/04`.
+- **Motivo:** tokens sempre disponíveis como variáveis CSS; custo de poucos bytes.
+- **Impacto:** `src/styles/global.css`, `docs/04`.
+
 ### 2026-10-08 — Configuração de lint e formatação
 - **Contexto:** ESLint 10 (flat config) e typescript-eslint 8.71, que marcou `tseslint.config()` como obsoleto.
 - **Decisão:** `eslint.config.js` usa `defineConfig` de `eslint/config` com `tseslint.configs.recommended` + `eslintPluginAstro.configs.recommended`; sem `@eslint/js` (não está na lista de dependências permitidas). Prettier: `singleQuote`, `printWidth: 100`, plugin Astro; `.prettierignore` também ignora `package-lock.json`. Alias `@/*` → `./src/*` via `paths` (sem `baseUrl`).

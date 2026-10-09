@@ -7,3 +7,82 @@
 @import '@fontsource/poppins/latin-700.css';
 @import '@fontsource/rajdhani/latin-600.css';
 @import '@fontsource/rajdhani/latin-700.css';
+
+/* Tokens do design system (docs/04). Cada token gera variável CSS + utilitário Tailwind.
+   `static`: todas as variáveis são emitidas, mesmo as usadas só em <style> de componentes. */
+@theme static {
+  /* Cores */
+  --color-bg: #07090c; /* fundo base, quase preto azulado */
+  --color-surface: #11151b; /* painéis, cards da lista */
+  --color-surface-glass: rgb(17 21 27 / 0.45); /* painel do carrossel (com backdrop-blur) */
+  --color-border: rgb(255 255 255 / 0.08);
+  --color-text: #f2f4f7;
+  --color-text-muted: #9aa3ae; /* metadados */
+  --color-accent: #ff3b1f; /* "luz de freio" — botão primário, selo de rank */
+  --color-accent-hover: #ff5a3d;
+  --color-gold: #e8b649; /* exclusivo do Top 1 */
+  --color-ambient-default: #0d2230;
+
+  /* Fontes */
+  --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif; /* UI, textos, nav, botões */
+  --font-display:
+    'Rajdhani', 'Arial Narrow', ui-sans-serif, sans-serif; /* nome do modelo, números */
+
+  /* Escala tipográfica */
+  --text-display: clamp(3rem, 7vw, 6.5rem); /* nome do modelo */
+  --text-display--line-height: 0.95;
+  --text-meta: clamp(1.25rem, 2vw, 2rem); /* linha de specs */
+  --text-meta--line-height: 1.2;
+  --text-body: 1rem; /* texto "por que eu gosto" (máx. ~60ch) */
+  --text-body--line-height: 1.6;
+  --text-nav: 0.95rem;
+  --text-nav--font-weight: 500;
+  --text-button: 0.875rem;
+  --text-button--font-weight: 600;
+  --text-button--letter-spacing: 0.06em;
+
+  /* Movimento */
+  --ease-garage: cubic-bezier(0.22, 1, 0.36, 1); /* easing padrão */
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    /* Tom do veículo ativo; a vitrine sobrescreve com ambientColor */
+    --ambient: var(--color-ambient-default);
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Foco visível (docs/07) */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  /* Movimento reduzido: transições ficam quase instantâneas (docs/04) */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* Números (rank, cv, ano): Rajdhani 600 com algarismos tabulares */
+@utility numeric {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}

@@ -52,7 +52,7 @@ Mantemos essa composição e trocamos a atmosfera subaquática por uma **atmosfe
 | UI, textos, nav, botões | **Poppins** (400, 500, 600) | a mesma da referência |
 | Logo "GARAGERICK" no header | **Poppins** 700 | como "iMovies" na referência |
 | Nome do modelo (display) | **Rajdhani** 700, caixa alta | ar automotivo/painel de instrumentos |
-| Números (rank, cv, ano) | **Rajdhani** 600, `font-variant-numeric: tabular-nums` | |
+| Números (rank, cv, ano) | **Rajdhani** 600, `font-variant-numeric: tabular-nums` | utilitário `numeric` |
 
 Escala (fluida com `clamp`):
 
@@ -121,7 +121,7 @@ Info em cima (largura total), carrossel abaixo em faixa horizontal.
 
 - Troca de veículo: fundo faz **crossfade** (400ms) + leve zoom (1.04 → 1);
   bloco de informações sai/entra com fade + translateY(12px), escalonado (logo → nome → specs → texto).
-- Easing padrão: `cubic-bezier(0.22, 1, 0.36, 1)`.
+- Easing padrão: `cubic-bezier(0.22, 1, 0.36, 1)` — token `--ease-garage` (utilitário `ease-garage`).
 - Ao chegar no **Top 1**: um brilho dourado percorre o card uma única vez.
 - `prefers-reduced-motion: reduce` → só crossfade de 150ms, sem zoom, sem translate, sem brilho.
 
