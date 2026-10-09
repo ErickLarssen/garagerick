@@ -15,6 +15,36 @@
 
 ---
 
+### 2026-10-08 — `astro.config.mjs` importa `SITE` de `src/lib/site.ts`
+- **Contexto:** decisão de manter a URL do site numa fonte única.
+- **Decisão:** `import { SITE } from './src/lib/site.ts'` no `astro.config.mjs` (`site: SITE.url`); o Astro carrega o config via Vite, então o import de `.ts` funciona. Resolve o `site` literal provisório da tarefa de Tailwind/sitemap.
+- **Motivo:** trocar domínio = editar só `lib/site.ts`.
+- **Impacto:** `astro.config.mjs`, `src/lib/site.ts`.
+
+### 2026-10-08 — Tokens em `@theme static`
+- **Contexto:** o Tailwind v4 só emite as variáveis de `@theme` que detecta em uso; tokens usados apenas em `<style>` de componentes ou em scripts (ex.: `--ease-garage`) sumiam do CSS.
+- **Decisão:** `@theme static` em `global.css`. Nomes adicionais: `--font-sans` (Poppins), `--font-display` (Rajdhani), `--ease-garage` (easing padrão) e utilitário `numeric` (Rajdhani 600 + `tabular-nums`). `--ambient` nasce em `:root` com `--color-ambient-default`. A regra global de `prefers-reduced-motion` zera só `animation` e `scroll-behavior` — transições ficam, para permitir o crossfade de 150 ms previsto no `docs/04`.
+- **Motivo:** tokens sempre disponíveis como variáveis CSS; custo de poucos bytes.
+- **Impacto:** `src/styles/global.css`, `docs/04`.
+
+### 2026-10-08 — Configuração de lint e formatação
+- **Contexto:** ESLint 10 (flat config) e typescript-eslint 8.71, que marcou `tseslint.config()` como obsoleto.
+- **Decisão:** `eslint.config.js` usa `defineConfig` de `eslint/config` com `tseslint.configs.recommended` + `eslintPluginAstro.configs.recommended`; sem `@eslint/js` (não está na lista de dependências permitidas). Prettier: `singleQuote`, `printWidth: 100`, plugin Astro; `.prettierignore` também ignora `package-lock.json`. Alias `@/*` → `./src/*` via `paths` (sem `baseUrl`).
+- **Motivo:** APIs atuais, sem dependência extra.
+- **Impacto:** `eslint.config.js`, `.prettierrc`, `.prettierignore`, `tsconfig.json`, `package.json`.
+
+### 2026-10-08 — Fontes em subset latin
+- **Contexto:** `@fontsource` traz vários subsets (latin, latin-ext, devanagari…).
+- **Decisão:** importar só `latin-<peso>.css` em `src/styles/global.css` (Poppins 400/500/600/700, Rajdhani 600/700). `site` fica literal no `astro.config.mjs` até a tarefa de `lib/site.ts`.
+- **Motivo:** o subset latin cobre o português (U+0000–00FF) com bem menos peso; meta de < 600 kB (`docs/07`).
+- **Impacto:** `src/styles/global.css`, `astro.config.mjs`.
+
+### 2026-10-08 — Projeto inicializado com Astro 7
+- **Contexto:** `npm create astro` (template `minimal`) instalou Astro 7.3.8 e TypeScript 6; o template também traz `CLAUDE.md`/`AGENTS.md` genéricos.
+- **Decisão:** template gerado numa pasta temporária e copiado para a raiz (sem os `CLAUDE.md`/`AGENTS.md` dele, preservando os nossos). `tsconfig` estende `astro/tsconfigs/strict`. Script `check` provisório = `astro check` (ESLint/Prettier entram na tarefa de configuração). Node ≥ 22.12 (exigência do Astro).
+- **Motivo:** `create astro` não aceita diretório com arquivos; versões estáveis mais recentes, conforme `docs/02`.
+- **Impacto:** `package.json`, `astro.config.mjs`, `tsconfig.json`, `.gitignore`, `.vscode/`, `src/pages/index.astro`, `public/`, `CLAUDE.md` (comando `--background`).
+
 ### 2026-10-08 — Revisão de ambiguidades dos docs (antes da Fase 0)
 - **Contexto:** leitura completa dos docs revelou conflitos e lacunas.
 - **Decisão:**

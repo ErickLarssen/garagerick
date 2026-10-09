@@ -45,6 +45,7 @@ Páginas: **Populares**, **Esportivos**, **Antigos** e **Motos** (ícone de moto
 ```bash
 npm install            # instalar dependências
 npm run dev            # servidor local (http://localhost:4321)
+npx astro dev --background  # servidor em segundo plano (astro dev stop | status | logs)
 npm run build          # build de produção (falha se o ranking estiver inconsistente)
 npm run preview        # pré-visualizar o build
 npm run check          # astro check + eslint + prettier --check
