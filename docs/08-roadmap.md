@@ -8,7 +8,7 @@
 - [x] Inicializar projeto Astro (template mínimo, TypeScript strict) na raiz do repositório, preservando `CLAUDE.md`, `docs/` e `.claude/`
 - [x] Instalar e configurar Tailwind CSS v4 (plugin Vite), fontes (`@fontsource`), Embla, sitemap
 - [x] Configurar alias `@/`, ESLint, Prettier e scripts do `package.json` (`docs/02`)
-- [ ] Criar `.gitignore`, `.prettierignore`, atualizar `README.md` (como rodar e como adicionar veículo) e commit
+- [x] Criar `.gitignore`, `.prettierignore`, atualizar `README.md` (como rodar e como adicionar veículo) e commit
 - [ ] Criar `src/styles/global.css` com tokens de `docs/04` (cores, fontes, escala)
 - [ ] Criar `lib/site.ts`
 
