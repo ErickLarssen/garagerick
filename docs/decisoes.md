@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-08 — Projeto inicializado com Astro 7
+- **Contexto:** `npm create astro` (template `minimal`) instalou Astro 7.3.8 e TypeScript 6; o template também traz `CLAUDE.md`/`AGENTS.md` genéricos.
+- **Decisão:** template gerado numa pasta temporária e copiado para a raiz (sem os `CLAUDE.md`/`AGENTS.md` dele, preservando os nossos). `tsconfig` estende `astro/tsconfigs/strict`. Script `check` provisório = `astro check` (ESLint/Prettier entram na tarefa de configuração). Node ≥ 22.12 (exigência do Astro).
+- **Motivo:** `create astro` não aceita diretório com arquivos; versões estáveis mais recentes, conforme `docs/02`.
+- **Impacto:** `package.json`, `astro.config.mjs`, `tsconfig.json`, `.gitignore`, `.vscode/`, `src/pages/index.astro`, `public/`, `CLAUDE.md` (comando `--background`).
+
 ### 2026-10-08 — Revisão de ambiguidades dos docs (antes da Fase 0)
 - **Contexto:** leitura completa dos docs revelou conflitos e lacunas.
 - **Decisão:**

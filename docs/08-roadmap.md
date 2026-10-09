@@ -5,7 +5,7 @@
 
 ## Fase 0 — Fundação
 
-- [ ] Inicializar projeto Astro (template mínimo, TypeScript strict) na raiz do repositório, preservando `CLAUDE.md`, `docs/` e `.claude/`
+- [x] Inicializar projeto Astro (template mínimo, TypeScript strict) na raiz do repositório, preservando `CLAUDE.md`, `docs/` e `.claude/`
 - [ ] Instalar e configurar Tailwind CSS v4 (plugin Vite), fontes (`@fontsource`), Embla, sitemap
 - [ ] Configurar alias `@/`, ESLint, Prettier e scripts do `package.json` (`docs/02`)
 - [ ] Criar `.gitignore`, `.prettierignore`, atualizar `README.md` (como rodar e como adicionar veículo) e commit
