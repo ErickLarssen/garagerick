@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-08 — Configuração de lint e formatação
+- **Contexto:** ESLint 10 (flat config) e typescript-eslint 8.71, que marcou `tseslint.config()` como obsoleto.
+- **Decisão:** `eslint.config.js` usa `defineConfig` de `eslint/config` com `tseslint.configs.recommended` + `eslintPluginAstro.configs.recommended`; sem `@eslint/js` (não está na lista de dependências permitidas). Prettier: `singleQuote`, `printWidth: 100`, plugin Astro; `.prettierignore` também ignora `package-lock.json`. Alias `@/*` → `./src/*` via `paths` (sem `baseUrl`).
+- **Motivo:** APIs atuais, sem dependência extra.
+- **Impacto:** `eslint.config.js`, `.prettierrc`, `.prettierignore`, `tsconfig.json`, `package.json`.
+
 ### 2026-10-08 — Fontes em subset latin
 - **Contexto:** `@fontsource` traz vários subsets (latin, latin-ext, devanagari…).
 - **Decisão:** importar só `latin-<peso>.css` em `src/styles/global.css` (Poppins 400/500/600/700, Rajdhani 600/700). `site` fica literal no `astro.config.mjs` até a tarefa de `lib/site.ts`.

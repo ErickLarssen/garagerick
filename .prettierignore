@@ -1,0 +1,11 @@
+# documentação escrita à mão (docs/decisoes.md — 2026-10-08)
+docs/
+.claude/
+CLAUDE.md
+
+# gerados
+dist/
+.astro/
+node_modules/
+.vercel/
+package-lock.json
