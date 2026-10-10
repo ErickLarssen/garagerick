@@ -17,7 +17,7 @@
 
 ### 2026-10-10 — `BaseLayout` e contraste do accent
 - **Contexto:** primeira tarefa da Fase 2. Ao estilizar o link "Pular para o conteúdo", o contraste de **branco sobre `--color-accent` deu 3,56:1** (3,10:1 no hover) — abaixo do 4,5:1 exigido pelo `docs/07` para texto normal.
-- **Decisão:** `title` recebe só o título da página e o layout acrescenta ` | Garagerick`; `activeNav` é opcional; `ogImage` opcional (sem imagem → `twitter:card=summary`, sem `og:image` até a Fase 7). Canonical a partir de `Astro.site`. Link "pular" usa texto `--color-bg` sobre accent (5,60:1). **Pendente para a Fase 3:** o botão primário (`docs/04`: branco sobre accent) precisa de outra solução — ver opções no resumo ao Erick.
+- **Decisão:** `title` recebe só o título da página e o layout acrescenta ` | Garagerick`; `activeNav` é opcional; `ogImage` opcional (sem imagem → `twitter:card=summary`, sem `og:image` até a Fase 7). Canonical a partir de `Astro.site`. Link "pular" usa texto `--color-bg` sobre accent (5,60:1). **Resolvido pelo Erick (opção 1):** o botão primário usa texto/ícone `--color-bg` sobre o accent; o accent não muda. Vale para todo texto sobre `--color-accent` (ex.: `RankBadge`).
 - **Motivo:** meta de acessibilidade do `docs/07`.
 - **Impacto:** `src/layouts/BaseLayout.astro`, `src/pages/index.astro`, `docs/05`.
 
