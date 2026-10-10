@@ -39,7 +39,7 @@
 - [x] `ShowcaseBackdrop` com degradês e `--ambient`
 - [x] `ShowcaseInfo`: `BrandLogo`, nome display, `SpecRow` + `RankBadge`, texto, botões
 - [x] `CoverflowCarousel` + `VehicleCard` renderizados (sem JS ainda)
-- [ ] Layout responsivo desktop/tablet/celular (`docs/04`)
+- [x] Layout responsivo desktop/tablet/celular (`docs/04`)
 - [ ] `SpecSheet` (`<dialog>`) abrindo e fechando
 
 **Entrega:** vitrine visualmente fiel à referência, mostrando o último colocado. 🛑 Pausa para revisão visual do Erick.

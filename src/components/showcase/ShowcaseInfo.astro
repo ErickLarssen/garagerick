@@ -25,7 +25,17 @@ const { vehicle } = Astro.props;
 
   <SpecRow vehicle={vehicle} />
 
-  <div class="info__body" data-info-body set:html={vehicle.body} />
+  <div class="info__body" id="showcase-body" data-info-body set:html={vehicle.body} />
+  <button
+    type="button"
+    class="info__more"
+    data-read-more
+    aria-controls="showcase-body"
+    aria-expanded="false"
+    hidden
+  >
+    Ler mais
+  </button>
 
   <div class="info__actions">
     <Button
@@ -62,7 +72,8 @@ const { vehicle } = Astro.props;
 
   .info__name {
     font-family: var(--font-display);
-    font-size: var(--text-display);
+    /* limita também pela altura da tela, para info + barra caberem na vitrine */
+    font-size: min(var(--text-display), 10svh);
     line-height: var(--text-display--line-height);
     font-weight: 700;
     text-transform: uppercase;
@@ -81,6 +92,48 @@ const { vehicle } = Astro.props;
     margin-top: 0.75em;
   }
 
+  .info__more {
+    min-height: 44px;
+    margin-block: -0.75rem -0.5rem;
+    font-size: var(--text-button);
+    font-weight: var(--text-button--font-weight);
+    letter-spacing: var(--text-button--letter-spacing);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+  }
+
+  .info__more:hover {
+    color: var(--color-text);
+  }
+
+  .info__more[hidden] {
+    display: none;
+  }
+
+  @media (max-width: 639px) {
+    .info {
+      gap: 0.85rem;
+    }
+
+    .info__name {
+      font-size: 2.5rem;
+    }
+  }
+
+  /* Celular: texto em 4 linhas com "Ler mais" — só com JS (data-clamp); sem JS aparece inteiro */
+  @media (max-width: 639px) {
+    .info[data-clamp] .info__body:not(.is-expanded) {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 4;
+      line-clamp: 4;
+      overflow: hidden;
+    }
+  }
+
   .info__actions {
     display: flex;
     flex-wrap: wrap;
@@ -88,3 +141,33 @@ const { vehicle } = Astro.props;
     margin-top: 0.5rem;
   }
 </style>
+
+<script>
+  // "Ler mais" (docs/04): corta o texto em 4 linhas no celular e mostra o botão só se houver corte.
+  // Exposto como evento para o controlador da Fase 4 reavaliar após trocar o texto.
+  const info = document.querySelector<HTMLElement>('[data-showcase-info]');
+  const body = info?.querySelector<HTMLElement>('[data-info-body]');
+  const button = info?.querySelector<HTMLButtonElement>('[data-read-more]');
+
+  if (info && body && button) {
+    const mobile = window.matchMedia('(max-width: 639px)');
+
+    const update = () => {
+      body.classList.remove('is-expanded');
+      button.setAttribute('aria-expanded', 'false');
+      button.textContent = 'Ler mais';
+      info.toggleAttribute('data-clamp', mobile.matches);
+      button.hidden = !mobile.matches || body.scrollHeight <= body.clientHeight + 1;
+    };
+
+    button.addEventListener('click', () => {
+      const expanded = body.classList.toggle('is-expanded');
+      button.setAttribute('aria-expanded', String(expanded));
+      button.textContent = expanded ? 'Ler menos' : 'Ler mais';
+    });
+
+    mobile.addEventListener('change', update);
+    info.addEventListener('showcase:content-change', update);
+    update();
+  }
+</script>

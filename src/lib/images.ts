@@ -40,7 +40,7 @@ export async function getCardImage(image: ImageMetadata): Promise<ResponsiveImag
   return {
     src: result.src,
     srcset: result.srcSet.attribute,
-    sizes: '(min-width: 1024px) 13rem, (min-width: 640px) 11rem, 9rem',
+    sizes: '(min-width: 1024px) 12.5rem, (min-width: 640px) 9.5rem, 6.75rem',
     width: image.width,
     height: image.height,
   };

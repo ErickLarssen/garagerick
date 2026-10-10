@@ -1,6 +1,8 @@
 ---
-// Vitrine (docs/05): orquestra fundo, informações e carrossel. Tudo renderizado no servidor;
-// o JS da Fase 4 só alterna o veículo ativo.
+// Vitrine (docs/05): orquestra fundo, informações, carrossel e a barra inferior
+// (RANKING COMPLETO + redes). Tudo renderizado no servidor; o JS da Fase 4 só alterna o veículo.
+import ArrowDownCircle from '@/assets/icons/arrow-down-circle.svg';
+import SocialLinks from '@/components/layout/SocialLinks.astro';
 import CoverflowCarousel from '@/components/showcase/CoverflowCarousel.astro';
 import ShowcaseBackdrop from '@/components/showcase/ShowcaseBackdrop.astro';
 import ShowcaseInfo from '@/components/showcase/ShowcaseInfo.astro';
@@ -28,12 +30,22 @@ const label = RANKING_LABELS[rankingKey];
     <h1 class="sr-only">{label} — ranking de favoritos</h1>
     <ShowcaseBackdrop vehicle={active} />
 
-    <div class="showcase__grid">
-      <div class="showcase__info">
-        <ShowcaseInfo vehicle={active} />
+    <div class="showcase__inner">
+      <div class="showcase__main">
+        <div class="showcase__info">
+          <ShowcaseInfo vehicle={active} />
+        </div>
+        <div class="showcase__carousel">
+          <CoverflowCarousel vehicles={vehicles} activeIndex={activeIndex} />
+        </div>
       </div>
-      <div class="showcase__carousel">
-        <CoverflowCarousel vehicles={vehicles} activeIndex={activeIndex} />
+
+      <div class="showcase__bar">
+        <a href="#ranking" class="showcase__more">
+          <ArrowDownCircle width={40} height={40} aria-hidden="true" />
+          Ranking completo
+        </a>
+        <SocialLinks class="showcase__social" />
       </div>
     </div>
   </section>
@@ -47,21 +59,98 @@ const label = RANKING_LABELS[rankingKey];
     overflow: hidden;
   }
 
-  .showcase__grid {
+  .showcase__inner {
     position: relative;
     z-index: 1;
-    display: grid;
-    align-content: center;
-    gap: 2.5rem;
+    display: flex;
+    flex-direction: column;
     min-height: 100svh;
-    padding: calc(var(--header-h) + 2rem) clamp(1.5rem, 5vw, 6rem) 2rem;
+    padding: calc(var(--header-h) + 1.5rem) clamp(1.5rem, 5vw, 6rem) 1.25rem;
   }
 
-  /* Desktop (docs/04): grade de 12 colunas; info 1–5, carrossel 7–12. Ajuste fino na tarefa de layout. */
+  .showcase__main {
+    flex: 1;
+    display: grid;
+    align-content: center;
+    gap: 2rem;
+  }
+
+  /* itens do grid podem encolher (a faixa do carrossel não força a largura) */
+  .showcase__main > * {
+    min-width: 0;
+  }
+
+  /* Barra inferior: RANKING COMPLETO à esquerda, redes à direita (como WATCH TRAILER na referência) */
+  .showcase__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .showcase__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-height: 44px;
+    font-size: var(--text-button);
+    font-weight: var(--text-button--font-weight);
+    letter-spacing: var(--text-button--letter-spacing);
+    text-transform: uppercase;
+    color: var(--color-text);
+  }
+
+  .showcase__more :global(svg) {
+    color: var(--color-text-muted);
+    transition:
+      color 200ms var(--ease-garage),
+      transform 300ms var(--ease-garage);
+  }
+
+  .showcase__more:hover :global(svg) {
+    color: var(--color-accent);
+    transform: translateY(2px);
+  }
+
+  .showcase :global(.showcase__social) {
+    margin-inline-end: -0.75rem;
+  }
+
+  /* Celular (< 640px): imagem no topo, info sobre o degradê inferior, carrossel em faixa */
+  @media (max-width: 639px) {
+    .showcase__inner {
+      padding-top: calc(var(--header-h) + 9svh);
+    }
+
+    .showcase__main {
+      align-content: end;
+      gap: 1.25rem;
+    }
+
+    /* Redes já estão no rodapé; aqui sobra só o link */
+    .showcase :global(.showcase__social) {
+      display: none;
+    }
+  }
+
+  /* Tablet (640–1023px): info em cima (largura total), carrossel abaixo */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .showcase__inner {
+      padding-top: calc(var(--header-h) + 5svh);
+    }
+
+    .showcase__main {
+      align-content: end;
+    }
+  }
+
+  /* Desktop (≥ 1024px): grade de 12 colunas; info 1–5, carrossel 7–12 */
   @media (min-width: 1024px) {
-    .showcase__grid {
+    .showcase__main {
       grid-template-columns: repeat(12, minmax(0, 1fr));
       align-items: center;
+      column-gap: 1.5rem;
     }
 
     .showcase__info {

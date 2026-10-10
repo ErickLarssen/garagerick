@@ -88,7 +88,7 @@ const active = vehicles[activeIndex];
     display: flex;
     align-items: center;
     padding-inline: calc(50% - var(--card-w) / 2); /* primeiro e último podem centralizar */
-    --card-w: clamp(9rem, 13vw, 13rem);
+    --card-w: clamp(10rem, 12vw, 12.5rem);
   }
 
   .carousel__slide {
@@ -151,6 +151,51 @@ const active = vehicles[activeIndex];
     min-width: 6.5rem;
     text-align: center;
     font-size: 1.25rem;
+  }
+
+  /* Tablet: faixa horizontal com cards médios, mantendo o coverflow */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .carousel__container {
+      --card-w: 9.5rem;
+    }
+  }
+
+  /* Celular (docs/04): faixa com swipe, cards menores, sem efeito 3D; painel sem moldura */
+  @media (max-width: 639px) {
+    .carousel {
+      padding-block: 0;
+      border: 0;
+      background: none;
+      backdrop-filter: none;
+    }
+
+    .carousel__viewport {
+      margin-inline: calc(-1 * clamp(1.5rem, 5vw, 6rem)); /* faixa de ponta a ponta */
+      padding-block: 0.25rem;
+    }
+
+    .carousel__container {
+      --card-w: 6.75rem;
+    }
+
+    .carousel__slide,
+    .carousel__slide[data-distance] {
+      margin-inline: 0.3rem;
+      transform: none;
+      filter: brightness(0.6);
+    }
+
+    .carousel__slide[data-distance='0'] {
+      filter: none;
+    }
+
+    .carousel__slide[data-distance='0'] :global(.card) {
+      box-shadow: 0 0 0 2px var(--color-accent);
+    }
+
+    .carousel__controls {
+      margin-top: 0.25rem;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

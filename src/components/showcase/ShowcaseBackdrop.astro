@@ -101,13 +101,22 @@ const hero = await getHeroImage(vehicle.heroImage);
   }
 
   /* Celular: imagem no topo, info sobre o degradê inferior (docs/04) — reforça o degradê de baixo */
+  /* Celular: a imagem ocupa só o topo (a vitrine pode ser mais alta que a tela) e o degradê
+     inferior a funde com o fundo, onde ficam as informações. */
   @media (max-width: 639px) {
+    /* seletor com .backdrop > para vencer a especificidade de ".backdrop > *" com escopo */
+    .backdrop > .backdrop__img,
+    .backdrop > .backdrop__side,
+    .backdrop > .backdrop__bottom {
+      height: 72svh;
+    }
+
     .backdrop__side {
-      background: linear-gradient(90deg, rgb(7 9 12 / 0.5) 0%, transparent 70%);
+      background: linear-gradient(90deg, rgb(7 9 12 / 0.45) 0%, transparent 70%);
     }
 
     .backdrop__bottom {
-      background: linear-gradient(0deg, var(--color-bg) 0%, var(--color-bg) 30%, transparent 70%);
+      background: linear-gradient(0deg, var(--color-bg) 0%, rgb(7 9 12 / 0.6) 30%, transparent 65%);
     }
   }
 </style>
