@@ -27,7 +27,7 @@
 ## Fase 2 — Layout base
 
 - [x] `BaseLayout` com SEO básico e "pular para o conteúdo"
-- [ ] `Header` + `Nav` (ícone de moto, estado ativo, comportamento ao rolar)
+- [x] `Header` + `Nav` (ícone de moto, estado ativo, comportamento ao rolar)
 - [ ] Menu mobile (gaveta) acessível
 - [ ] `Footer` + `SocialLinks`
 - [ ] Rotas `/`, `/esportivos`, `/antigos`, `/motos`, `404` usando o layout

@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-10 — `Header` e `Nav`
+- **Contexto:** segunda tarefa da Fase 2.
+- **Decisão:** ícones SVG importados como componente (recurso nativo do Astro 7: `import Icon from '@/assets/icons/x.svg'`), traço 1,75px em `currentColor`; ícone próprio `motorcycle.svg`. Itens e rotas do menu vêm de `RANKING_LABELS`/`RANKING_ROUTES`. Altura do header em `--header-h` (4,5rem, no `:root`); conteúdo que não é a vitrine compensa com padding. Header ganha `data-scrolled` quando `scrollY > 8` (listener passivo + rAF), com fundo `rgb(7 9 12 / .75)` + blur e fallback sólido via `@supports`. Nav fica oculta abaixo de 640px até a tarefa do menu mobile. Alvos de toque com 44px de altura.
+- **Motivo:** sem dependência de ícones; dados de navegação numa fonte única.
+- **Impacto:** `src/components/layout/{Header,Nav}.astro`, `src/assets/icons/motorcycle.svg`, `BaseLayout`, `global.css`.
+
 ### 2026-10-10 — `BaseLayout` e contraste do accent
 - **Contexto:** primeira tarefa da Fase 2. Ao estilizar o link "Pular para o conteúdo", o contraste de **branco sobre `--color-accent` deu 3,56:1** (3,10:1 no hover) — abaixo do 4,5:1 exigido pelo `docs/07` para texto normal.
 - **Decisão:** `title` recebe só o título da página e o layout acrescenta ` | Garagerick`; `activeNav` é opcional; `ogImage` opcional (sem imagem → `twitter:card=summary`, sem `og:image` até a Fase 7). Canonical a partir de `Astro.site`. Link "pular" usa texto `--color-bg` sobre accent (5,60:1). **Resolvido pelo Erick (opção 1):** o botão primário usa texto/ícone `--color-bg` sobre o accent; o accent não muda. Vale para todo texto sobre `--color-accent` (ex.: `RankBadge`).

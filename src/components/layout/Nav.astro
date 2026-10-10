@@ -1,0 +1,73 @@
+---
+// Navegação principal (docs/05): ícone de moto → /motos, depois Populares, Esportivos, Antigos.
+import MotorcycleIcon from '@/assets/icons/motorcycle.svg';
+import { RANKING_LABELS, RANKING_ROUTES, type RankingKey } from '@/lib/rankings';
+
+interface Props {
+  activeNav?: RankingKey;
+  class?: string;
+}
+
+const { activeNav, class: className } = Astro.props;
+const textItems: RankingKey[] = ['populares', 'esportivos', 'antigos'];
+---
+
+<nav aria-label="Principal" class={className}>
+  <ul class="flex items-center gap-[clamp(1rem,2.5vw,2.25rem)]">
+    <li>
+      <a
+        href={RANKING_ROUTES.motos}
+        aria-label={RANKING_LABELS.motos}
+        aria-current={activeNav === 'motos' ? 'page' : undefined}
+        class="nav-link"
+      >
+        <MotorcycleIcon width={26} height={26} aria-hidden="true" />
+      </a>
+    </li>
+    {textItems.map((key) => (
+      <li>
+        <a
+          href={RANKING_ROUTES[key]}
+          aria-current={activeNav === key ? 'page' : undefined}
+          class="nav-link"
+        >
+          {RANKING_LABELS[key]}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: var(--text-nav);
+    font-weight: var(--text-nav--font-weight);
+    color: var(--color-text-muted);
+    transition: color 200ms var(--ease-garage);
+  }
+
+  .nav-link:hover,
+  .nav-link[aria-current='page'] {
+    color: var(--color-text);
+  }
+
+  /* Sublinhado do item ativo em --color-accent */
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 6px;
+    height: 2px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transition: transform 250ms var(--ease-garage);
+  }
+
+  .nav-link[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+</style>

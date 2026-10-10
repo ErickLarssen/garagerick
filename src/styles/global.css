@@ -50,6 +50,8 @@
     color-scheme: dark;
     /* Tom do veículo ativo; a vitrine sobrescreve com ambientColor */
     --ambient: var(--color-ambient-default);
+    /* Altura do header fixo (o conteúdo que não é a vitrine compensa com padding) */
+    --header-h: 4.5rem;
   }
 
   body {

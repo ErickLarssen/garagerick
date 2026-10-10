@@ -1,17 +1,15 @@
 ---
 // Página temporária — será substituída pela vitrine de Populares.
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { SITE } from '@/lib/site';
 ---
 
 <BaseLayout title="Populares — Ranking de carros favoritos" activeNav="populares">
-  <div class="px-[clamp(1.5rem,5vw,6rem)] py-16">
-    <p class="font-bold text-text uppercase">{SITE.name}</p>
+  <div class="px-[clamp(1.5rem,5vw,6rem)] pt-[calc(var(--header-h)+4rem)] pb-16">
     <h1 class="mt-8 font-display text-display font-bold uppercase">Em construção</h1>
     <p class="mt-4 text-meta text-text-muted">
       <span class="numeric">2026</span> │ <span class="numeric text-accent">#01</span> │
       <span class="numeric text-gold">TOP 1</span>
     </p>
-    <p class="mt-6 max-w-[60ch]">{SITE.description}</p>
+    <p class="mt-6 max-w-[60ch]">Página temporária — a vitrine chega na Fase 3.</p>
   </div>
 </BaseLayout>
