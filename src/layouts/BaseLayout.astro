@@ -1,9 +1,10 @@
 ---
 // Layout base de todas as páginas (docs/05): <head> com SEO, fontes, favicon e theme-color,
-// link "Pular para o conteúdo", Header e <main>. O Footer entra na próxima tarefa de layout.
+// link "Pular para o conteúdo", Header, <main> e Footer.
 import '@/styles/global.css';
 import type { ImageMetadata } from 'astro';
 import { getImage } from 'astro:assets';
+import Footer from '@/components/layout/Footer.astro';
 import Header from '@/components/layout/Header.astro';
 import { SITE } from '@/lib/site';
 import type { RankingKey } from '@/lib/rankings';
@@ -74,5 +75,7 @@ const og = ogImage
     <main id="conteudo" tabindex="-1" class="outline-none">
       <slot />
     </main>
+
+    <Footer />
   </body>
 </html>

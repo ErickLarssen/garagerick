@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-10 — `Footer` e `SocialLinks`
+- **Contexto:** quarta tarefa da Fase 2.
+- **Decisão:** ícones de Instagram, YouTube e GitHub adaptados da biblioteca **Lucide** (licença ISC, só os paths copiados — sem dependência); Behance desenhado à mão no mesmo estilo linear. `SocialLinks` aceita `class` para ser reutilizado na vitrine. Rodapé: nome + descrição, links Cinerick ("meus filmes favoritos") e Portfólio ("ericksilva.dev"), redes e `© ano autor`. Todos os externos com `target="_blank" rel="noopener"` e `aria-label` que começa pelo texto visível + "(abre em nova aba)". Alvos de toque de 44px.
+- **Motivo:** sem dependência de ícones; acessibilidade (`docs/07`).
+- **Impacto:** `src/components/layout/{Footer,SocialLinks}.astro`, `src/assets/icons/{instagram,youtube,github,behance}.svg`, `BaseLayout`.
+
 ### 2026-10-10 — Menu mobile com Popover API
 - **Contexto:** gaveta mobile acessível; o site deve navegar sem JS e com < 40 kB de JS.
 - **Decisão:** `MobileMenu.astro` usa `popover="auto"` + `popovertarget` (zero JS): Esc, clique fora e `aria-expanded` nativos; animação com `@starting-style` + `transition-behavior: allow-discrete`, reduzida em `prefers-reduced-motion`. `Nav` ganhou `variant="bar" | "drawer"`. Sem trava de rolagem do fundo (popover não é modal) — aceitável para um menu de 4 itens. **Armadilha registrada:** estilos de `<style>` de componente ficam fora das camadas do Tailwind v4 e vencem utilitários (ex.: `sm:hidden` perde para um `display` do componente); breakpoints de elementos com `display` próprio vão em media query dentro do componente.

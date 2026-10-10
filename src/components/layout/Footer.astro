@@ -1,0 +1,61 @@
+---
+// Rodapé (docs/01 e docs/05): links para o Cinerick, o portfólio e as redes. Dados de SITE.
+import SocialLinks from '@/components/layout/SocialLinks.astro';
+import { SITE } from '@/lib/site';
+
+const year = new Date().getFullYear();
+const external = [
+  { href: SITE.links.cinerick, label: 'Cinerick', hint: 'meus filmes favoritos' },
+  { href: SITE.links.portfolio, label: 'Portfólio', hint: 'ericksilva.dev' },
+];
+---
+
+<footer class="border-t border-border px-[clamp(1.5rem,5vw,6rem)] py-12">
+  <div class="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
+    <div class="max-w-[40ch]">
+      <a href="/" class="text-lg font-bold tracking-wide uppercase">
+        {SITE.name}
+      </a>
+      <p class="mt-2 text-sm text-text-muted">{SITE.description}</p>
+    </div>
+
+    <ul class="flex flex-col gap-1 text-sm">
+      {external.map(({ href, label, hint }) => (
+        <li>
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener"
+            class="footer-link"
+            aria-label={`${label} — ${hint} (abre em nova aba)`}
+          >
+            {label} <span class="text-text-muted">— {hint}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <SocialLinks class="-ml-3 sm:ml-0 sm:-mr-3" />
+  </div>
+
+  <p class="mt-10 text-xs text-text-muted">
+    © {year} {SITE.author}
+  </p>
+</footer>
+
+<style>
+  .footer-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--color-text);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 4px;
+    transition: text-decoration-color 200ms var(--ease-garage);
+  }
+
+  .footer-link:hover {
+    text-decoration-color: var(--color-accent);
+  }
+</style>
