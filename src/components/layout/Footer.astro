@@ -11,7 +11,7 @@ const external = [
 ---
 
 <footer class="border-t border-border px-[clamp(1.5rem,5vw,6rem)] py-12">
-  <div class="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
+  <div class="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
     <div class="max-w-[40ch]">
       <a href="/" class="text-lg font-bold tracking-wide uppercase">
         {SITE.name}
@@ -19,7 +19,7 @@ const external = [
       <p class="mt-2 text-sm text-text-muted">{SITE.description}</p>
     </div>
 
-    <ul class="flex flex-col gap-1 text-sm">
+    <ul class="flex flex-col text-sm">
       {external.map(({ href, label, hint }) => (
         <li>
           <a
@@ -35,7 +35,7 @@ const external = [
       ))}
     </ul>
 
-    <SocialLinks class="-ml-3 sm:ml-0 sm:-mr-3" />
+    <SocialLinks class="-ml-3 lg:ml-0 lg:-mr-3" />
   </div>
 
   <p class="mt-10 text-xs text-text-muted">
@@ -45,9 +45,9 @@ const external = [
 
 <style>
   .footer-link {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
+    display: inline-block;
+    padding-block: 0.7rem; /* ~44px de área de toque */
+    line-height: 1.25;
     color: var(--color-text);
     text-decoration: underline;
     text-decoration-color: transparent;

@@ -1,0 +1,24 @@
+---
+// Esportivos e Antigos (docs/02): mesma estrutura, gerada por getStaticPaths.
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import RankingPagePlaceholder from '@/components/ranking/RankingPagePlaceholder.astro';
+import { RANKING_SEO } from '@/lib/rankings';
+
+export const getStaticPaths = (() =>
+  (['esportivos', 'antigos'] as const).map((category) => ({
+    params: { category },
+    props: { category },
+  }))) satisfies GetStaticPaths;
+
+interface Props {
+  category: 'esportivos' | 'antigos';
+}
+
+const { category } = Astro.props;
+const { title, description } = RANKING_SEO[category];
+---
+
+<BaseLayout title={title} description={description} activeNav={category}>
+  <RankingPagePlaceholder ranking={category} />
+</BaseLayout>

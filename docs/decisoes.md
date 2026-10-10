@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-10 — Rotas da Fase 2 e revisão visual
+- **Contexto:** última tarefa da Fase 2 + conferência no navegador (preview, iframes de 390 e 768 px; desktop 1440 px).
+- **Decisão:** `RANKING_SEO` (título e descrição por ranking) em `lib/rankings.ts`. Páginas `index`, `[category]` (esportivos/antigos) e `motos` usam o componente temporário `RankingPagePlaceholder` (h1 com o nome do ranking + lista simples) — chamar `getRanking` ali reativa a validação no build; ele será substituído pela vitrine na Fase 3. `404.astro` básica ("Saiu da pista." + "Voltar para a garagem", botão accent com texto escuro). Bugs achados na revisão e corrigidos: (1) no celular o botão de menu caía na coluna do meio do grid do header (o `Nav` some) → `col-start-3`; (2) `inline-flex` no link do rodapé engolia o espaço antes do travessão e espremia o texto no tablet → link `inline-block` com padding e rodapé em linha só a partir de `lg`. Observação: abas de automação em segundo plano não disparam `scroll`/rAF, então o fundo do header ao rolar foi confirmado só visualmente.
+- **Motivo:** navegação completa entre as páginas antes da vitrine; layout responsivo correto.
+- **Impacto:** `src/pages/{index,[category],motos,404}.astro`, `src/components/ranking/RankingPagePlaceholder.astro`, `lib/rankings.ts`, `Header.astro`, `Footer.astro`.
+
 ### 2026-10-10 — Redes sociais: Instagram, LinkedIn e GitHub
 - **Contexto:** pedido do Erick após a tarefa do rodapé.
 - **Decisão:** removidos YouTube e Behance (ícones, `SITE.links` e docs); adicionado LinkedIn (`https://www.linkedin.com/in/ericklarssen/`), ícone adaptado da Lucide. Ordem: Instagram, LinkedIn, GitHub. O YouTube continua só como destino do `videoUrl` dos veículos.

@@ -1,0 +1,12 @@
+---
+// Motos (lê a collection motorcycles via getRanking('motos')).
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import RankingPagePlaceholder from '@/components/ranking/RankingPagePlaceholder.astro';
+import { RANKING_SEO } from '@/lib/rankings';
+
+const { title, description } = RANKING_SEO.motos;
+---
+
+<BaseLayout title={title} description={description} activeNav="motos">
+  <RankingPagePlaceholder ranking="motos" />
+</BaseLayout>

@@ -30,7 +30,7 @@
 - [x] `Header` + `Nav` (ícone de moto, estado ativo, comportamento ao rolar)
 - [x] Menu mobile (gaveta) acessível
 - [x] `Footer` + `SocialLinks`
-- [ ] Rotas `/`, `/esportivos`, `/antigos`, `/motos`, `404` usando o layout
+- [x] Rotas `/`, `/esportivos`, `/antigos`, `/motos`, `404` usando o layout
 
 **Entrega:** navegação completa entre as quatro páginas, ainda sem vitrine.
 

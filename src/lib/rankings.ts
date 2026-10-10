@@ -34,6 +34,26 @@ export const RANKING_LABELS: Record<RankingKey, string> = {
   motos: 'Motos',
 };
 
+/** Título (sem o nome do site) e descrição de SEO de cada página de ranking (docs/07). */
+export const RANKING_SEO: Record<RankingKey, { title: string; description: string }> = {
+  populares: {
+    title: 'Populares — Ranking de carros favoritos',
+    description: 'Meus carros populares favoritos em contagem regressiva até o Top 1.',
+  },
+  esportivos: {
+    title: 'Esportivos — Ranking de carros favoritos',
+    description: 'Meus carros esportivos favoritos em contagem regressiva até o Top 1.',
+  },
+  antigos: {
+    title: 'Antigos — Ranking de carros favoritos',
+    description: 'Meus carros antigos e clássicos favoritos em contagem regressiva até o Top 1.',
+  },
+  motos: {
+    title: 'Motos — Ranking de motos favoritas',
+    description: 'Minhas motos favoritas em contagem regressiva até o Top 1.',
+  },
+};
+
 export interface SpecItem {
   label: string;
   value: string;
