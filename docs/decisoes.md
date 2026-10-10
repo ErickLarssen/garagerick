@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-10 — `CoverflowCarousel` e `VehicleCard` estáticos
+- **Contexto:** terceira tarefa da Fase 3 (sem JS). Fase 2 mergeada na `main` com push (confirmado pelo Erick).
+- **Decisão:** markup no formato do Embla (`viewport > ul container > li slides`). Sem JS o viewport é uma faixa com `overflow-x: auto` + `scroll-snap`; a Fase 4 adiciona `.is-enhanced` (overflow escondido). Coverflow estático por `data-distance` (0, 1, 2+) calculado no servidor: escala 1 / 0,85 / 0,7, `brightness` 1 / 0,5 / 0,35, blur 0 / 1 / 1,5 px; slides com margem negativa para leve sobreposição; `padding-inline: calc(50% - card/2)` permite centralizar o primeiro e o último. Cards em AVIF 320/640 (`getCardImage`), lazy só a mais de 3 posições do ativo. `VehicleCard`: `<button>` com `aria-label` "#04 — Marca Modelo" ("Top 1 — …" no primeiro), `aria-current` no ativo, número translúcido (dourado no Top 1, com contorno dourado sutil). Contador `#05 de 5` e setas com `aria-label` Anterior/Próximo (sem ação até a Fase 4). Grade provisória: info colunas 1–5, carrossel 7–12 a partir de 1024 px. Verificado por script no Chrome (capturas falham com a aba em segundo plano).
+- **Motivo:** fidelidade à referência sem JS; Fase 4 só liga o comportamento.
+- **Impacto:** `src/components/showcase/{CoverflowCarousel,VehicleCard,Showcase}.astro`, `src/lib/images.ts`, ícones `chevron-left/right.svg`.
+
 ### 2026-10-10 — `ShowcaseInfo` e componentes de base
 - **Contexto:** segunda tarefa da Fase 3.
 - **Decisão:** `ui/Button.astro` (primary = accent + texto escuro; secondary = superfície + borda) vira `<a>` sempre que recebe `href` (mesmo vazio) — o botão VÍDEO é sempre link, escondido com `hidden` quando não há `videoUrl`, para a Fase 4 só trocar `href`/`hidden`. `BrandLogo` usa `filter: brightness(0) invert(.96) sepia(.08)` (branco levemente creme) e calcula largura pela proporção do SVG. `RankBadge`: texto visual (`#05`/`TOP 1`) com `aria-hidden` + texto `sr-only` ("Posição 5"/"Top 1") — `aria-label` em `<span>` genérico não é válido. `SpecRow` em Rajdhani 600 com separadores de 1px via `::before`. Ícones novos: `play.svg`, `specs.svg`. Botão FICHA TÉCNICA (`data-open-specs`) ainda sem ação até a tarefa do `SpecSheet`. Atributos `data-*` (`data-info-name`, `data-info-body`, `data-info-video`, `data-brand-logo`, `data-spec-row`) servem de ganchos para o controlador da Fase 4.

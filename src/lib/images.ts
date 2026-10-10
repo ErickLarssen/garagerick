@@ -27,3 +27,21 @@ export async function getHeroImage(image: ImageMetadata): Promise<ResponsiveImag
     height: image.height,
   };
 }
+
+const CARD_WIDTHS = [320, 640];
+
+/** Card do carrossel (3:4): AVIF em 320/640 px (1x/2x do maior tamanho exibido). */
+export async function getCardImage(image: ImageMetadata): Promise<ResponsiveImage> {
+  const result = await getImage({
+    src: image,
+    widths: CARD_WIDTHS.filter((w) => w <= image.width),
+    format: 'avif',
+  });
+  return {
+    src: result.src,
+    srcset: result.srcSet.attribute,
+    sizes: '(min-width: 1024px) 13rem, (min-width: 640px) 11rem, 9rem',
+    width: image.width,
+    height: image.height,
+  };
+}

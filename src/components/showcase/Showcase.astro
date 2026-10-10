@@ -1,6 +1,7 @@
 ---
 // Vitrine (docs/05): orquestra fundo, informações e carrossel. Tudo renderizado no servidor;
 // o JS da Fase 4 só alterna o veículo ativo.
+import CoverflowCarousel from '@/components/showcase/CoverflowCarousel.astro';
 import ShowcaseBackdrop from '@/components/showcase/ShowcaseBackdrop.astro';
 import ShowcaseInfo from '@/components/showcase/ShowcaseInfo.astro';
 import { RANKING_LABELS, type RankedVehicle, type RankingKey } from '@/lib/rankings';
@@ -11,7 +12,8 @@ interface Props {
 }
 
 const { vehicles, rankingKey } = Astro.props;
-const active = vehicles[0]; // a vitrine abre no último colocado (docs/01)
+const activeIndex = 0; // a vitrine abre no último colocado (docs/01); o hash entra na Fase 4
+const active = vehicles[activeIndex];
 const label = RANKING_LABELS[rankingKey];
 ---
 
@@ -27,8 +29,12 @@ const label = RANKING_LABELS[rankingKey];
     <ShowcaseBackdrop vehicle={active} />
 
     <div class="showcase__grid">
-      <ShowcaseInfo vehicle={active} />
-      <!-- CoverflowCarousel entra na próxima tarefa da Fase 3 -->
+      <div class="showcase__info">
+        <ShowcaseInfo vehicle={active} />
+      </div>
+      <div class="showcase__carousel">
+        <CoverflowCarousel vehicles={vehicles} activeIndex={activeIndex} />
+      </div>
     </div>
   </section>
 )}
@@ -44,9 +50,26 @@ const label = RANKING_LABELS[rankingKey];
   .showcase__grid {
     position: relative;
     z-index: 1;
-    display: flex;
-    align-items: center;
+    display: grid;
+    align-content: center;
+    gap: 2.5rem;
     min-height: 100svh;
     padding: calc(var(--header-h) + 2rem) clamp(1.5rem, 5vw, 6rem) 2rem;
+  }
+
+  /* Desktop (docs/04): grade de 12 colunas; info 1–5, carrossel 7–12. Ajuste fino na tarefa de layout. */
+  @media (min-width: 1024px) {
+    .showcase__grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      align-items: center;
+    }
+
+    .showcase__info {
+      grid-column: 1 / span 5;
+    }
+
+    .showcase__carousel {
+      grid-column: 7 / span 6;
+    }
   }
 </style>
