@@ -1,0 +1,18 @@
+---
+// 404 (docs/05). Versão temática completa na Fase 7.
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Página não encontrada" description="Essa página saiu da pista.">
+  <div class="grid min-h-[70svh] place-content-center px-[clamp(1.5rem,5vw,6rem)] pt-(--header-h) text-center">
+    <p class="numeric text-meta text-accent">404</p>
+    <h1 class="mt-2 font-display text-display font-bold uppercase">Saiu da pista.</h1>
+    <p class="mt-4 text-text-muted">A página que você procurou não está nesta garagem.</p>
+    <a
+      href="/"
+      class="mx-auto mt-8 inline-flex h-11 items-center rounded bg-accent px-6 text-button font-semibold tracking-[0.06em] text-bg uppercase transition-colors hover:bg-accent-hover"
+    >
+      Voltar para a garagem
+    </a>
+  </div>
+</BaseLayout>

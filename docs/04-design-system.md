@@ -71,10 +71,11 @@ Escala (fluida com `clamp`):
   altura base 40px × `logoScale`. Fica **acima** do nome do modelo, como "Disney" sobre o título.
 - **Linha de specs**: itens separados por barra vertical fina (`1px`, `--color-border` mais claro),
   cor `--color-text-muted`, exceto o selo de rank.
-- **Selo de rank** (`RankBadge`): fundo `--color-accent`, texto branco, Rajdhani, cantos
+- **Selo de rank** (`RankBadge`): fundo `--color-accent`, texto `--color-bg` (contraste), Rajdhani, cantos
   levemente chanfrados (`clip-path`) — equivalente ao `12+`. Top 1: fundo `--color-gold`,
   texto escuro e rótulo "TOP 1" **no lugar de** `#01` (na linha de specs, no card e na lista).
-- **Botões**: primário sólido `--color-accent` com ícone ▶; secundário `--color-surface` com
+- **Botões**: primário sólido `--color-accent` com **texto e ícone `--color-bg`** (contraste 5,6:1 —
+  branco sobre o accent dá só 3,56:1) e ícone ▶; secundário `--color-surface` com
   borda sutil. Altura 44px, raio 4px (cantos quase retos, como a referência).
 - **Cards do carrossel**: proporção 3:4, raio 8px. Ativo: escala 1, sombra forte, sem filtro.
   Vizinhos: escala ~0.85, `brightness(0.5)`, `blur(1px)`. Extremos: escala ~0.7, mais escuros.

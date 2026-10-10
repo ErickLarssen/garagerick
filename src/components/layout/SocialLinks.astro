@@ -1,0 +1,51 @@
+---
+// Ícones das redes do Erick (docs/05). URLs vêm de SITE.links; usado no Footer e na vitrine.
+import GithubIcon from '@/assets/icons/github.svg';
+import InstagramIcon from '@/assets/icons/instagram.svg';
+import LinkedinIcon from '@/assets/icons/linkedin.svg';
+import { SITE } from '@/lib/site';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const networks = [
+  { key: 'instagram', label: 'Instagram', Icon: InstagramIcon },
+  { key: 'linkedin', label: 'LinkedIn', Icon: LinkedinIcon },
+  { key: 'github', label: 'GitHub', Icon: GithubIcon },
+] as const;
+---
+
+<ul class:list={['flex items-center gap-1', className]}>
+  {networks.map(({ key, label, Icon }) => (
+    <li>
+      <a
+        href={SITE.links[key]}
+        target="_blank"
+        rel="noopener"
+        aria-label={`${label} de ${SITE.author} (abre em nova aba)`}
+        class="social-link"
+      >
+        <Icon width={22} height={22} aria-hidden="true" />
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .social-link {
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 4px;
+    color: var(--color-text-muted);
+    transition: color 200ms var(--ease-garage);
+  }
+
+  .social-link:hover {
+    color: var(--color-text);
+  }
+</style>

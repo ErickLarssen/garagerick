@@ -1,0 +1,75 @@
+---
+// Header fixo (docs/05): transparente sobre a vitrine; ganha fundo com blur ao rolar.
+import MobileMenu from '@/components/layout/MobileMenu.astro';
+import Nav from '@/components/layout/Nav.astro';
+import { SITE } from '@/lib/site';
+import type { RankingKey } from '@/lib/rankings';
+
+interface Props {
+  activeNav?: RankingKey;
+}
+
+const { activeNav } = Astro.props;
+---
+
+<header class="site-header" data-site-header>
+  <div class="mx-auto grid h-(--header-h) grid-cols-[1fr_auto_1fr] items-center px-[clamp(1.5rem,5vw,6rem)]">
+    <a href="/" class="justify-self-start text-lg font-bold tracking-wide uppercase">
+      {SITE.name}
+    </a>
+
+    <Nav activeNav={activeNav} class="hidden sm:block" />
+
+    <!-- Busca entra à direita na Fase 6 -->
+    <div class="col-start-3 justify-self-end">
+      <MobileMenu activeNav={activeNav} />
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 40;
+    border-bottom: 1px solid transparent;
+    transition:
+      background-color 250ms var(--ease-garage),
+      border-color 250ms var(--ease-garage);
+  }
+
+  .site-header[data-scrolled] {
+    background-color: var(--color-bg);
+    border-bottom-color: var(--color-border);
+  }
+
+  @supports (backdrop-filter: blur(1px)) {
+    .site-header[data-scrolled] {
+      background-color: rgb(7 9 12 / 0.75);
+      backdrop-filter: blur(12px);
+    }
+  }
+</style>
+
+<script>
+  // Marca o header quando a página sai do topo (fundo + blur). Passivo e com rAF.
+  const header = document.querySelector<HTMLElement>('[data-site-header]');
+  if (header) {
+    let ticking = false;
+    const update = () => {
+      header.toggleAttribute('data-scrolled', window.scrollY > 8);
+      ticking = false;
+    };
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true },
+    );
+    update();
+  }
+</script>

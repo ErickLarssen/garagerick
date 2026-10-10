@@ -15,6 +15,42 @@
 
 ---
 
+### 2026-10-10 — Rotas da Fase 2 e revisão visual
+- **Contexto:** última tarefa da Fase 2 + conferência no navegador (preview, iframes de 390 e 768 px; desktop 1440 px).
+- **Decisão:** `RANKING_SEO` (título e descrição por ranking) em `lib/rankings.ts`. Páginas `index`, `[category]` (esportivos/antigos) e `motos` usam o componente temporário `RankingPagePlaceholder` (h1 com o nome do ranking + lista simples) — chamar `getRanking` ali reativa a validação no build; ele será substituído pela vitrine na Fase 3. `404.astro` básica ("Saiu da pista." + "Voltar para a garagem", botão accent com texto escuro). Bugs achados na revisão e corrigidos: (1) no celular o botão de menu caía na coluna do meio do grid do header (o `Nav` some) → `col-start-3`; (2) `inline-flex` no link do rodapé engolia o espaço antes do travessão e espremia o texto no tablet → link `inline-block` com padding e rodapé em linha só a partir de `lg`. Observação: abas de automação em segundo plano não disparam `scroll`/rAF, então o fundo do header ao rolar foi confirmado só visualmente.
+- **Motivo:** navegação completa entre as páginas antes da vitrine; layout responsivo correto.
+- **Impacto:** `src/pages/{index,[category],motos,404}.astro`, `src/components/ranking/RankingPagePlaceholder.astro`, `lib/rankings.ts`, `Header.astro`, `Footer.astro`.
+
+### 2026-10-10 — Redes sociais: Instagram, LinkedIn e GitHub
+- **Contexto:** pedido do Erick após a tarefa do rodapé.
+- **Decisão:** removidos YouTube e Behance (ícones, `SITE.links` e docs); adicionado LinkedIn (`https://www.linkedin.com/in/ericklarssen/`), ícone adaptado da Lucide. Ordem: Instagram, LinkedIn, GitHub. O YouTube continua só como destino do `videoUrl` dos veículos.
+- **Motivo:** preferência do Erick.
+- **Impacto:** `src/lib/site.ts`, `SocialLinks.astro`, `src/assets/icons/`, `docs/01`, `docs/05`, `docs/06`.
+
+### 2026-10-10 — `Footer` e `SocialLinks`
+- **Contexto:** quarta tarefa da Fase 2.
+- **Decisão:** ícones de Instagram, YouTube e GitHub adaptados da biblioteca **Lucide** (licença ISC, só os paths copiados — sem dependência); Behance desenhado à mão no mesmo estilo linear. `SocialLinks` aceita `class` para ser reutilizado na vitrine. Rodapé: nome + descrição, links Cinerick ("meus filmes favoritos") e Portfólio ("ericksilva.dev"), redes e `© ano autor`. Todos os externos com `target="_blank" rel="noopener"` e `aria-label` que começa pelo texto visível + "(abre em nova aba)". Alvos de toque de 44px.
+- **Motivo:** sem dependência de ícones; acessibilidade (`docs/07`).
+- **Impacto:** `src/components/layout/{Footer,SocialLinks}.astro`, `src/assets/icons/{instagram,youtube,github,behance}.svg`, `BaseLayout`.
+
+### 2026-10-10 — Menu mobile com Popover API
+- **Contexto:** gaveta mobile acessível; o site deve navegar sem JS e com < 40 kB de JS.
+- **Decisão:** `MobileMenu.astro` usa `popover="auto"` + `popovertarget` (zero JS): Esc, clique fora e `aria-expanded` nativos; animação com `@starting-style` + `transition-behavior: allow-discrete`, reduzida em `prefers-reduced-motion`. `Nav` ganhou `variant="bar" | "drawer"`. Sem trava de rolagem do fundo (popover não é modal) — aceitável para um menu de 4 itens. **Armadilha registrada:** estilos de `<style>` de componente ficam fora das camadas do Tailwind v4 e vencem utilitários (ex.: `sm:hidden` perde para um `display` do componente); breakpoints de elementos com `display` próprio vão em media query dentro do componente.
+- **Motivo:** acessibilidade e progressive enhancement sem custo de JS; suporte nas 2 últimas versões dos navegadores-alvo.
+- **Impacto:** `src/components/layout/{MobileMenu,Nav,Header}.astro`, `src/assets/icons/{menu,close}.svg`, `docs/05`.
+
+### 2026-10-10 — `Header` e `Nav`
+- **Contexto:** segunda tarefa da Fase 2.
+- **Decisão:** ícones SVG importados como componente (recurso nativo do Astro 7: `import Icon from '@/assets/icons/x.svg'`), traço 1,75px em `currentColor`; ícone próprio `motorcycle.svg`. Itens e rotas do menu vêm de `RANKING_LABELS`/`RANKING_ROUTES`. Altura do header em `--header-h` (4,5rem, no `:root`); conteúdo que não é a vitrine compensa com padding. Header ganha `data-scrolled` quando `scrollY > 8` (listener passivo + rAF), com fundo `rgb(7 9 12 / .75)` + blur e fallback sólido via `@supports`. Nav fica oculta abaixo de 640px até a tarefa do menu mobile. Alvos de toque com 44px de altura.
+- **Motivo:** sem dependência de ícones; dados de navegação numa fonte única.
+- **Impacto:** `src/components/layout/{Header,Nav}.astro`, `src/assets/icons/motorcycle.svg`, `BaseLayout`, `global.css`.
+
+### 2026-10-10 — `BaseLayout` e contraste do accent
+- **Contexto:** primeira tarefa da Fase 2. Ao estilizar o link "Pular para o conteúdo", o contraste de **branco sobre `--color-accent` deu 3,56:1** (3,10:1 no hover) — abaixo do 4,5:1 exigido pelo `docs/07` para texto normal.
+- **Decisão:** `title` recebe só o título da página e o layout acrescenta ` | Garagerick`; `activeNav` é opcional; `ogImage` opcional (sem imagem → `twitter:card=summary`, sem `og:image` até a Fase 7). Canonical a partir de `Astro.site`. Link "pular" usa texto `--color-bg` sobre accent (5,60:1). **Resolvido pelo Erick (opção 1):** o botão primário usa texto/ícone `--color-bg` sobre o accent; o accent não muda. Vale para todo texto sobre `--color-accent` (ex.: `RankBadge`).
+- **Motivo:** meta de acessibilidade do `docs/07`.
+- **Impacto:** `src/layouts/BaseLayout.astro`, `src/pages/index.astro`, `docs/05`.
+
 ### 2026-10-10 — Validação de rankings testada
 - **Contexto:** tarefa de teste da Fase 1.
 - **Decisão:** testados (e desfeitos) três cenários: rank duplicado (`posição 3 repetida (...)` + `posição 4 ausente`), marca inexistente e mesmo slug em carros e motos — todos quebram o build com mensagem acionável. O Astro 7 também acusa referência inválida (`Invalid content reference`) antes da nossa validação; mantemos a nossa por dar contexto do ranking. Sem framework de testes (não previsto em `docs/02`).

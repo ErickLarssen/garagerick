@@ -1,0 +1,81 @@
+---
+// Layout base de todas as páginas (docs/05): <head> com SEO, fontes, favicon e theme-color,
+// link "Pular para o conteúdo", Header, <main> e Footer.
+import '@/styles/global.css';
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+import Footer from '@/components/layout/Footer.astro';
+import Header from '@/components/layout/Header.astro';
+import { SITE } from '@/lib/site';
+import type { RankingKey } from '@/lib/rankings';
+
+interface Props {
+  /** Título da página sem o nome do site (ex.: "Esportivos — Ranking de carros favoritos"). */
+  title: string;
+  description?: string;
+  /** Imagem de compartilhamento (1200×630). Sem ela, não há og:image (fallback chega na Fase 7). */
+  ogImage?: ImageMetadata;
+  /** Item ativo do menu; ausente em páginas fora dos rankings (ex.: 404). */
+  activeNav?: RankingKey;
+}
+
+const { title, description = SITE.description, ogImage, activeNav } = Astro.props;
+
+const fullTitle = `${title} | ${SITE.name}`;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
+const og = ogImage
+  ? new URL(
+      (await getImage({ src: ogImage, width: 1200, height: 630, format: 'jpg' })).src,
+      Astro.site ?? SITE.url,
+    ).href
+  : undefined;
+---
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={SITE.author} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#07090c" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {og && <meta property="og:image" content={og} />}
+    {og && <meta property="og:image:width" content="1200" />}
+    {og && <meta property="og:image:height" content="630" />}
+    <meta name="twitter:card" content={og ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    {og && <meta name="twitter:image" content={og} />}
+
+    <slot name="head" />
+  </head>
+  <body class="min-h-svh">
+    <a
+      href="#conteudo"
+      class="sr-only z-50 rounded bg-accent px-4 py-2 font-semibold text-bg focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
+    >
+      Pular para o conteúdo
+    </a>
+
+    <Header activeNav={activeNav} />
+
+    <main id="conteudo" tabindex="-1" class="outline-none">
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
+</html>

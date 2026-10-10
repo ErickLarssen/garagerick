@@ -6,7 +6,8 @@ o primeiro veículo da vitrine e a lista completa funciona normalmente.
 ## Componentes de layout
 
 ### `BaseLayout.astro`
-Props: `title`, `description`, `ogImage?`, `activeNav: RankingKey`.
+Props: `title` (sem o nome do site — o layout acrescenta ` | Garagerick`), `description?` (padrão `SITE.description`),
+`ogImage?: ImageMetadata` (recortada para 1200×630 via `getImage`), `activeNav?: RankingKey` (ausente na 404).
 Responsável por `<head>` (SEO, Open Graph, fontes, favicon, `theme-color`), `Header`, `<main>`, `Footer`
 e link "Pular para o conteúdo".
 
@@ -16,6 +17,12 @@ e link "Pular para o conteúdo".
   Esportivos → `/esportivos`, Antigos → `/antigos`.
 - Item ativo com `aria-current="page"` e sublinhado em `--color-accent`.
 - Header fixo e transparente sobre a vitrine; ganha fundo `--color-bg` com blur ao rolar.
+
+### `MobileMenu.astro` (< 640px)
+- Botão "Abrir menu" + gaveta lateral com **Popover API** (`popover="auto"` + `popovertarget`):
+  funciona sem JS, fecha com Esc/clique fora, e o navegador expõe `aria-expanded` no botão.
+- Dentro: botão "Fechar menu" e `Nav variant="drawer"` (lista vertical; o item de moto mostra ícone + "Motos").
+- Busca mobile entra na gaveta na Fase 6.
 
 ### `SearchBox.astro` + `scripts/search.ts`
 - Busca **client-side** sobre `/search-index.json` (gerado no build por `pages/search-index.json.ts`):
@@ -29,8 +36,8 @@ e link "Pular para o conteúdo".
 - Vazio: "Nada encontrado nessa garagem."
 
 ### `Footer.astro` / `SocialLinks.astro`
-Dados vindos de `lib/site.ts`: Instagram (`elarssen.design`), YouTube (`@ElarssenDesign`),
-GitHub (`ErickLarssen`), Behance (`ericklarssen`); links para o Cinerick e para `ericksilva.dev`.
+Dados vindos de `lib/site.ts`: Instagram (`elarssen.design`), LinkedIn (`ericklarssen`) e
+GitHub (`ErickLarssen`), nessa ordem; links para o Cinerick e para `ericksilva.dev`.
 Sempre `target="_blank" rel="noopener"` com `aria-label` descritivo.
 
 ## A vitrine (`components/showcase/`)

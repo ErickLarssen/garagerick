@@ -1,0 +1,109 @@
+---
+// Menu mobile (docs/04: < 640px). Gaveta com Popover API nativa: abre/fecha sem JS,
+// fecha com Esc e clique fora, e o navegador expõe aria-expanded no botão automaticamente.
+import CloseIcon from '@/assets/icons/close.svg';
+import MenuIcon from '@/assets/icons/menu.svg';
+import Nav from '@/components/layout/Nav.astro';
+import type { RankingKey } from '@/lib/rankings';
+
+interface Props {
+  activeNav?: RankingKey;
+}
+
+const { activeNav } = Astro.props;
+---
+
+<button
+  type="button"
+  popovertarget="mobile-menu"
+  aria-controls="mobile-menu"
+  class="menu-button menu-button--open"
+>
+  <MenuIcon width={26} height={26} aria-hidden="true" />
+  <span class="sr-only">Abrir menu</span>
+</button>
+
+<div id="mobile-menu" popover="auto" class="drawer">
+  <div class="flex h-(--header-h) items-center justify-end px-6">
+    <button
+      type="button"
+      popovertarget="mobile-menu"
+      popovertargetaction="hide"
+      class="menu-button"
+    >
+      <CloseIcon width={26} height={26} aria-hidden="true" />
+      <span class="sr-only">Fechar menu</span>
+    </button>
+  </div>
+
+  <Nav activeNav={activeNav} variant="drawer" class="px-4" />
+
+  <!-- Busca mobile entra aqui na Fase 6 -->
+</div>
+
+<style>
+  .menu-button {
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin-inline-end: -10px; /* alinha o ícone à margem, mantendo a área de toque */
+    color: var(--color-text);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  /* Estilos de componente ficam fora das camadas do Tailwind, então o breakpoint é tratado aqui
+     (um utilitário sm:hidden perderia para o display acima). 640px = sm. */
+  @media (min-width: 640px) {
+    .menu-button--open {
+      display: none;
+    }
+
+    .drawer:popover-open {
+      display: none;
+    }
+  }
+
+  .drawer {
+    /* reset do popover (que vem centralizado com borda) */
+    inset: 0 0 0 auto;
+    width: min(20rem, 85vw);
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-inline-start: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    overflow-y: auto;
+
+    /* entrada/saída deslizando da direita */
+    transform: translateX(100%);
+    transition:
+      transform 300ms var(--ease-garage),
+      overlay 300ms allow-discrete,
+      display 300ms allow-discrete;
+  }
+
+  .drawer:popover-open {
+    transform: translateX(0);
+  }
+
+  @starting-style {
+    .drawer:popover-open {
+      transform: translateX(100%);
+    }
+  }
+
+  .drawer::backdrop {
+    background: rgb(7 9 12 / 0.6);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .drawer {
+      transition-duration: 0.01ms;
+    }
+  }
+</style>

@@ -1,0 +1,100 @@
+---
+// Navegação principal (docs/05): ícone de moto → /motos, depois Populares, Esportivos, Antigos.
+// variant "bar": linha no header (desktop/tablet). variant "drawer": lista vertical na gaveta mobile.
+import MotorcycleIcon from '@/assets/icons/motorcycle.svg';
+import { RANKING_LABELS, RANKING_ROUTES, type RankingKey } from '@/lib/rankings';
+
+interface Props {
+  activeNav?: RankingKey;
+  variant?: 'bar' | 'drawer';
+  class?: string;
+}
+
+const { activeNav, variant = 'bar', class: className } = Astro.props;
+const isDrawer = variant === 'drawer';
+const textItems: RankingKey[] = ['populares', 'esportivos', 'antigos'];
+---
+
+<nav aria-label="Principal" class={className}>
+  <ul
+    class:list={[
+      'flex',
+      isDrawer ? 'flex-col gap-2' : 'items-center gap-[clamp(1rem,2.5vw,2.25rem)]',
+    ]}
+  >
+    <li>
+      <a
+        href={RANKING_ROUTES.motos}
+        aria-label={isDrawer ? undefined : RANKING_LABELS.motos}
+        aria-current={activeNav === 'motos' ? 'page' : undefined}
+        class:list={['nav-link', { 'nav-link--drawer': isDrawer }]}
+      >
+        <MotorcycleIcon width={26} height={26} aria-hidden="true" />
+        {isDrawer && <span class="ml-3">{RANKING_LABELS.motos}</span>}
+      </a>
+    </li>
+    {textItems.map((key) => (
+      <li>
+        <a
+          href={RANKING_ROUTES[key]}
+          aria-current={activeNav === key ? 'page' : undefined}
+          class:list={['nav-link', { 'nav-link--drawer': isDrawer }]}
+        >
+          {RANKING_LABELS[key]}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: var(--text-nav);
+    font-weight: var(--text-nav--font-weight);
+    color: var(--color-text-muted);
+    transition: color 200ms var(--ease-garage);
+  }
+
+  .nav-link:hover,
+  .nav-link[aria-current='page'] {
+    color: var(--color-text);
+  }
+
+  /* Sublinhado do item ativo em --color-accent */
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 6px;
+    height: 2px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transition: transform 250ms var(--ease-garage);
+  }
+
+  .nav-link[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+
+  /* Gaveta: itens maiores, sublinhado vira barra lateral */
+  .nav-link--drawer {
+    min-height: 52px;
+    padding-inline: 1rem;
+    font-size: 1.125rem;
+  }
+
+  .nav-link--drawer::after {
+    inset: 12px auto 12px 0;
+    width: 3px;
+    height: auto;
+    transform: scaleY(0);
+  }
+
+  .nav-link--drawer[aria-current='page']::after {
+    transform: scaleY(1);
+  }
+</style>
