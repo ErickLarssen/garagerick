@@ -1,28 +1,17 @@
 ---
-// Página temporária da Fase 0 — será substituída pela vitrine de Populares.
-import '@/styles/global.css';
+// Página temporária — será substituída pela vitrine de Populares.
+import BaseLayout from '@/layouts/BaseLayout.astro';
 import { SITE } from '@/lib/site';
 ---
 
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{SITE.name}</title>
-    <meta name="description" content={SITE.description} />
-  </head>
-  <body class="min-h-svh">
-    <main class="px-[clamp(1.5rem,5vw,6rem)] py-16">
-      <p class="font-bold text-text uppercase">{SITE.name}</p>
-      <h1 class="mt-8 font-display text-display font-bold uppercase">Em construção</h1>
-      <p class="mt-4 text-meta text-text-muted">
-        <span class="numeric">2026</span> │ <span class="numeric text-accent">#01</span> │
-        <span class="numeric text-gold">TOP 1</span>
-      </p>
-      <p class="mt-6 max-w-[60ch]">{SITE.description}</p>
-    </main>
-  </body>
-</html>
+<BaseLayout title="Populares — Ranking de carros favoritos" activeNav="populares">
+  <div class="px-[clamp(1.5rem,5vw,6rem)] py-16">
+    <p class="font-bold text-text uppercase">{SITE.name}</p>
+    <h1 class="mt-8 font-display text-display font-bold uppercase">Em construção</h1>
+    <p class="mt-4 text-meta text-text-muted">
+      <span class="numeric">2026</span> │ <span class="numeric text-accent">#01</span> │
+      <span class="numeric text-gold">TOP 1</span>
+    </p>
+    <p class="mt-6 max-w-[60ch]">{SITE.description}</p>
+  </div>
+</BaseLayout>

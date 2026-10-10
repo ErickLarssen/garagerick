@@ -6,7 +6,8 @@ o primeiro veículo da vitrine e a lista completa funciona normalmente.
 ## Componentes de layout
 
 ### `BaseLayout.astro`
-Props: `title`, `description`, `ogImage?`, `activeNav: RankingKey`.
+Props: `title` (sem o nome do site — o layout acrescenta ` | Garagerick`), `description?` (padrão `SITE.description`),
+`ogImage?: ImageMetadata` (recortada para 1200×630 via `getImage`), `activeNav?: RankingKey` (ausente na 404).
 Responsável por `<head>` (SEO, Open Graph, fontes, favicon, `theme-color`), `Header`, `<main>`, `Footer`
 e link "Pular para o conteúdo".
 

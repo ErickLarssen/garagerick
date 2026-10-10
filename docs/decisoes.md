@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-10 — `BaseLayout` e contraste do accent
+- **Contexto:** primeira tarefa da Fase 2. Ao estilizar o link "Pular para o conteúdo", o contraste de **branco sobre `--color-accent` deu 3,56:1** (3,10:1 no hover) — abaixo do 4,5:1 exigido pelo `docs/07` para texto normal.
+- **Decisão:** `title` recebe só o título da página e o layout acrescenta ` | Garagerick`; `activeNav` é opcional; `ogImage` opcional (sem imagem → `twitter:card=summary`, sem `og:image` até a Fase 7). Canonical a partir de `Astro.site`. Link "pular" usa texto `--color-bg` sobre accent (5,60:1). **Pendente para a Fase 3:** o botão primário (`docs/04`: branco sobre accent) precisa de outra solução — ver opções no resumo ao Erick.
+- **Motivo:** meta de acessibilidade do `docs/07`.
+- **Impacto:** `src/layouts/BaseLayout.astro`, `src/pages/index.astro`, `docs/05`.
+
 ### 2026-10-10 — Validação de rankings testada
 - **Contexto:** tarefa de teste da Fase 1.
 - **Decisão:** testados (e desfeitos) três cenários: rank duplicado (`posição 3 repetida (...)` + `posição 4 ausente`), marca inexistente e mesmo slug em carros e motos — todos quebram o build com mensagem acionável. O Astro 7 também acusa referência inválida (`Invalid content reference`) antes da nossa validação; mantemos a nossa por dar contexto do ranking. Sem framework de testes (não previsto em `docs/02`).
