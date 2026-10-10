@@ -36,7 +36,7 @@
 
 ## Fase 3 — Vitrine (estática)
 
-- [ ] `ShowcaseBackdrop` com degradês e `--ambient`
+- [x] `ShowcaseBackdrop` com degradês e `--ambient`
 - [ ] `ShowcaseInfo`: `BrandLogo`, nome display, `SpecRow` + `RankBadge`, texto, botões
 - [ ] `CoverflowCarousel` + `VehicleCard` renderizados (sem JS ainda)
 - [ ] Layout responsivo desktop/tablet/celular (`docs/04`)

@@ -1,24 +1,20 @@
 ---
-// TEMPORÁRIO (Fase 2): conteúdo das páginas de ranking até a vitrine chegar na Fase 3.
-// Chamar getRanking aqui mantém a validação do ranking ativa no build.
-import { RANKING_LABELS, RANKING_SEO, getRanking, type RankingKey } from '@/lib/rankings';
+// TEMPORÁRIO: lista simples abaixo da vitrine até o RankingList da Fase 5.
+import { RANKING_LABELS, type RankedVehicle, type RankingKey } from '@/lib/rankings';
 import { formatRank } from '@/lib/format';
 
 interface Props {
+  vehicles: RankedVehicle[];
   ranking: RankingKey;
 }
 
-const { ranking } = Astro.props;
-const vehicles = await getRanking(ranking);
+const { vehicles, ranking } = Astro.props;
 ---
 
-<div class="px-[clamp(1.5rem,5vw,6rem)] pt-[calc(var(--header-h)+4rem)] pb-16">
-  <h1 class="font-display text-display font-bold uppercase">{RANKING_LABELS[ranking]}</h1>
-  <p class="mt-4 max-w-[60ch] text-text-muted">{RANKING_SEO[ranking].description}</p>
-  <p class="mt-2 text-sm text-text-muted">
-    {vehicles.length} veículos · a vitrine chega na Fase 3.
-  </p>
-
+<section id="ranking" class="px-[clamp(1.5rem,5vw,6rem)] py-16">
+  <h2 class="font-display text-4xl font-bold uppercase">
+    Ranking completo — {RANKING_LABELS[ranking]}
+  </h2>
   <ol reversed class="mt-8 grid max-w-xl gap-2">
     {vehicles.map((v) => (
       <li class="flex items-baseline gap-3">
@@ -31,4 +27,4 @@ const vehicles = await getRanking(ranking);
       </li>
     ))}
   </ol>
-</div>
+</section>

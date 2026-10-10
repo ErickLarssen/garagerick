@@ -62,7 +62,7 @@ Estrutura:
 
 ### `ShowcaseBackdrop.astro`
 - Duas `<img>` sobrepostas (A/B). A troca carrega a nova na camada oculta e faz crossfade.
-- Imagens geradas com `getImage()` do Astro (AVIF/WebP, larguras 640/1280/1920) e `srcset`.
+- Imagens geradas com `getHeroImage()` (`lib/images.ts`, sobre `getImage()`): **só AVIF**, larguras 640/1280/1920, `srcset` + `sizes="100vw"`.
 - A primeira imagem tem `fetchpriority="high"` e **não** é lazy (é o LCP).
 
 ### `ShowcaseInfo.astro`

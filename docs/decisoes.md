@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-10 — `ShowcaseBackdrop` e esqueleto do `Showcase`
+- **Contexto:** primeira tarefa da Fase 3. A Fase 2 ainda não foi mergeada (sem confirmação do Erick), então `fase-3-vitrine-estatica` saiu de `fase-2-layout`.
+- **Decisão:** hero **só em AVIF** (640/1280/1920) via `lib/images.ts → getHeroImage` — os navegadores-alvo suportam AVIF e uma `<img>` com `srcset` simplifica a troca por JS na Fase 4 (um `<picture>` exigiria trocar várias `<source>`). Camada B começa com a mesma URL da A (vem do cache). Camadas conforme `docs/04`, com fallback sem `color-mix` via `@supports`; no celular o degradê inferior é reforçado (info sobre a parte de baixo). `Showcase` define `--ambient` inline, abre no último colocado e tem o `<h1>` estático (`sr-only`). A lista temporária virou `<section id="ranking">` com `<h2>`. Verificação visual no Chrome não foi possível (capturas travando); fica para a revisão do Erick no fim da fase.
+- **Motivo:** desempenho (LCP) e simplicidade da troca de imagem.
+- **Impacto:** `src/lib/images.ts`, `src/components/showcase/{Showcase,ShowcaseBackdrop}.astro`, páginas de ranking, `RankingPagePlaceholder`, `docs/05`.
+
 ### 2026-10-10 — Rotas da Fase 2 e revisão visual
 - **Contexto:** última tarefa da Fase 2 + conferência no navegador (preview, iframes de 390 e 768 px; desktop 1440 px).
 - **Decisão:** `RANKING_SEO` (título e descrição por ranking) em `lib/rankings.ts`. Páginas `index`, `[category]` (esportivos/antigos) e `motos` usam o componente temporário `RankingPagePlaceholder` (h1 com o nome do ranking + lista simples) — chamar `getRanking` ali reativa a validação no build; ele será substituído pela vitrine na Fase 3. `404.astro` básica ("Saiu da pista." + "Voltar para a garagem", botão accent com texto escuro). Bugs achados na revisão e corrigidos: (1) no celular o botão de menu caía na coluna do meio do grid do header (o `Nav` some) → `col-start-3`; (2) `inline-flex` no link do rodapé engolia o espaço antes do travessão e espremia o texto no tablet → link `inline-block` com padding e rodapé em linha só a partir de `lg`. Observação: abas de automação em segundo plano não disparam `scroll`/rAF, então o fundo do header ao rolar foi confirmado só visualmente.

@@ -1,0 +1,48 @@
+---
+// Vitrine (docs/05): orquestra fundo, informações e carrossel. Tudo renderizado no servidor;
+// o JS da Fase 4 só alterna o veículo ativo.
+import ShowcaseBackdrop from '@/components/showcase/ShowcaseBackdrop.astro';
+import { RANKING_LABELS, type RankedVehicle, type RankingKey } from '@/lib/rankings';
+
+interface Props {
+  vehicles: RankedVehicle[]; // ordem decrescente (último colocado primeiro)
+  rankingKey: RankingKey;
+}
+
+const { vehicles, rankingKey } = Astro.props;
+const active = vehicles[0]; // a vitrine abre no último colocado (docs/01)
+const label = RANKING_LABELS[rankingKey];
+---
+
+{active && (
+  <section
+    class="showcase"
+    data-showcase
+    aria-roledescription="vitrine"
+    aria-label={`Ranking ${label}`}
+    style={`--ambient: ${active.ambientColor}`}
+  >
+    <h1 class="sr-only">{label} — ranking de favoritos</h1>
+    <ShowcaseBackdrop vehicle={active} />
+
+    <div class="showcase__grid">
+      <!-- ShowcaseInfo e CoverflowCarousel entram nas próximas tarefas da Fase 3 -->
+    </div>
+  </section>
+)}
+
+<style>
+  .showcase {
+    position: relative;
+    isolation: isolate;
+    min-height: 100svh;
+    overflow: hidden;
+  }
+
+  .showcase__grid {
+    position: relative;
+    z-index: 1;
+    min-height: 100svh;
+    padding: calc(var(--header-h) + 2rem) clamp(1.5rem, 5vw, 6rem) 2rem;
+  }
+</style>

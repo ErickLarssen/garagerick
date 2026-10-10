@@ -3,7 +3,8 @@
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import RankingPagePlaceholder from '@/components/ranking/RankingPagePlaceholder.astro';
-import { RANKING_SEO } from '@/lib/rankings';
+import Showcase from '@/components/showcase/Showcase.astro';
+import { RANKING_SEO, getRanking } from '@/lib/rankings';
 
 export const getStaticPaths = (() =>
   (['esportivos', 'antigos'] as const).map((category) => ({
@@ -17,8 +18,10 @@ interface Props {
 
 const { category } = Astro.props;
 const { title, description } = RANKING_SEO[category];
+const vehicles = await getRanking(category);
 ---
 
 <BaseLayout title={title} description={description} activeNav={category}>
-  <RankingPagePlaceholder ranking={category} />
+  <Showcase vehicles={vehicles} rankingKey={category} />
+  <RankingPagePlaceholder vehicles={vehicles} ranking={category} />
 </BaseLayout>
