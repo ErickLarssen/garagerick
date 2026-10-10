@@ -15,6 +15,36 @@
 
 ---
 
+### 2026-10-10 — Validação de rankings testada
+- **Contexto:** tarefa de teste da Fase 1.
+- **Decisão:** testados (e desfeitos) três cenários: rank duplicado (`posição 3 repetida (...)` + `posição 4 ausente`), marca inexistente e mesmo slug em carros e motos — todos quebram o build com mensagem acionável. O Astro 7 também acusa referência inválida (`Invalid content reference`) antes da nossa validação; mantemos a nossa por dar contexto do ranking. Sem framework de testes (não previsto em `docs/02`).
+- **Motivo:** garantir que o build é a rede de segurança do ranking.
+- **Impacto:** nenhum arquivo de código.
+
+### 2026-10-10 — Núcleo de dados (`format`, `validate-rankings`, `rankings`)
+- **Contexto:** implementação do contrato de `docs/03`.
+- **Decisão:** `validateRankings` é uma função pura (recebe refs e ids de marcas), reúne **todas** as violações e lança um único erro; mensagens no formato `posição N repetida/ausente/fora do intervalo`. `rankings.ts` carrega e valida o catálogo uma vez por build (memoizado), já que a regra de slug único é global. `RankedVehicle` ganhou `ranking`; `rankings.ts` exporta `RANKING_KEYS`, `RANKING_ROUTES` e `RANKING_LABELS`. `body` remove comentários HTML (o `<!-- TODO -->` não vaza para a UI/JSON). Fallback de `ambientColor` = `var(--color-ambient-default)`. Página `/debug` (noindex) criada já nesta tarefa porque a validação só roda quando uma página chama `getRanking`.
+- **Motivo:** erros acionáveis de uma vez só; fonte única de rotas/rótulos.
+- **Impacto:** `src/lib/*.ts`, `src/pages/debug.astro`, `docs/03`.
+
+### 2026-10-10 — BYD Seal e VW Nivus com dados mínimos
+- **Contexto:** regra 3 (não inventar ficha técnica), mas o schema exige `year`, `powertrain`, imagens e um logo existente para a marca.
+- **Decisão:** preenchidos só fatos independentes de versão: `powertrain` (Seal elétrico, Nivus combustão), `bodyStyle` (Sedã, SUV cupê) e `country` das marcas. `year: 2024` em ambos com comentário `# TODO: confirmar ano-modelo` (campo obrigatório). Demais specs vazias + `<!-- TODO: confirmar ficha técnica -->` no corpo. Imagens apontam para `_placeholder/` (comentário indica o caminho final). `byd.svg` e `volkswagen.svg` são cópias do logo placeholder com comentário `PLACEHOLDER` — basta sobrescrever o arquivo pelo logo oficial. `ambientColor` vazio (usa o padrão) até o Erick escolher.
+- **Motivo:** o build precisa de dados válidos sem inventar números de versão específica.
+- **Impacto:** `src/content/cars/byd-seal.md`, `src/content/cars/volkswagen-nivus.md`, `src/content/brands/{byd,volkswagen}.json`, `src/assets/brands/{byd,volkswagen}.svg`.
+
+### 2026-10-10 — Placeholders da Fase 1
+- **Contexto:** `docs/06` pede marca `exemplo`, imagens placeholder e itens de exemplo.
+- **Decisão:** imagens em **PNG** (não SVG), geradas por um script Node sem dependências (só `zlib`); 5 tons, um por posição. Populares recebe só #3–#5 (BYD Seal e VW Nivus ocupam #1 e #2 na tarefa seguinte); demais listas #1–#5. Specs fictícias e variadas (elétrico, híbrido, combustão, moto, item sem specs), com comentário `# PLACEHOLDER` no frontmatter. Corpo usa o `TODO` da regra 4. Confirmado na prática: ids preservam o `_` (`_exemplo-esportivos-2`). Teste negativo: `ambientColor` inválido derruba o `astro sync` com mensagem clara.
+- **Motivo:** o Astro não rasteriza SVG para AVIF/WebP, e a vitrine precisa testar o pipeline real de imagens; specs variadas permitem testar a linha de `quickSpecs` e a omissão de campos.
+- **Impacto:** `src/assets/brands/exemplo.svg`, `src/assets/vehicles/_placeholder/`, `src/content/**/_exemplo-*`, `src/content/brands/exemplo.json`, `docs/06`.
+
+### 2026-10-10 — Content collections no Astro 7 (Zod 4)
+- **Contexto:** o Astro 7 usa Zod 4; `import { z } from 'astro:content'` está obsoleto (sai no Astro 8) e `z.string().url()` virou `z.url()`.
+- **Decisão:** `z` de `astro/zod`, `glob` de `astro/loaders`; `vehicleBase` tipado com `SchemaContext`. Verificado no código do loader: o glob **não** ignora arquivos com `_`, e o id usa `github-slugger`, que preserva o `_` (`_exemplo-3.md` → id `_exemplo-3`) — confirmação prática na tarefa de placeholders.
+- **Motivo:** APIs atuais, sem avisos de obsolescência.
+- **Impacto:** `src/content.config.ts`, `docs/03`.
+
 ### 2026-10-08 — `astro.config.mjs` importa `SITE` de `src/lib/site.ts`
 - **Contexto:** decisão de manter a URL do site numa fonte única.
 - **Decisão:** `import { SITE } from './src/lib/site.ts'` no `astro.config.mjs` (`site: SITE.url`); o Astro carrega o config via Vite, então o import de `.ts` funciona. Resolve o `site` literal provisório da tarefa de Tailwind/sitemap.

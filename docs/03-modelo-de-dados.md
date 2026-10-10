@@ -3,6 +3,10 @@
 Todo o conteúdo vive em **Astro Content Collections** (`src/content/`), validado por Zod em
 `src/content.config.ts`. Componentes nunca leem arquivos diretamente — sempre via `lib/rankings.ts`.
 
+> **Astro 7 / Zod 4:** `z` vem de `astro/zod` (o `z` de `astro:content` está obsoleto), `glob` de
+> `astro/loaders` e `defineCollection`/`reference` de `astro:content`. URLs usam `z.url()`.
+> Os trechos abaixo omitem os imports; o arquivo real é a referência.
+
 ## Collections
 
 | Collection | Formato | Pasta | Um arquivo por… |
@@ -61,7 +65,7 @@ const vehicleBase = ({ image }) => ({
   cardImage: image(),                         // 3:4
   heroFocus: z.string().default('center'),    // object-position do fundo ("70% 50%")
   ambientColor: z.string().regex(/^#[0-9a-f]{6}$/i).optional(), // tom do degradê da vitrine
-  videoUrl: z.string().url().optional(),      // YouTube
+  videoUrl: z.url().optional(),               // YouTube
   tags: z.array(z.string()).default([]),      // usados na busca
 });
 ```
@@ -143,8 +147,10 @@ Validadas em `src/lib/validate-rankings.ts`, chamado por `lib/rankings.ts` (o bu
 2. O mesmo slug não aparece em duas listas.
 3. A marca referenciada existe em `brands`.
 
-Mensagens de erro em português e acionáveis:
-`Ranking "esportivos": posições 3 e 3 repetidas (porsche-911.md, ferrari-f40.md).`
+Mensagens de erro em português e acionáveis (todas as violações são listadas de uma vez):
+`Ranking "esportivos": posição 3 repetida (porsche-911.md, ferrari-f40.md).`
+`Ranking "esportivos": posição 4 ausente.`
+`Ranking "esportivos": posição 7 fora do intervalo 1–5 (porsche-911.md).`
 
 ## Tipo de saída para a UI
 
@@ -154,6 +160,7 @@ export type RankingKey = 'populares' | 'esportivos' | 'antigos' | 'motos';
 
 export interface RankedVehicle {
   slug: string;              // id do arquivo
+  ranking: RankingKey;       // lista a que pertence
   rank: number;
   total: number;             // tamanho da lista (para "#07 de 10")
   isTop: boolean;            // rank === 1
@@ -165,15 +172,19 @@ export interface RankedVehicle {
   heroImage: ImageMetadata;
   cardImage: ImageMetadata;
   heroFocus: string;
-  ambientColor: string;      // fallback: token --color-ambient-default
+  ambientColor: string;      // fallback: "var(--color-ambient-default)"
   videoUrl?: string;
-  body: string;              // HTML renderizado do Markdown
+  body: string;              // HTML renderizado do Markdown, sem comentários HTML (<!-- TODO -->)
 }
 
 export interface SpecItem { label: string; value: string } // { label: "Torque", value: "36,7 kgfm" }
 
 export async function getRanking(key: RankingKey): Promise<RankedVehicle[]>;
 // Retorna ordenado por rank DECRESCENTE (último colocado primeiro, Top 1 por último).
+
+export const RANKING_KEYS: readonly RankingKey[];          // ordem do menu
+export const RANKING_ROUTES: Record<RankingKey, string>;   // populares → "/", demais → "/<key>"
+export const RANKING_LABELS: Record<RankingKey, string>;   // "Populares", "Esportivos"…
 ```
 
 ### Regras de `quickSpecs` (linha principal da vitrine)
@@ -190,4 +201,5 @@ Campo ausente → item omitido (nunca exibir "undefined" ou "—" na linha princ
 
 ### Formatação (`lib/format.ts`)
 
-Use `Intl.NumberFormat('pt-BR')`: `36,7 kgfm`, `3,8 s`, `250 km/h`, `82,5 kWh`, `998 cc`.
+Use `Intl.NumberFormat('pt-BR')`: `36,7 kgfm`, `3,8 s`, `250 km/h`, `82,5 kWh`, `998 cc`
+(milhar com ponto: `1.203 cc`). `formatRank(7)` → `#07`. Rótulos de `powertrain` em `POWERTRAIN_LABELS`.
