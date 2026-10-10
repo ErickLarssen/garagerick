@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-10 — Validação de rankings testada
+- **Contexto:** tarefa de teste da Fase 1.
+- **Decisão:** testados (e desfeitos) três cenários: rank duplicado (`posição 3 repetida (...)` + `posição 4 ausente`), marca inexistente e mesmo slug em carros e motos — todos quebram o build com mensagem acionável. O Astro 7 também acusa referência inválida (`Invalid content reference`) antes da nossa validação; mantemos a nossa por dar contexto do ranking. Sem framework de testes (não previsto em `docs/02`).
+- **Motivo:** garantir que o build é a rede de segurança do ranking.
+- **Impacto:** nenhum arquivo de código.
+
 ### 2026-10-10 — Núcleo de dados (`format`, `validate-rankings`, `rankings`)
 - **Contexto:** implementação do contrato de `docs/03`.
 - **Decisão:** `validateRankings` é uma função pura (recebe refs e ids de marcas), reúne **todas** as violações e lança um único erro; mensagens no formato `posição N repetida/ausente/fora do intervalo`. `rankings.ts` carrega e valida o catálogo uma vez por build (memoizado), já que a regra de slug único é global. `RankedVehicle` ganhou `ranking`; `rankings.ts` exporta `RANKING_KEYS`, `RANKING_ROUTES` e `RANKING_LABELS`. `body` remove comentários HTML (o `<!-- TODO -->` não vaza para a UI/JSON). Fallback de `ambientColor` = `var(--color-ambient-default)`. Página `/debug` (noindex) criada já nesta tarefa porque a validação só roda quando uma página chama `getRanking`.
