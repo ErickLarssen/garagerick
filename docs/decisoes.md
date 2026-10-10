@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-10 — Content collections no Astro 7 (Zod 4)
+- **Contexto:** o Astro 7 usa Zod 4; `import { z } from 'astro:content'` está obsoleto (sai no Astro 8) e `z.string().url()` virou `z.url()`.
+- **Decisão:** `z` de `astro/zod`, `glob` de `astro/loaders`; `vehicleBase` tipado com `SchemaContext`. Verificado no código do loader: o glob **não** ignora arquivos com `_`, e o id usa `github-slugger`, que preserva o `_` (`_exemplo-3.md` → id `_exemplo-3`) — confirmação prática na tarefa de placeholders.
+- **Motivo:** APIs atuais, sem avisos de obsolescência.
+- **Impacto:** `src/content.config.ts`, `docs/03`.
+
 ### 2026-10-08 — `astro.config.mjs` importa `SITE` de `src/lib/site.ts`
 - **Contexto:** decisão de manter a URL do site numa fonte única.
 - **Decisão:** `import { SITE } from './src/lib/site.ts'` no `astro.config.mjs` (`site: SITE.url`); o Astro carrega o config via Vite, então o import de `.ts` funciona. Resolve o `site` literal provisório da tarefa de Tailwind/sitemap.

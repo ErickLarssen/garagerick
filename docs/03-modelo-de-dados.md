@@ -3,6 +3,10 @@
 Todo o conteúdo vive em **Astro Content Collections** (`src/content/`), validado por Zod em
 `src/content.config.ts`. Componentes nunca leem arquivos diretamente — sempre via `lib/rankings.ts`.
 
+> **Astro 7 / Zod 4:** `z` vem de `astro/zod` (o `z` de `astro:content` está obsoleto), `glob` de
+> `astro/loaders` e `defineCollection`/`reference` de `astro:content`. URLs usam `z.url()`.
+> Os trechos abaixo omitem os imports; o arquivo real é a referência.
+
 ## Collections
 
 | Collection | Formato | Pasta | Um arquivo por… |
@@ -61,7 +65,7 @@ const vehicleBase = ({ image }) => ({
   cardImage: image(),                         // 3:4
   heroFocus: z.string().default('center'),    // object-position do fundo ("70% 50%")
   ambientColor: z.string().regex(/^#[0-9a-f]{6}$/i).optional(), // tom do degradê da vitrine
-  videoUrl: z.string().url().optional(),      // YouTube
+  videoUrl: z.url().optional(),               // YouTube
   tags: z.array(z.string()).default([]),      // usados na busca
 });
 ```
