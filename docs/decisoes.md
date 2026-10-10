@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-10 — `ShowcaseInfo` e componentes de base
+- **Contexto:** segunda tarefa da Fase 3.
+- **Decisão:** `ui/Button.astro` (primary = accent + texto escuro; secondary = superfície + borda) vira `<a>` sempre que recebe `href` (mesmo vazio) — o botão VÍDEO é sempre link, escondido com `hidden` quando não há `videoUrl`, para a Fase 4 só trocar `href`/`hidden`. `BrandLogo` usa `filter: brightness(0) invert(.96) sepia(.08)` (branco levemente creme) e calcula largura pela proporção do SVG. `RankBadge`: texto visual (`#05`/`TOP 1`) com `aria-hidden` + texto `sr-only` ("Posição 5"/"Top 1") — `aria-label` em `<span>` genérico não é válido. `SpecRow` em Rajdhani 600 com separadores de 1px via `::before`. Ícones novos: `play.svg`, `specs.svg`. Botão FICHA TÉCNICA (`data-open-specs`) ainda sem ação até a tarefa do `SpecSheet`. Atributos `data-*` (`data-info-name`, `data-info-body`, `data-info-video`, `data-brand-logo`, `data-spec-row`) servem de ganchos para o controlador da Fase 4.
+- **Motivo:** acessibilidade e preparação para a troca de veículo por JS sem mudar markup.
+- **Impacto:** `src/components/ui/Button.astro`, `src/components/showcase/{ShowcaseInfo,BrandLogo,RankBadge,SpecRow,Showcase}.astro`, `src/assets/icons/{play,specs}.svg`.
+
 ### 2026-10-10 — `ShowcaseBackdrop` e esqueleto do `Showcase`
 - **Contexto:** primeira tarefa da Fase 3. A Fase 2 ainda não foi mergeada (sem confirmação do Erick), então `fase-3-vitrine-estatica` saiu de `fase-2-layout`.
 - **Decisão:** hero **só em AVIF** (640/1280/1920) via `lib/images.ts → getHeroImage` — os navegadores-alvo suportam AVIF e uma `<img>` com `srcset` simplifica a troca por JS na Fase 4 (um `<picture>` exigiria trocar várias `<source>`). Camada B começa com a mesma URL da A (vem do cache). Camadas conforme `docs/04`, com fallback sem `color-mix` via `@supports`; no celular o degradê inferior é reforçado (info sobre a parte de baixo). `Showcase` define `--ambient` inline, abre no último colocado e tem o `<h1>` estático (`sr-only`). A lista temporária virou `<section id="ranking">` com `<h2>`. Verificação visual no Chrome não foi possível (capturas travando); fica para a revisão do Erick no fim da fase.

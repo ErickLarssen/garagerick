@@ -1,0 +1,42 @@
+---
+// Selo de posição (docs/04): accent com texto escuro e cantos chanfrados; Top 1 em dourado.
+import { formatRank } from '@/lib/format';
+
+interface Props {
+  rank: number;
+  class?: string;
+}
+
+const { rank, class: className } = Astro.props;
+const isTop = rank === 1;
+---
+
+<span class:list={['rank-badge', { 'rank-badge--top': isTop }, className]} data-rank-badge>
+  <span aria-hidden="true">{isTop ? 'TOP 1' : formatRank(rank)}</span>
+  <span class="sr-only">{isTop ? 'Top 1' : `Posição ${rank}`}</span>
+</span>
+
+<style>
+  .rank-badge {
+    display: inline-block;
+    padding: 0.1em 0.55em 0.05em;
+    background: var(--color-accent);
+    color: var(--color-bg);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+    clip-path: polygon(
+      0.4em 0,
+      100% 0,
+      100% calc(100% - 0.4em),
+      calc(100% - 0.4em) 100%,
+      0 100%,
+      0 0.4em
+    );
+  }
+
+  .rank-badge--top {
+    background: var(--color-gold);
+  }
+</style>

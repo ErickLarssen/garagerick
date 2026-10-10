@@ -2,6 +2,7 @@
 // Vitrine (docs/05): orquestra fundo, informações e carrossel. Tudo renderizado no servidor;
 // o JS da Fase 4 só alterna o veículo ativo.
 import ShowcaseBackdrop from '@/components/showcase/ShowcaseBackdrop.astro';
+import ShowcaseInfo from '@/components/showcase/ShowcaseInfo.astro';
 import { RANKING_LABELS, type RankedVehicle, type RankingKey } from '@/lib/rankings';
 
 interface Props {
@@ -26,7 +27,8 @@ const label = RANKING_LABELS[rankingKey];
     <ShowcaseBackdrop vehicle={active} />
 
     <div class="showcase__grid">
-      <!-- ShowcaseInfo e CoverflowCarousel entram nas próximas tarefas da Fase 3 -->
+      <ShowcaseInfo vehicle={active} />
+      <!-- CoverflowCarousel entra na próxima tarefa da Fase 3 -->
     </div>
   </section>
 )}
@@ -42,6 +44,8 @@ const label = RANKING_LABELS[rankingKey];
   .showcase__grid {
     position: relative;
     z-index: 1;
+    display: flex;
+    align-items: center;
     min-height: 100svh;
     padding: calc(var(--header-h) + 2rem) clamp(1.5rem, 5vw, 6rem) 2rem;
   }

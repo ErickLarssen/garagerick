@@ -1,0 +1,90 @@
+---
+// Bloco de informações da vitrine (docs/05): BrandLogo → nome → SpecRow → texto → botões.
+// aria-live="polite": a troca de veículo (Fase 4) é anunciada por leitores de tela.
+import PlayIcon from '@/assets/icons/play.svg';
+import SpecsIcon from '@/assets/icons/specs.svg';
+import BrandLogo from '@/components/showcase/BrandLogo.astro';
+import SpecRow from '@/components/showcase/SpecRow.astro';
+import Button from '@/components/ui/Button.astro';
+import type { RankedVehicle } from '@/lib/rankings';
+
+interface Props {
+  vehicle: RankedVehicle;
+}
+
+const { vehicle } = Astro.props;
+---
+
+<div class="info" data-showcase-info aria-live="polite">
+  <BrandLogo brand={vehicle.brand} class="info__logo" />
+
+  <h2 class="info__name" data-info-name>
+    <span class="sr-only">{vehicle.brand.name} </span>
+    {vehicle.name}
+  </h2>
+
+  <SpecRow vehicle={vehicle} />
+
+  <div class="info__body" data-info-body set:html={vehicle.body} />
+
+  <div class="info__actions">
+    <Button
+      href={vehicle.videoUrl ?? ''}
+      target="_blank"
+      rel="noopener"
+      variant="primary"
+      data-info-video
+      hidden={!vehicle.videoUrl}
+    >
+      <PlayIcon width={16} height={16} aria-hidden="true" />
+      Vídeo
+      <span class="sr-only">(abre o YouTube em nova aba)</span>
+    </Button>
+    <Button variant="secondary" data-open-specs>
+      <SpecsIcon width={18} height={18} aria-hidden="true" />
+      Ficha técnica
+    </Button>
+  </div>
+</div>
+
+<style>
+  .info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.1rem;
+    max-width: 40rem;
+  }
+
+  .info :global(.info__logo) {
+    margin-bottom: 0.25rem;
+  }
+
+  .info__name {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    line-height: var(--text-display--line-height);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    text-wrap: balance;
+  }
+
+  .info__body {
+    max-width: 60ch;
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    color: var(--color-text);
+  }
+
+  .info__body :global(p + p) {
+    margin-top: 0.75em;
+  }
+
+  .info__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+</style>
