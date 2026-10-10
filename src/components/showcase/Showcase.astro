@@ -6,6 +6,7 @@ import SocialLinks from '@/components/layout/SocialLinks.astro';
 import CoverflowCarousel from '@/components/showcase/CoverflowCarousel.astro';
 import ShowcaseBackdrop from '@/components/showcase/ShowcaseBackdrop.astro';
 import ShowcaseInfo from '@/components/showcase/ShowcaseInfo.astro';
+import SpecSheet from '@/components/showcase/SpecSheet.astro';
 import { RANKING_LABELS, type RankedVehicle, type RankingKey } from '@/lib/rankings';
 
 interface Props {
@@ -48,6 +49,7 @@ const label = RANKING_LABELS[rankingKey];
         <SocialLinks class="showcase__social" />
       </div>
     </div>
+    <SpecSheet vehicle={active} />
   </section>
 )}
 

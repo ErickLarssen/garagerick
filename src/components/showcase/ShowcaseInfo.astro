@@ -50,7 +50,13 @@ const { vehicle } = Astro.props;
       Vídeo
       <span class="sr-only">(abre o YouTube em nova aba)</span>
     </Button>
-    <Button variant="secondary" data-open-specs>
+    <Button
+      variant="secondary"
+      data-open-specs
+      command="show-modal"
+      commandfor="spec-sheet"
+      aria-haspopup="dialog"
+    >
       <SpecsIcon width={18} height={18} aria-hidden="true" />
       Ficha técnica
     </Button>
