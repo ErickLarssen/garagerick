@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-10 — Núcleo de dados (`format`, `validate-rankings`, `rankings`)
+- **Contexto:** implementação do contrato de `docs/03`.
+- **Decisão:** `validateRankings` é uma função pura (recebe refs e ids de marcas), reúne **todas** as violações e lança um único erro; mensagens no formato `posição N repetida/ausente/fora do intervalo`. `rankings.ts` carrega e valida o catálogo uma vez por build (memoizado), já que a regra de slug único é global. `RankedVehicle` ganhou `ranking`; `rankings.ts` exporta `RANKING_KEYS`, `RANKING_ROUTES` e `RANKING_LABELS`. `body` remove comentários HTML (o `<!-- TODO -->` não vaza para a UI/JSON). Fallback de `ambientColor` = `var(--color-ambient-default)`. Página `/debug` (noindex) criada já nesta tarefa porque a validação só roda quando uma página chama `getRanking`.
+- **Motivo:** erros acionáveis de uma vez só; fonte única de rotas/rótulos.
+- **Impacto:** `src/lib/*.ts`, `src/pages/debug.astro`, `docs/03`.
+
 ### 2026-10-10 — BYD Seal e VW Nivus com dados mínimos
 - **Contexto:** regra 3 (não inventar ficha técnica), mas o schema exige `year`, `powertrain`, imagens e um logo existente para a marca.
 - **Decisão:** preenchidos só fatos independentes de versão: `powertrain` (Seal elétrico, Nivus combustão), `bodyStyle` (Sedã, SUV cupê) e `country` das marcas. `year: 2024` em ambos com comentário `# TODO: confirmar ano-modelo` (campo obrigatório). Demais specs vazias + `<!-- TODO: confirmar ficha técnica -->` no corpo. Imagens apontam para `_placeholder/` (comentário indica o caminho final). `byd.svg` e `volkswagen.svg` são cópias do logo placeholder com comentário `PLACEHOLDER` — basta sobrescrever o arquivo pelo logo oficial. `ambientColor` vazio (usa o padrão) até o Erick escolher.

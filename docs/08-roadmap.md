@@ -19,7 +19,7 @@
 - [x] `src/content.config.ts` com as três collections (`docs/03`)
 - [x] Placeholders: marca `exemplo`, imagens placeholder, 5 itens por lista (`docs/06`)
 - [x] BYD Seal (#1) e Volkswagen Nivus (#2) em Populares, com ficha marcada como TODO
-- [ ] `lib/format.ts`, `lib/validate-rankings.ts`, `lib/rankings.ts` (`getRanking`, `RankedVehicle`)
+- [x] `lib/format.ts`, `lib/validate-rankings.ts`, `lib/rankings.ts` (`getRanking`, `RankedVehicle`)
 - [ ] Testar a validação: duplicar um rank de propósito, confirmar a mensagem de erro, desfazer
 
 **Entrega:** uma página de debug temporária (`/debug`, removida no fim da fase) listando os rankings ordenados.

@@ -1,0 +1,58 @@
+---
+// TEMPORÁRIA (Fase 1): lista os rankings ordenados para conferir os dados. Remover no fim da fase.
+import '@/styles/global.css';
+import { getRanking, RANKING_KEYS, RANKING_LABELS, RANKING_ROUTES } from '@/lib/rankings';
+import { formatRank } from '@/lib/format';
+
+const rankings = await Promise.all(
+  RANKING_KEYS.map(async (key) => ({ key, vehicles: await getRanking(key) })),
+);
+---
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex" />
+    <title>Debug — rankings</title>
+  </head>
+  <body class="p-8">
+    <h1 class="font-display text-4xl font-bold uppercase">Debug — rankings</h1>
+    {rankings.map(({ key, vehicles }) => (
+      <section class="mt-10">
+        <h2 class="font-display text-2xl font-bold uppercase">
+          {RANKING_LABELS[key]} <span class="text-text-muted">({RANKING_ROUTES[key]})</span>
+        </h2>
+        <ol class="mt-4 grid gap-3">
+          {vehicles.map((v) => (
+            <li
+              class:list={[
+                'rounded border border-border bg-surface p-4',
+                { 'border-gold': v.isTop },
+              ]}
+            >
+              <p>
+                <span class:list={['numeric', v.isTop ? 'text-gold' : 'text-accent']}>
+                  {v.isTop ? 'TOP 1' : formatRank(v.rank)}
+                </span>{' '}
+                de {v.total} — <strong>{v.brand.name}</strong> {v.name}{' '}
+                <code class="text-text-muted">#{v.slug}</code>
+              </p>
+              <p class="text-text-muted">
+                {[String(v.year), formatRank(v.rank), ...v.quickSpecs].join(' │ ')}
+              </p>
+              <p class="text-sm text-text-muted">
+                {v.specs.map((s) => `${s.label}: ${s.value}`).join(' · ')}
+              </p>
+              <p class="text-sm text-text-muted">
+                ambient: <span style={`color: ${v.ambientColor}`}>■</span> {v.ambientColor} · foco:{' '}
+                {v.heroFocus} · hero: {v.heroImage.width}×{v.heroImage.height}
+              </p>
+              <div class="text-sm" set:html={v.body} />
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))}
+  </body>
+</html>
