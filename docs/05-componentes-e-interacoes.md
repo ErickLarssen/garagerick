@@ -18,6 +18,12 @@ e link "Pular para o conteúdo".
 - Item ativo com `aria-current="page"` e sublinhado em `--color-accent`.
 - Header fixo e transparente sobre a vitrine; ganha fundo `--color-bg` com blur ao rolar.
 
+### `MobileMenu.astro` (< 640px)
+- Botão "Abrir menu" + gaveta lateral com **Popover API** (`popover="auto"` + `popovertarget`):
+  funciona sem JS, fecha com Esc/clique fora, e o navegador expõe `aria-expanded` no botão.
+- Dentro: botão "Fechar menu" e `Nav variant="drawer"` (lista vertical; o item de moto mostra ícone + "Motos").
+- Busca mobile entra na gaveta na Fase 6.
+
 ### `SearchBox.astro` + `scripts/search.ts`
 - Busca **client-side** sobre `/search-index.json` (gerado no build por `pages/search-index.json.ts`):
   `{ slug, name, brand, ranking, rank, tags, cardImageSrc }`.

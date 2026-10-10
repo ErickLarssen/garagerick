@@ -1,27 +1,36 @@
 ---
 // Navegação principal (docs/05): ícone de moto → /motos, depois Populares, Esportivos, Antigos.
+// variant "bar": linha no header (desktop/tablet). variant "drawer": lista vertical na gaveta mobile.
 import MotorcycleIcon from '@/assets/icons/motorcycle.svg';
 import { RANKING_LABELS, RANKING_ROUTES, type RankingKey } from '@/lib/rankings';
 
 interface Props {
   activeNav?: RankingKey;
+  variant?: 'bar' | 'drawer';
   class?: string;
 }
 
-const { activeNav, class: className } = Astro.props;
+const { activeNav, variant = 'bar', class: className } = Astro.props;
+const isDrawer = variant === 'drawer';
 const textItems: RankingKey[] = ['populares', 'esportivos', 'antigos'];
 ---
 
 <nav aria-label="Principal" class={className}>
-  <ul class="flex items-center gap-[clamp(1rem,2.5vw,2.25rem)]">
+  <ul
+    class:list={[
+      'flex',
+      isDrawer ? 'flex-col gap-2' : 'items-center gap-[clamp(1rem,2.5vw,2.25rem)]',
+    ]}
+  >
     <li>
       <a
         href={RANKING_ROUTES.motos}
-        aria-label={RANKING_LABELS.motos}
+        aria-label={isDrawer ? undefined : RANKING_LABELS.motos}
         aria-current={activeNav === 'motos' ? 'page' : undefined}
-        class="nav-link"
+        class:list={['nav-link', { 'nav-link--drawer': isDrawer }]}
       >
         <MotorcycleIcon width={26} height={26} aria-hidden="true" />
+        {isDrawer && <span class="ml-3">{RANKING_LABELS.motos}</span>}
       </a>
     </li>
     {textItems.map((key) => (
@@ -29,7 +38,7 @@ const textItems: RankingKey[] = ['populares', 'esportivos', 'antigos'];
         <a
           href={RANKING_ROUTES[key]}
           aria-current={activeNav === key ? 'page' : undefined}
-          class="nav-link"
+          class:list={['nav-link', { 'nav-link--drawer': isDrawer }]}
         >
           {RANKING_LABELS[key]}
         </a>
@@ -69,5 +78,23 @@ const textItems: RankingKey[] = ['populares', 'esportivos', 'antigos'];
 
   .nav-link[aria-current='page']::after {
     transform: scaleX(1);
+  }
+
+  /* Gaveta: itens maiores, sublinhado vira barra lateral */
+  .nav-link--drawer {
+    min-height: 52px;
+    padding-inline: 1rem;
+    font-size: 1.125rem;
+  }
+
+  .nav-link--drawer::after {
+    inset: 12px auto 12px 0;
+    width: 3px;
+    height: auto;
+    transform: scaleY(0);
+  }
+
+  .nav-link--drawer[aria-current='page']::after {
+    transform: scaleY(1);
   }
 </style>

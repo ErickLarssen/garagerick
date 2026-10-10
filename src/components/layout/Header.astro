@@ -1,5 +1,6 @@
 ---
 // Header fixo (docs/05): transparente sobre a vitrine; ganha fundo com blur ao rolar.
+import MobileMenu from '@/components/layout/MobileMenu.astro';
 import Nav from '@/components/layout/Nav.astro';
 import { SITE } from '@/lib/site';
 import type { RankingKey } from '@/lib/rankings';
@@ -19,8 +20,10 @@ const { activeNav } = Astro.props;
 
     <Nav activeNav={activeNav} class="hidden sm:block" />
 
-    <!-- Busca (Fase 6) e botão do menu mobile (próxima tarefa) entram à direita -->
-    <div class="justify-self-end"></div>
+    <!-- Busca entra à direita na Fase 6 -->
+    <div class="justify-self-end">
+      <MobileMenu activeNav={activeNav} />
+    </div>
   </div>
 </header>
 

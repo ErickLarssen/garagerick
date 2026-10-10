@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-10 — Menu mobile com Popover API
+- **Contexto:** gaveta mobile acessível; o site deve navegar sem JS e com < 40 kB de JS.
+- **Decisão:** `MobileMenu.astro` usa `popover="auto"` + `popovertarget` (zero JS): Esc, clique fora e `aria-expanded` nativos; animação com `@starting-style` + `transition-behavior: allow-discrete`, reduzida em `prefers-reduced-motion`. `Nav` ganhou `variant="bar" | "drawer"`. Sem trava de rolagem do fundo (popover não é modal) — aceitável para um menu de 4 itens. **Armadilha registrada:** estilos de `<style>` de componente ficam fora das camadas do Tailwind v4 e vencem utilitários (ex.: `sm:hidden` perde para um `display` do componente); breakpoints de elementos com `display` próprio vão em media query dentro do componente.
+- **Motivo:** acessibilidade e progressive enhancement sem custo de JS; suporte nas 2 últimas versões dos navegadores-alvo.
+- **Impacto:** `src/components/layout/{MobileMenu,Nav,Header}.astro`, `src/assets/icons/{menu,close}.svg`, `docs/05`.
+
 ### 2026-10-10 — `Header` e `Nav`
 - **Contexto:** segunda tarefa da Fase 2.
 - **Decisão:** ícones SVG importados como componente (recurso nativo do Astro 7: `import Icon from '@/assets/icons/x.svg'`), traço 1,75px em `currentColor`; ícone próprio `motorcycle.svg`. Itens e rotas do menu vêm de `RANKING_LABELS`/`RANKING_ROUTES`. Altura do header em `--header-h` (4,5rem, no `:root`); conteúdo que não é a vitrine compensa com padding. Header ganha `data-scrolled` quando `scrollY > 8` (listener passivo + rAF), com fundo `rgb(7 9 12 / .75)` + blur e fallback sólido via `@supports`. Nav fica oculta abaixo de 640px até a tarefa do menu mobile. Alvos de toque com 44px de altura.
