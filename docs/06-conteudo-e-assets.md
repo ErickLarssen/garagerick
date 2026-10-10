@@ -80,9 +80,8 @@ export const SITE = {
     cinerick: 'https://cinerick.online',
     portfolio: 'https://ericksilva.dev',
     instagram: 'https://www.instagram.com/elarssen.design/',
-    youtube: 'https://www.youtube.com/@ElarssenDesign/',
+    linkedin: 'https://www.linkedin.com/in/ericklarssen/',
     github: 'https://github.com/ErickLarssen/',
-    behance: 'https://www.behance.net/ericklarssen/',
   },
 } as const;
 ```

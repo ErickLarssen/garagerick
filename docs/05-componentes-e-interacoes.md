@@ -36,8 +36,8 @@ e link "Pular para o conteúdo".
 - Vazio: "Nada encontrado nessa garagem."
 
 ### `Footer.astro` / `SocialLinks.astro`
-Dados vindos de `lib/site.ts`: Instagram (`elarssen.design`), YouTube (`@ElarssenDesign`),
-GitHub (`ErickLarssen`), Behance (`ericklarssen`); links para o Cinerick e para `ericksilva.dev`.
+Dados vindos de `lib/site.ts`: Instagram (`elarssen.design`), LinkedIn (`ericklarssen`) e
+GitHub (`ErickLarssen`), nessa ordem; links para o Cinerick e para `ericksilva.dev`.
 Sempre `target="_blank" rel="noopener"` com `aria-label` descritivo.
 
 ## A vitrine (`components/showcase/`)

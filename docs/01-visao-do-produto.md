@@ -9,7 +9,7 @@ com seus 50 filmes favoritos em contagem regressiva (#50 → #1). Cada item tem:
 - linha curta de metadados (ano · duração · gênero · classificação)
 - um parágrafo em **primeira pessoa**, tom leve e apaixonado, explicando por que ele gosta
 - link para o trailer
-- uma introdução "Sobre mim" e um rodapé com redes (Instagram, Behance, YouTube, GitHub)
+- uma introdução "Sobre mim" e um rodapé com redes (Instagram, Behance, YouTube, GitHub) — no Garagerick: Instagram, LinkedIn e GitHub
 
 O **Garagerick** é o equivalente para **carros e motos**. Mesma alma (ranking pessoal,
 sem pretensão de crítica especializada, voz do Erick), mas com uma apresentação mais
@@ -70,7 +70,7 @@ Paralelo direto com a referência (filme "The Little Mermaid"):
 | Botão `▶ WATCH` | Botão `▶ VÍDEO` (abre o vídeo no YouTube) |
 | Botão `+ MY LIST` | Botão `FICHA TÉCNICA` (abre painel com specs completas) |
 | `WATCH TRAILER` (rodapé esquerdo) | `RANKING COMPLETO` (rola até a lista) |
-| Ícones sociais (rodapé direito) | Instagram, YouTube, GitHub, Behance do Erick |
+| Ícones sociais (rodapé direito) | Instagram, LinkedIn e GitHub do Erick |
 
 ## Fora de escopo (por enquanto)
 

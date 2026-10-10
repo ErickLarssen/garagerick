@@ -1,9 +1,8 @@
 ---
 // Ícones das redes do Erick (docs/05). URLs vêm de SITE.links; usado no Footer e na vitrine.
-import BehanceIcon from '@/assets/icons/behance.svg';
 import GithubIcon from '@/assets/icons/github.svg';
 import InstagramIcon from '@/assets/icons/instagram.svg';
-import YoutubeIcon from '@/assets/icons/youtube.svg';
+import LinkedinIcon from '@/assets/icons/linkedin.svg';
 import { SITE } from '@/lib/site';
 
 interface Props {
@@ -14,9 +13,8 @@ const { class: className } = Astro.props;
 
 const networks = [
   { key: 'instagram', label: 'Instagram', Icon: InstagramIcon },
-  { key: 'youtube', label: 'YouTube', Icon: YoutubeIcon },
+  { key: 'linkedin', label: 'LinkedIn', Icon: LinkedinIcon },
   { key: 'github', label: 'GitHub', Icon: GithubIcon },
-  { key: 'behance', label: 'Behance', Icon: BehanceIcon },
 ] as const;
 ---
 

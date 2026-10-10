@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-10 — Redes sociais: Instagram, LinkedIn e GitHub
+- **Contexto:** pedido do Erick após a tarefa do rodapé.
+- **Decisão:** removidos YouTube e Behance (ícones, `SITE.links` e docs); adicionado LinkedIn (`https://www.linkedin.com/in/ericklarssen/`), ícone adaptado da Lucide. Ordem: Instagram, LinkedIn, GitHub. O YouTube continua só como destino do `videoUrl` dos veículos.
+- **Motivo:** preferência do Erick.
+- **Impacto:** `src/lib/site.ts`, `SocialLinks.astro`, `src/assets/icons/`, `docs/01`, `docs/05`, `docs/06`.
+
 ### 2026-10-10 — `Footer` e `SocialLinks`
 - **Contexto:** quarta tarefa da Fase 2.
 - **Decisão:** ícones de Instagram, YouTube e GitHub adaptados da biblioteca **Lucide** (licença ISC, só os paths copiados — sem dependência); Behance desenhado à mão no mesmo estilo linear. `SocialLinks` aceita `class` para ser reutilizado na vitrine. Rodapé: nome + descrição, links Cinerick ("meus filmes favoritos") e Portfólio ("ericksilva.dev"), redes e `© ano autor`. Todos os externos com `target="_blank" rel="noopener"` e `aria-label` que começa pelo texto visível + "(abre em nova aba)". Alvos de toque de 44px.
