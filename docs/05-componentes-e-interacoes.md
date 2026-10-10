@@ -62,7 +62,7 @@ Estrutura:
 
 ### `ShowcaseBackdrop.astro`
 - Duas `<img>` sobrepostas (A/B). A troca carrega a nova na camada oculta e faz crossfade.
-- Imagens geradas com `getImage()` do Astro (AVIF/WebP, larguras 640/1280/1920) e `srcset`.
+- Imagens geradas com `getHeroImage()` (`lib/images.ts`, sobre `getImage()`): **só AVIF**, larguras 640/1280/1920, `srcset` + `sizes="100vw"`.
 - A primeira imagem tem `fetchpriority="high"` e **não** é lazy (é o LCP).
 
 ### `ShowcaseInfo.astro`
@@ -81,6 +81,9 @@ podendo ser visualmente oculto (`sr-only`) na vitrine.
 ### `SpecSheet.astro`
 `<dialog>` nativo (modal), com `specs: SpecItem[]` em grade de 2 colunas (label muted, valor em Rajdhani).
 Fecha com Esc, botão "Fechar" e clique no backdrop. Devolve o foco ao botão que abriu.
+Abre **sem JS** via Invoker Commands (`command="show-modal" commandfor="spec-sheet"`); "Fechar" é um
+`<form method="dialog">`; clique fora via `closedby="any"` (com reserva em JS). Um script pequeno guarda o
+invocador (evento `command`) e devolve o foco a ele se ele se perder (Safari não foca botões no clique).
 
 ### `CoverflowCarousel.astro` + `VehicleCard.astro`
 - Embla com `loop: false`, `align: 'center'`, `containScroll: false`, `startIndex` = 0

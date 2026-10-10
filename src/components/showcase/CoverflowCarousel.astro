@@ -1,0 +1,206 @@
+---
+// Carrossel coverflow (docs/04 e docs/05). Markup no formato do Embla (viewport > container > slides).
+// Sem JS: faixa com rolagem horizontal e scroll-snap. Na Fase 4 o Embla assume
+// (classe .is-enhanced) e recalcula o coverflow a cada quadro.
+import ChevronLeft from '@/assets/icons/chevron-left.svg';
+import ChevronRight from '@/assets/icons/chevron-right.svg';
+import VehicleCard from '@/components/showcase/VehicleCard.astro';
+import { formatRank } from '@/lib/format';
+import type { RankedVehicle } from '@/lib/rankings';
+
+interface Props {
+  vehicles: RankedVehicle[]; // ordem decrescente
+  activeIndex: number;
+}
+
+const { vehicles, activeIndex } = Astro.props;
+const active = vehicles[activeIndex];
+---
+
+<div class="carousel" data-carousel>
+  <div class="carousel__viewport" data-carousel-viewport>
+    <ul class="carousel__container" aria-label="Veículos do ranking">
+      {vehicles.map((vehicle, index) => (
+        <li
+          class="carousel__slide"
+          data-slide
+          data-distance={Math.min(Math.abs(index - activeIndex), 2)}
+        >
+          <VehicleCard
+            vehicle={vehicle}
+            index={index}
+            active={index === activeIndex}
+            lazy={Math.abs(index - activeIndex) > 3}
+          />
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="carousel__controls">
+    <button type="button" class="carousel__arrow" data-carousel-prev aria-label="Anterior">
+      <ChevronLeft width={24} height={24} aria-hidden="true" />
+    </button>
+    <p class="carousel__counter numeric" data-carousel-counter>
+      {active && (active.isTop ? 'TOP 1' : formatRank(active.rank))}
+      <span class="text-text-muted">de {vehicles.length}</span>
+    </p>
+    <button type="button" class="carousel__arrow" data-carousel-next aria-label="Próximo">
+      <ChevronRight width={24} height={24} aria-hidden="true" />
+    </button>
+  </div>
+</div>
+
+<style>
+  .carousel {
+    width: 100%;
+    padding-block: 1.5rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    background: var(--color-surface);
+  }
+
+  @supports (backdrop-filter: blur(1px)) {
+    .carousel {
+      background: var(--color-surface-glass);
+      backdrop-filter: blur(12px);
+    }
+  }
+
+  /* Sem JS: faixa rolável com encaixe. Com Embla (Fase 4): overflow escondido. */
+  .carousel__viewport {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding-block: 1rem; /* espaço para a escala/sombra do card ativo */
+  }
+
+  .carousel__viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  :global(.is-enhanced) .carousel__viewport {
+    overflow: hidden;
+    scroll-snap-type: none;
+  }
+
+  .carousel__container {
+    display: flex;
+    align-items: center;
+    padding-inline: calc(50% - var(--card-w) / 2); /* primeiro e último podem centralizar */
+    --card-w: clamp(10rem, 12vw, 12.5rem);
+  }
+
+  .carousel__slide {
+    flex: 0 0 var(--card-w);
+    min-width: 0;
+    margin-inline: -0.75rem; /* vizinhos se sobrepõem levemente, como na referência */
+    scroll-snap-align: center;
+    transition:
+      transform 400ms var(--ease-garage),
+      filter 400ms var(--ease-garage);
+  }
+
+  /* Coverflow estático (docs/04). A Fase 4 calcula estes valores continuamente. */
+  .carousel__slide[data-distance='0'] {
+    position: relative;
+    z-index: 3;
+    transform: scale(1);
+  }
+
+  .carousel__slide[data-distance='0'] :global(.card) {
+    box-shadow: 0 24px 48px -12px rgb(0 0 0 / 0.7);
+  }
+
+  .carousel__slide[data-distance='1'] {
+    z-index: 2;
+    transform: scale(0.85);
+    filter: brightness(0.5) blur(1px);
+  }
+
+  .carousel__slide[data-distance='2'] {
+    z-index: 1;
+    transform: scale(0.7);
+    filter: brightness(0.35) blur(1.5px);
+  }
+
+  .carousel__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .carousel__arrow {
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: background-color 200ms var(--ease-garage);
+  }
+
+  .carousel__arrow:hover {
+    background: rgb(255 255 255 / 0.08);
+  }
+
+  .carousel__counter {
+    min-width: 6.5rem;
+    text-align: center;
+    font-size: 1.25rem;
+  }
+
+  /* Tablet: faixa horizontal com cards médios, mantendo o coverflow */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .carousel__container {
+      --card-w: 9.5rem;
+    }
+  }
+
+  /* Celular (docs/04): faixa com swipe, cards menores, sem efeito 3D; painel sem moldura */
+  @media (max-width: 639px) {
+    .carousel {
+      padding-block: 0;
+      border: 0;
+      background: none;
+      backdrop-filter: none;
+    }
+
+    .carousel__viewport {
+      margin-inline: calc(-1 * clamp(1.5rem, 5vw, 6rem)); /* faixa de ponta a ponta */
+      padding-block: 0.25rem;
+    }
+
+    .carousel__container {
+      --card-w: 6.75rem;
+    }
+
+    .carousel__slide,
+    .carousel__slide[data-distance] {
+      margin-inline: 0.3rem;
+      transform: none;
+      filter: brightness(0.6);
+    }
+
+    .carousel__slide[data-distance='0'] {
+      filter: none;
+    }
+
+    .carousel__slide[data-distance='0'] :global(.card) {
+      box-shadow: 0 0 0 2px var(--color-accent);
+    }
+
+    .carousel__controls {
+      margin-top: 0.25rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .carousel__slide {
+      transition: none;
+    }
+  }
+</style>

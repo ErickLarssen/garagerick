@@ -36,11 +36,11 @@
 
 ## Fase 3 — Vitrine (estática)
 
-- [ ] `ShowcaseBackdrop` com degradês e `--ambient`
-- [ ] `ShowcaseInfo`: `BrandLogo`, nome display, `SpecRow` + `RankBadge`, texto, botões
-- [ ] `CoverflowCarousel` + `VehicleCard` renderizados (sem JS ainda)
-- [ ] Layout responsivo desktop/tablet/celular (`docs/04`)
-- [ ] `SpecSheet` (`<dialog>`) abrindo e fechando
+- [x] `ShowcaseBackdrop` com degradês e `--ambient`
+- [x] `ShowcaseInfo`: `BrandLogo`, nome display, `SpecRow` + `RankBadge`, texto, botões
+- [x] `CoverflowCarousel` + `VehicleCard` renderizados (sem JS ainda)
+- [x] Layout responsivo desktop/tablet/celular (`docs/04`)
+- [x] `SpecSheet` (`<dialog>`) abrindo e fechando
 
 **Entrega:** vitrine visualmente fiel à referência, mostrando o último colocado. 🛑 Pausa para revisão visual do Erick.
 

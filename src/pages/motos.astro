@@ -2,11 +2,14 @@
 // Motos (lê a collection motorcycles via getRanking('motos')).
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import RankingPagePlaceholder from '@/components/ranking/RankingPagePlaceholder.astro';
-import { RANKING_SEO } from '@/lib/rankings';
+import Showcase from '@/components/showcase/Showcase.astro';
+import { RANKING_SEO, getRanking } from '@/lib/rankings';
 
 const { title, description } = RANKING_SEO.motos;
+const vehicles = await getRanking('motos');
 ---
 
 <BaseLayout title={title} description={description} activeNav="motos">
-  <RankingPagePlaceholder ranking="motos" />
+  <Showcase vehicles={vehicles} rankingKey="motos" />
+  <RankingPagePlaceholder vehicles={vehicles} ranking="motos" />
 </BaseLayout>

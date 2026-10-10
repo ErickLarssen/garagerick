@@ -1,0 +1,35 @@
+---
+// Logo da marca (docs/04): SVG monocromático clareado com filtro, altura base 40px × logoScale.
+import type { RankedVehicle } from '@/lib/rankings';
+
+interface Props {
+  brand: RankedVehicle['brand'];
+  /** Altura base em px (vitrine: 40; card: menor). */
+  baseHeight?: number;
+  class?: string;
+}
+
+const { brand, baseHeight = 40, class: className } = Astro.props;
+const height = Math.round(baseHeight * brand.logoScale);
+const width = Math.round((brand.logo.width / brand.logo.height) * height);
+---
+
+<img
+  src={brand.logo.src}
+  alt={brand.name}
+  width={width}
+  height={height}
+  style={`height: ${height}px`}
+  class:list={['brand-logo', className]}
+  data-brand-logo
+  decoding="async"
+/>
+
+<style>
+  .brand-logo {
+    display: block;
+    width: auto; /* altura fixa via style: o reset do Tailwind (height: auto) faria o SVG crescer */
+    /* deixa qualquer SVG monocromático branco, levemente creme */
+    filter: brightness(0) invert(0.96) sepia(0.08);
+  }
+</style>

@@ -1,0 +1,49 @@
+---
+// Linha principal de specs (docs/03 e docs/05): ANO │ RankBadge │ quickSpecs[0] │ quickSpecs[1].
+import RankBadge from '@/components/showcase/RankBadge.astro';
+import type { RankedVehicle } from '@/lib/rankings';
+
+interface Props {
+  vehicle: RankedVehicle;
+}
+
+const { vehicle } = Astro.props;
+---
+
+<ul class="spec-row" data-spec-row>
+  <li class="numeric">{vehicle.year}</li>
+  <li>
+    <RankBadge rank={vehicle.rank} />
+  </li>
+  {vehicle.quickSpecs.map((spec) => (
+    <li>{spec}</li>
+  ))}
+</ul>
+
+<style>
+  .spec-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    row-gap: 0.4rem;
+    font-size: var(--text-meta);
+    line-height: var(--text-meta--line-height);
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--color-text-muted);
+  }
+
+  .spec-row > li {
+    display: flex;
+    align-items: center;
+  }
+
+  /* separador │ fino entre itens */
+  .spec-row > li + li::before {
+    content: '';
+    width: 1px;
+    height: 0.9em;
+    margin-inline: 0.75em;
+    background: rgb(255 255 255 / 0.28);
+  }
+</style>

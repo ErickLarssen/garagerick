@@ -1,0 +1,199 @@
+---
+// Ficha técnica (docs/05): <dialog> modal nativo com as specs em grade de 2 colunas.
+// Abre sem JS via Invoker Commands (botão com command="show-modal" commandfor="spec-sheet");
+// fecha com Esc (nativo), botão "Fechar" (<form method="dialog">) e clique fora (closedby="any",
+// com script de reserva). O navegador devolve o foco ao botão que abriu.
+import CloseIcon from '@/assets/icons/close.svg';
+import type { RankedVehicle } from '@/lib/rankings';
+
+interface Props {
+  vehicle: RankedVehicle;
+}
+
+const { vehicle } = Astro.props;
+---
+
+<dialog
+  id="spec-sheet"
+  class="sheet"
+  aria-labelledby="spec-sheet-title"
+  closedby="any"
+  data-spec-sheet
+>
+  <div class="sheet__header">
+    <h2 id="spec-sheet-title" class="sheet__title">
+      Ficha técnica
+      <span class="sheet__vehicle" data-sheet-vehicle>
+        {vehicle.brand.name} {vehicle.name}
+      </span>
+    </h2>
+    <form method="dialog">
+      <button type="submit" class="sheet__close">
+        <CloseIcon width={22} height={22} aria-hidden="true" />
+        <span class="sr-only">Fechar</span>
+      </button>
+    </form>
+  </div>
+
+  <dl class="sheet__specs" data-sheet-specs>
+    {vehicle.specs.map((spec) => (
+      <div class="sheet__item">
+        <dt>{spec.label}</dt>
+        <dd>{spec.value}</dd>
+      </div>
+    ))}
+  </dl>
+</dialog>
+
+<script>
+  const sheet = document.querySelector<HTMLDialogElement>('[data-spec-sheet]');
+
+  if (sheet) {
+    // Reserva para navegadores sem `closedby`: clique no backdrop (alvo = o próprio <dialog>) fecha.
+    if (!('closedBy' in HTMLDialogElement.prototype)) {
+      sheet.addEventListener('click', (event) => {
+        if (event.target === sheet) sheet.close();
+      });
+    }
+
+    // Devolve o foco ao botão que abriu. O navegador devolve ao elemento focado antes de abrir,
+    // mas no Safari um clique não foca o botão — então guardamos o invocador (evento `command`).
+    let opener: HTMLElement | null = null;
+    sheet.addEventListener('command', (event) => {
+      opener = (event as Event & { source?: HTMLElement }).source ?? null;
+    });
+    sheet.addEventListener('close', () => {
+      // A restauração do navegador acontece depois do `close`, e a animação de saída mantém o
+      // <dialog> renderizado por um instante — o foco pode ficar preso nele e depois cair no body.
+      setTimeout(() => {
+        const active = document.activeElement;
+        const focusLost = !active || active === document.body || sheet.contains(active);
+        if (focusLost) opener?.focus();
+      });
+    });
+  }
+</script>
+
+<style>
+  .sheet {
+    width: min(34rem, calc(100vw - 2rem));
+    max-height: min(40rem, calc(100svh - 2rem));
+    margin: auto;
+    padding: 1.5rem 1.75rem 1.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    overflow-y: auto;
+
+    /* entrada: fade + leve escala */
+    opacity: 0;
+    transform: scale(0.97);
+    transition:
+      opacity 200ms var(--ease-garage),
+      transform 250ms var(--ease-garage),
+      overlay 250ms allow-discrete,
+      display 250ms allow-discrete;
+  }
+
+  .sheet[open] {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  @starting-style {
+    .sheet[open] {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+  }
+
+  .sheet::backdrop {
+    background: rgb(7 9 12 / 0.7);
+  }
+
+  @supports (backdrop-filter: blur(1px)) {
+    .sheet::backdrop {
+      backdrop-filter: blur(4px);
+    }
+  }
+
+  .sheet__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .sheet__title {
+    font-size: var(--text-button);
+    font-weight: var(--text-button--font-weight);
+    letter-spacing: var(--text-button--letter-spacing);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .sheet__vehicle {
+    display: block;
+    margin-top: 0.35rem;
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+    color: var(--color-text);
+  }
+
+  .sheet__close {
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin: -0.5rem -0.75rem 0 0;
+    border-radius: 4px;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  .sheet__close:hover {
+    background: rgb(255 255 255 / 0.08);
+  }
+
+  .sheet__specs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 1.5rem;
+  }
+
+  .sheet__item {
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .sheet__item dt {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+  }
+
+  .sheet__item dd {
+    margin-top: 0.15rem;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sheet {
+      transform: none;
+      transition-duration: 150ms;
+    }
+
+    @starting-style {
+      .sheet[open] {
+        transform: none;
+      }
+    }
+  }
+</style>

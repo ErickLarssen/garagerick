@@ -1,12 +1,15 @@
 ---
-// Populares (home). A vitrine substitui o placeholder na Fase 3.
+// Populares (home): vitrine + lista completa (temporária até a Fase 5).
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import RankingPagePlaceholder from '@/components/ranking/RankingPagePlaceholder.astro';
-import { RANKING_SEO } from '@/lib/rankings';
+import Showcase from '@/components/showcase/Showcase.astro';
+import { RANKING_SEO, getRanking } from '@/lib/rankings';
 
 const { title, description } = RANKING_SEO.populares;
+const vehicles = await getRanking('populares');
 ---
 
 <BaseLayout title={title} description={description} activeNav="populares">
-  <RankingPagePlaceholder ranking="populares" />
+  <Showcase vehicles={vehicles} rankingKey="populares" />
+  <RankingPagePlaceholder vehicles={vehicles} ranking="populares" />
 </BaseLayout>

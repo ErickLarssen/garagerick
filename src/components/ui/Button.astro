@@ -1,0 +1,68 @@
+---
+// Botão da interface (docs/04): 44px de altura, raio 4px, texto em caixa alta.
+// primary: accent com texto escuro (contraste 5,6:1). secondary: superfície com borda sutil.
+// Com `href` (mesmo vazio) vira link; sem `href`, <button>.
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = {
+  variant?: 'primary' | 'secondary';
+  href?: string;
+} & Omit<HTMLAttributes<'button'>, 'class'> &
+  Omit<HTMLAttributes<'a'>, 'class' | 'type'> & { class?: string };
+
+const { variant = 'primary', href, class: className, type, ...rest } = Astro.props;
+const Tag = href !== undefined ? 'a' : 'button';
+---
+
+<Tag
+  href={href}
+  type={href !== undefined ? undefined : (type ?? 'button')}
+  class:list={['btn', `btn--${variant}`, className]}
+  {...rest}
+>
+  <slot />
+</Tag>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    height: 44px;
+    padding-inline: 1.25rem;
+    border-radius: 4px;
+    font-size: var(--text-button);
+    font-weight: var(--text-button--font-weight);
+    letter-spacing: var(--text-button--letter-spacing);
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color 200ms var(--ease-garage),
+      border-color 200ms var(--ease-garage);
+  }
+
+  .btn[hidden] {
+    display: none;
+  }
+
+  .btn--primary {
+    background: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  .btn--primary:hover {
+    background: var(--color-accent-hover);
+  }
+
+  .btn--secondary {
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid rgb(255 255 255 / 0.16);
+  }
+
+  .btn--secondary:hover {
+    border-color: rgb(255 255 255 / 0.32);
+  }
+</style>
