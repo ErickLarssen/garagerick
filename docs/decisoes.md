@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-10 — Placeholders da Fase 1
+- **Contexto:** `docs/06` pede marca `exemplo`, imagens placeholder e itens de exemplo.
+- **Decisão:** imagens em **PNG** (não SVG), geradas por um script Node sem dependências (só `zlib`); 5 tons, um por posição. Populares recebe só #3–#5 (BYD Seal e VW Nivus ocupam #1 e #2 na tarefa seguinte); demais listas #1–#5. Specs fictícias e variadas (elétrico, híbrido, combustão, moto, item sem specs), com comentário `# PLACEHOLDER` no frontmatter. Corpo usa o `TODO` da regra 4. Confirmado na prática: ids preservam o `_` (`_exemplo-esportivos-2`). Teste negativo: `ambientColor` inválido derruba o `astro sync` com mensagem clara.
+- **Motivo:** o Astro não rasteriza SVG para AVIF/WebP, e a vitrine precisa testar o pipeline real de imagens; specs variadas permitem testar a linha de `quickSpecs` e a omissão de campos.
+- **Impacto:** `src/assets/brands/exemplo.svg`, `src/assets/vehicles/_placeholder/`, `src/content/**/_exemplo-*`, `src/content/brands/exemplo.json`, `docs/06`.
+
 ### 2026-10-10 — Content collections no Astro 7 (Zod 4)
 - **Contexto:** o Astro 7 usa Zod 4; `import { z } from 'astro:content'` está obsoleto (sai no Astro 8) e `z.string().url()` virou `z.url()`.
 - **Decisão:** `z` de `astro/zod`, `glob` de `astro/loaders`; `vehicleBase` tipado com `SchemaContext`. Verificado no código do loader: o glob **não** ignora arquivos com `_`, e o id usa `github-slugger`, que preserva o `_` (`_exemplo-3.md` → id `_exemplo-3`) — confirmação prática na tarefa de placeholders.

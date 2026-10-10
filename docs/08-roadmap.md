@@ -17,7 +17,7 @@
 ## Fase 1 — Dados
 
 - [x] `src/content.config.ts` com as três collections (`docs/03`)
-- [ ] Placeholders: marca `exemplo`, imagens placeholder, 5 itens por lista (`docs/06`)
+- [x] Placeholders: marca `exemplo`, imagens placeholder, 5 itens por lista (`docs/06`)
 - [ ] BYD Seal (#1) e Volkswagen Nivus (#2) em Populares, com ficha marcada como TODO
 - [ ] `lib/format.ts`, `lib/validate-rankings.ts`, `lib/rankings.ts` (`getRanking`, `RankedVehicle`)
 - [ ] Testar a validação: duplicar um rank de propósito, confirmar a mensagem de erro, desfazer

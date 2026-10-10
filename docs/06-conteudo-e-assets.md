@@ -57,8 +57,11 @@ Para desenvolver a interface, crie **dados de exemplo** com placeholders:
 | Motos | 5 placeholders |
 
 Placeholders: `name: "Modelo Exemplo 3"`, marca `exemplo` (logo genérico neutro criado pelo agente),
-imagens geradas como degradês escuros (SVG/PNG simples em `src/assets/vehicles/_placeholder/`).
-Arquivos placeholder começam com `_exemplo-` para serem fáceis de achar e apagar.
+imagens geradas como degradês escuros (PNG em `src/assets/vehicles/_placeholder/`: `hero-1..5.png`
+1920×1080 e `card-1..5.png` 900×1200, cinco tons). Arquivos placeholder seguem o padrão
+`_exemplo-<lista>-<rank>.md` para serem fáceis de achar e apagar; em Populares eles ocupam #3–#5.
+As specs dos placeholders são **fictícias** (marcadas no frontmatter) e variadas de propósito
+para exercitar a UI — a regra 3 do `CLAUDE.md` vale para veículos reais.
 
 > O Erick vai substituir os placeholders pelos veículos reais. Não pesquise nem escolha
 > veículos por ele.
