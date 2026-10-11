@@ -1,19 +1,9 @@
-// Controlador da vitrine (docs/05). O HTML já vem completo do servidor; aqui só ligamos o
-// carrossel (Embla) e alternamos o veículo ativo (fundo, informações e ficha técnica).
-import EmblaCarousel, { type EmblaCarouselType } from 'embla-carousel';
+// Controlador da vitrine (docs/05). O HTML já vem completo do servidor; aqui alternamos o veículo
+// ativo (fundo, informações e ficha) por setas, teclado, swipe e hash. Sem cards/carrossel desde
+// 2026-10-11 (decisão do Erick).
 import { formatRank } from '@/lib/format';
 import type { ShowcaseVehicle } from '@/lib/showcase-data';
 import { prefersReducedMotion } from '@/scripts/reduced-motion';
-
-/** Valores do coverflow (docs/04) por distância ao centro: 0 = ativo, 1 = vizinho, 2 = extremo. */
-const COVERFLOW = {
-  scale: [1, 0.85, 0.7],
-  brightness: [1, 0.5, 0.35],
-  blur: [0, 1, 1.5],
-};
-
-/** Sobreposição entre cards vizinhos, em fração da largura do card (como na referência). */
-const OVERLAP = 0.06;
 
 /** Movimento (docs/04): mesmo easing do token --ease-garage. */
 const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
@@ -23,31 +13,8 @@ const INFO_STAGGER_MS = 60;
 const ZOOM_MS = 900;
 const SHINE_MS = 1100;
 
-/** Interpola linearmente numa tabela de valores para uma distância contínua (0…2). */
-function lerpStep(values: number[], distance: number): number {
-  const d = Math.min(Math.abs(distance), values.length - 1);
-  const i = Math.floor(d);
-  const next = values[Math.min(i + 1, values.length - 1)] ?? values[i];
-  const current = values[i] ?? 0;
-  return current + ((next ?? current) - current) * (d - i);
-}
-
-/**
- * Posição do centro de um card a `d` posições do ativo, já que os cards encolhem com a distância:
- * cada um encosta no anterior (meias-larguras escaladas) menos a sobreposição. Interpola entre inteiros.
- */
-function packedOffset(d: number, width: number): number {
-  const whole = Math.floor(d);
-  let position = 0;
-  for (let k = 1; ; k++) {
-    const next =
-      position +
-      (width * (lerpStep(COVERFLOW.scale, k - 1) + lerpStep(COVERFLOW.scale, k))) / 2 -
-      width * OVERLAP;
-    if (k === whole + 1) return position + (next - position) * (d - whole);
-    position = next;
-  }
-}
+/** Swipe: deslocamento horizontal mínimo, e ele precisa dominar o vertical. */
+const SWIPE_MIN_PX = 50;
 
 /** Espera uma animação terminar (ou ser cancelada), com teto de tempo por segurança. */
 function settled(animation: Animation, ms: number): Promise<void> {
@@ -98,18 +65,14 @@ function required<T extends Element>(parent: ParentNode, selector: string): T {
 export class ShowcaseController {
   readonly root: HTMLElement;
   readonly vehicles: ShowcaseVehicle[];
-  readonly embla: EmblaCarouselType;
   index = 0; // índice no array (0 = último colocado)
 
-  private readonly slides: HTMLElement[];
-  private readonly cards: HTMLElement[];
   private readonly layers: [HTMLImageElement, HTMLImageElement];
   private readonly info: InfoView;
   private readonly sheet: SheetView;
   private readonly prevButton: HTMLElement;
   private readonly nextButton: HTMLElement;
   private readonly counter: HTMLElement;
-  private frame = 0;
   private readonly preloaded = new Set<number>();
   private token = 0; // incrementa a cada troca; etapas atrasadas de trocas antigas são descartadas
 
@@ -117,41 +80,23 @@ export class ShowcaseController {
     this.root = root;
     this.vehicles = readData(root);
 
-    const viewport = required<HTMLElement>(root, '[data-carousel-viewport]');
-    this.slides = [...viewport.querySelectorAll<HTMLElement>('[data-slide]')];
-    this.cards = [...viewport.querySelectorAll<HTMLElement>('[data-card]')];
     this.layers = [
       required<HTMLImageElement>(root, '[data-backdrop-layer="a"]'),
       required<HTMLImageElement>(root, '[data-backdrop-layer="b"]'),
     ];
     this.info = new InfoView(required<HTMLElement>(root, '[data-showcase-info]'));
     this.sheet = new SheetView(required<HTMLDialogElement>(root, '[data-spec-sheet]'));
-    this.prevButton = required<HTMLElement>(root, '[data-carousel-prev]');
-    this.nextButton = required<HTMLElement>(root, '[data-carousel-next]');
+    this.prevButton = required<HTMLElement>(root, '[data-showcase-prev]');
+    this.nextButton = required<HTMLElement>(root, '[data-showcase-next]');
     this.counter = required<HTMLElement>(root, '[data-counter-rank]');
 
-    // Hash da URL (docs/05): /esportivos#porsche-911 abre direto no veículo
-    const initial = this.indexFromHash() ?? this.index;
-
-    required<HTMLElement>(root, '[data-carousel]').classList.add('is-enhanced');
-    this.embla = EmblaCarousel(viewport, {
-      loop: false,
-      align: 'center',
-      containScroll: false,
-      startIndex: initial,
-      skipSnaps: false,
-      // movimento reduzido: o encaixe depois de um arraste fica quase imediato (padrão do Embla: 25)
-      duration: prefersReducedMotion() ? 10 : 25,
-    });
-
-    this.embla.on('scroll', () => this.scheduleCoverflow());
-    this.embla.on('reInit', () => this.applyCoverflow());
-    this.embla.on('resize', () => this.applyCoverflow());
-    this.embla.on('select', () => this.setActive(this.embla.selectedScrollSnap()));
-    this.applyCoverflow();
-    this.bindControls(viewport);
+    root.classList.add('is-enhanced'); // CSS mostra as setas só com JS
+    this.bindControls();
     this.updateNavigation();
-    if (initial !== this.index) this.setActive(initial, { instant: true });
+
+    // Hash da URL (docs/05): /esportivos#porsche-911 abre direto no veículo
+    const initial = this.indexFromHash();
+    if (initial !== undefined) this.setActive(initial, { instant: true });
 
     // Vizinhos só depois da carga, quando a página estiver ociosa (não disputa com o LCP)
     const preloadInitial = () => whenIdle(() => this.preloadAround(this.index));
@@ -167,10 +112,9 @@ export class ShowcaseController {
     return i >= 0 ? i : undefined;
   }
 
-  /** Vai para o índice `i` (limitado às pontas). Com movimento reduzido, pula sem animar. */
+  /** Vai para o índice `i` (limitado às pontas). */
   go(i: number): void {
-    const target = Math.max(0, Math.min(i, this.vehicles.length - 1));
-    this.embla.scrollTo(target, prefersReducedMotion());
+    this.setActive(Math.max(0, Math.min(i, this.vehicles.length - 1)));
   }
 
   /** Próximo = em direção ao #1 (índice +1 no array decrescente). */
@@ -182,16 +126,10 @@ export class ShowcaseController {
     this.go(this.index - 1);
   }
 
-  /** Setas, clique nos cards e teclado (docs/05). A roda do mouse não troca de veículo. */
-  private bindControls(viewport: HTMLElement): void {
+  /** Setas, teclado, swipe e hash (docs/05). A roda do mouse não troca de veículo. */
+  private bindControls(): void {
     this.prevButton.addEventListener('click', () => this.prev());
     this.nextButton.addEventListener('click', () => this.next());
-
-    // o Embla v8 já cancela (na captura) o clique que encerra um arraste
-    this.cards.forEach((card, i) => card.addEventListener('click', () => this.go(i)));
-
-    // O viewport tem overflow escondido; se o navegador rolar ao focar algo, desfaz.
-    viewport.addEventListener('scroll', () => (viewport.scrollLeft = 0));
 
     // ex.: a busca navegando para outro veículo na mesma página
     window.addEventListener('hashchange', () => {
@@ -207,6 +145,34 @@ export class ShowcaseController {
       if (event.key === 'ArrowRight') this.next();
       else this.prev();
     });
+
+    this.bindSwipe();
+  }
+
+  /**
+   * Swipe no celular/tablet: deslizar para a esquerda = próximo (em direção ao #1).
+   * Só toque/caneta (o mouse não arrasta); a vitrine tem `touch-action: pan-y`, então a rolagem
+   * vertical continua com o navegador.
+   */
+  private bindSwipe(): void {
+    let start: { x: number; y: number; id: number } | undefined;
+
+    this.root.addEventListener('pointerdown', (event) => {
+      if (event.pointerType === 'mouse' || !event.isPrimary) return;
+      start = { x: event.clientX, y: event.clientY, id: event.pointerId };
+    });
+
+    this.root.addEventListener('pointerup', (event) => {
+      if (!start || event.pointerId !== start.id) return;
+      const dx = event.clientX - start.x;
+      const dy = event.clientY - start.y;
+      start = undefined;
+      if (Math.abs(dx) < SWIPE_MIN_PX || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+      if (dx < 0) this.next();
+      else this.prev();
+    });
+
+    this.root.addEventListener('pointercancel', () => (start = undefined));
   }
 
   /** ←/→ só com foco na vitrine ou na página — nunca em campos, menus ou com a ficha aberta. */
@@ -221,17 +187,16 @@ export class ShowcaseController {
     return this.root.contains(active);
   }
 
-  /** Contador (posição no ranking, não índice), setas nas pontas e card focável (roving tabindex). */
+  /** Contador (posição no ranking, não índice) e setas desabilitadas nas pontas. */
   private updateNavigation(): void {
     const vehicle = this.vehicles[this.index];
     if (vehicle) this.counter.textContent = vehicle.isTop ? 'TOP 1' : formatRank(vehicle.rank);
     this.prevButton.setAttribute('aria-disabled', String(this.index === 0));
     this.nextButton.setAttribute('aria-disabled', String(this.index === this.vehicles.length - 1));
-    this.cards.forEach((card, n) => (card.tabIndex = n === this.index ? 0 : -1));
   }
 
   /**
-   * Ativa o veículo de índice `i`: carrossel, tom ambiente, fundo, informações e ficha.
+   * Ativa o veículo de índice `i`: tom ambiente, fundo, informações e ficha.
    * `instant`: sem animação e sem mexer na URL (carga inicial vinda do hash).
    */
   setActive(i: number, { instant = false } = {}): void {
@@ -240,33 +205,25 @@ export class ShowcaseController {
     this.index = i;
     const token = ++this.token;
 
-    this.slides.forEach((slide, n) =>
-      slide.setAttribute('data-distance', String(Math.min(Math.abs(n - i), 2))),
-    );
-    this.cards.forEach((card, n) => {
-      if (n === i) card.setAttribute('aria-current', 'true');
-      else card.removeAttribute('aria-current');
-    });
-
-    // se o foco estava num card, ele acompanha o novo card ativo
-    const focusedCard = this.cards.some((card) => card === document.activeElement);
     this.updateNavigation();
-    if (focusedCard) this.cards[i]?.focus({ preventScroll: true });
-
     this.root.style.setProperty('--ambient', vehicle.ambientColor);
     this.root.classList.toggle('is-top', vehicle.isTop);
-    if (vehicle.isTop) this.shineTop(i);
     this.preloadAround(i);
     this.sheet.render(vehicle);
 
     if (instant) {
       this.showBackdropNow(vehicle);
       this.info.show(vehicle);
+      if (vehicle.isTop) this.shineTop();
       return;
     }
 
     void this.swapBackdrop(vehicle, token);
-    void this.info.swap(vehicle, () => token === this.token);
+    void this.info
+      .swap(vehicle, () => token === this.token)
+      .then(() => {
+        if (vehicle.isTop && token === this.token) this.shineTop();
+      });
     // não polui o histórico; só roda em trocas feitas pelo usuário (nunca na carga)
     history.replaceState(null, '', `${location.pathname}${location.search}#${vehicle.slug}`);
   }
@@ -290,14 +247,14 @@ export class ShowcaseController {
     }
   }
 
-  /** Brilho dourado que percorre o card do Top 1 uma única vez por chegada (docs/04). */
-  private shineTop(i: number): void {
-    const shine = this.cards[i]?.querySelector<HTMLElement>('[data-card-shine]');
-    if (!shine || prefersReducedMotion()) return;
-    shine.getAnimations().forEach((animation) => animation.cancel());
-    shine.animate([{ transform: 'translateX(-130%)' }, { transform: 'translateX(130%)' }], {
+  /** Faixa de luz que atravessa o selo dourado do Top 1, uma vez por chegada (docs/04). */
+  private shineTop(): void {
+    const badge = this.root.querySelector<HTMLElement>('[data-showcase-info] [data-rank-badge]');
+    if (!badge || prefersReducedMotion()) return;
+    badge.getAnimations().forEach((animation) => animation.cancel());
+    badge.animate([{ backgroundPosition: '100% 0' }, { backgroundPosition: '0% 0' }], {
       duration: SHINE_MS,
-      delay: 250, // depois que o card chega ao centro
+      delay: 200,
       easing: EASE,
     });
   }
@@ -333,36 +290,6 @@ export class ShowcaseController {
         easing: EASE,
       });
     }
-  }
-
-  /** Agrupa os eventos de scroll num único cálculo por quadro. */
-  private scheduleCoverflow(): void {
-    if (this.frame) return;
-    this.frame = requestAnimationFrame(() => {
-      this.frame = 0;
-      this.applyCoverflow();
-    });
-  }
-
-  /** Distância contínua de cada slide ao centro → escala, brilho, desfoque e empilhamento. */
-  private applyCoverflow(): void {
-    const snaps = this.embla.scrollSnapList();
-    const progress = this.embla.scrollProgress();
-    const step = snaps.length > 1 ? (snaps[1] ?? 1) - (snaps[0] ?? 0) : 1;
-    const width = this.slides[0]?.offsetWidth ?? 0;
-
-    this.slides.forEach((slide, i) => {
-      const distance = ((snaps[i] ?? 0) - progress) / (step || 1);
-      const abs = Math.abs(distance);
-      slide.style.setProperty('--cf-scale', lerpStep(COVERFLOW.scale, abs).toFixed(3));
-      slide.style.setProperty('--cf-brightness', lerpStep(COVERFLOW.brightness, abs).toFixed(3));
-      slide.style.setProperty('--cf-blur', `${lerpStep(COVERFLOW.blur, abs).toFixed(2)}px`);
-      // aproxima o card do centro: posição "empacotada" menos a posição natural do Embla
-      const shift = Math.sign(distance) * (packedOffset(abs, width) - abs * width);
-      slide.style.setProperty('--cf-shift', `${shift.toFixed(1)}px`);
-      slide.style.setProperty('--cf-focus', Math.max(0, 1 - abs).toFixed(3)); // celular: só escurece
-      slide.style.zIndex = String(100 - Math.round(abs * 10));
-    });
   }
 }
 

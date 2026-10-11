@@ -50,12 +50,15 @@ Estrutura:
 ```html
 <section class="showcase" data-showcase aria-roledescription="vitrine" aria-label="Ranking …">
   <ShowcaseBackdrop />            <!-- 2 camadas de imagem para crossfade -->
-  <div class="showcase__grid">
+  <div class="showcase__main">
     <ShowcaseInfo />              <!-- aria-live="polite" -->
-    <CoverflowCarousel />
   </div>
-  <a href="#ranking" class="showcase__more">RANKING COMPLETO</a>
-  <SocialLinks />
+  <div class="showcase__bar">
+    <a href="#ranking" class="showcase__more">RANKING COMPLETO</a>
+    <ShowcaseNav />               <!-- ◀ #07 de 12 ▶ -->
+    <SocialLinks />
+  </div>
+  <SpecSheet />
 </section>
 <script type="application/json" id="showcase-data">…</script>
 ```
@@ -85,22 +88,13 @@ Abre **sem JS** via Invoker Commands (`command="show-modal" commandfor="spec-she
 `<form method="dialog">`; clique fora via `closedby="any"` (com reserva em JS). Um script pequeno guarda o
 invocador (evento `command`) e devolve o foco a ele se ele se perder (Safari não foca botões no clique).
 
-### `CoverflowCarousel.astro` + `VehicleCard.astro`
-- Embla com `loop: false`, `align: 'center'`, `containScroll: false`, `startIndex` = 0
-  (último colocado) ou o índice do hash da URL.
-- Cada card é um `<button>` com `aria-label="#04 — Volkswagen Nivus"`.
-  Card: imagem 3:4 + logo da marca pequeno + número da posição grande e translúcido no canto.
-- Efeito coverflow calculado no evento `scroll` do Embla: para cada slide, a distância ao
-  centro define `scale`, `filter` e `z-index` (ver tokens em `docs/04`). Use `requestAnimationFrame`.
-  O controlador grava variáveis CSS por slide (`--cf-scale`, `--cf-brightness`, `--cf-blur`, `--cf-shift`,
-  `--cf-focus`) e o CSS do carrossel as aplica (no celular só `--cf-focus`, sem 3D). A sobreposição dos
-  cards vem de `--cf-shift` (6% da largura), **não** de margem negativa — margem negativa desalinha o
-  centro calculado pelo Embla.
+### `ShowcaseNav.astro` (substitui `CoverflowCarousel` + `VehicleCard`, removidos em 2026-10-11)
+- Setas ◀ ▶ (`aria-label="Anterior"/"Próximo"`) + contador `#07 de 12` (posição do ranking, não índice;
+  "TOP 1" no primeiro). "Próximo" (▶ / →) avança **em direção ao #1** (índice +1 no array decrescente).
+- Nas pontas, `aria-disabled="true"` (não `disabled`, para não perder o foco). Sem JS as setas ficam
+  ocultas (só aparecem com `.is-enhanced` na vitrine); o contador continua.
 - Dados do cliente: `lib/showcase-data.ts` (`ShowcaseVehicle`, `buildShowcaseData`) → JSON em
   `<script type="application/json" id="showcase-data">` dentro da vitrine.
-- Controles: setas ◀ ▶ (`aria-label="Anterior"/"Próximo"`) + contador `#07 de 10`.
-  "Próximo" (▶ / →) avança **em direção ao #1** (índice +1 no array decrescente).
-- Rótulo do contador conta **a posição do ranking**, não o índice do slide.
 
 ## Controlador da vitrine (`scripts/showcase-controller.ts`)
 
@@ -110,29 +104,28 @@ Uma classe/módulo pequeno, iniciado pelo `<script>` do `Showcase`:
 interface ShowcaseState { index: number }   // índice no array (0 = último colocado)
 
 init(root: HTMLElement): void
-  - lê #showcase-data
-  - cria Embla, escuta 'select' → setActive(embla.selectedScrollSnap())
-  - lê location.hash → se existir slug, embla.scrollTo(i, true)
+  - lê #showcase-data, marca a vitrine com .is-enhanced
+  - liga setas, teclado, swipe e hashchange
+  - lê location.hash → se existir slug, setActive(i, { instant: true })
 
 setActive(i):
   - atualiza backdrop (crossfade), info (textos, logo, specs, vídeo), --ambient
-  - atualiza contador e aria-current no card ativo
+  - atualiza contador e setas
   - history.replaceState(null, '', '#' + slug)    // não poluir o histórico;
     // NÃO roda na carga inicial — só após interação do usuário
-  - se isTop → classe .is-top (brilho dourado, selo TOP 1)
+  - se isTop → classe .is-top (contador dourado) e faixa de luz no selo TOP 1
   - pré-carrega hero do próximo e do anterior
 ```
 
 Entradas:
-- Clique num card → `scrollTo(i)`
 - Setas ◀ ▶ e teclas ←/→ (quando o foco está na vitrine ou no `body`, nunca em inputs)
-- Swipe/arrastar (nativo do Embla)
+- Swipe (toque/caneta): ≥ 50 px na horizontal e dominante sobre o vertical; esquerda = próximo.
+  A vitrine tem `touch-action: pan-y` (rolagem vertical continua com o navegador). Mouse não arrasta.
 - Roda do mouse **não** troca veículo (evita sequestrar a rolagem da página)
 - Teclado: ←/→ valem com foco na vitrine, no `body` ou no `<main>` (que recebe foco ao clicar em área
   vazia); nunca em campos, com a ficha técnica aberta ou com o menu mobile aberto.
 - Setas nas pontas usam `aria-disabled="true"` (não `disabled`, para não perder o foco).
-- Roving tabindex: só o card ativo tem `tabindex=0`; se o foco estiver num card, ele acompanha a troca.
-- `hashchange` (ex.: vindo da busca na mesma página) → `scrollTo`
+- `hashchange` (ex.: vindo da busca na mesma página) → `go(i)`
 
 **Hash:** só é tratado como veículo se corresponder a um slug do ranking atual. Qualquer outro
 hash (`#ranking`, `#conteudo` do "pular para o conteúdo"…) é ignorado pelo controlador e segue

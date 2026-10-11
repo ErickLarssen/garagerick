@@ -10,7 +10,6 @@ Isso aponta para um gerador estático com "ilhas" de JavaScript, não para uma S
 | **Astro** (última estável) | HTML estático por padrão, JS só onde precisa, Content Collections com validação Zod, otimização de imagens nativa |
 | **TypeScript strict** | Schemas de dados tipados ponta a ponta (collection → componente) |
 | **Tailwind CSS v4** | Velocidade de layout; tokens do design system expostos via `@theme` |
-| **Embla Carousel** (vanilla) | Leve (~7 kB), acessível, suporta swipe/teclado, sem framework |
 | **TS vanilla nos `<script>`** | A interação da vitrine é pequena e localizada; React seria peso morto |
 | **Vercel** | Deploy estático com preview por branch; o Erick já usa |
 
@@ -20,7 +19,7 @@ Isso aponta para um gerador estático com "ilhas" de JavaScript, não para uma S
 
 ### Dependências permitidas
 
-- Produção: `astro`, `embla-carousel`, `@astrojs/sitemap`
+- Produção: `astro`, `@astrojs/sitemap` (`embla-carousel` removido em 2026-10-11, junto com os cards)
 - Estilo: `tailwindcss`, `@tailwindcss/vite`
 - Fontes: `@fontsource/poppins` (400, 500, 600, 700), `@fontsource/rajdhani` (600, 700) (auto-hospedadas, sem Google Fonts em runtime)
 - Dev: `typescript`, `@astrojs/check`, `eslint`, `eslint-plugin-astro`, `typescript-eslint`,
@@ -74,15 +73,14 @@ garagerick/
 │   │   │   ├── SearchBox.astro
 │   │   │   ├── Footer.astro
 │   │   │   └── SocialLinks.astro
-│   │   ├── showcase/              # a vitrine (hero + carrossel)
+│   │   ├── showcase/              # a vitrine (fundo + informações + navegação)
 │   │   │   ├── Showcase.astro     # orquestra tudo; contém o <script> principal
 │   │   │   ├── ShowcaseBackdrop.astro
 │   │   │   ├── ShowcaseInfo.astro # logo, nome, specs, texto, botões
 │   │   │   ├── SpecRow.astro
 │   │   │   ├── RankBadge.astro
 │   │   │   ├── BrandLogo.astro
-│   │   │   ├── CoverflowCarousel.astro
-│   │   │   ├── VehicleCard.astro
+│   │   │   ├── ShowcaseNav.astro      # ◀ #07 de 12 ▶
 │   │   │   └── SpecSheet.astro    # painel "Ficha técnica" (<dialog>)
 │   │   ├── ranking/
 │   │   │   ├── RankingList.astro

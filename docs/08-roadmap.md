@@ -38,7 +38,7 @@
 
 - [x] `ShowcaseBackdrop` com degradês e `--ambient`
 - [x] `ShowcaseInfo`: `BrandLogo`, nome display, `SpecRow` + `RankBadge`, texto, botões
-- [x] `CoverflowCarousel` + `VehicleCard` renderizados (sem JS ainda)
+- [x] ~~`CoverflowCarousel` + `VehicleCard` renderizados (sem JS ainda)~~ — removidos na revisão da Fase 4 (2026-10-11)
 - [x] Layout responsivo desktop/tablet/celular (`docs/04`)
 - [x] `SpecSheet` (`<dialog>`) abrindo e fechando
 
@@ -46,7 +46,7 @@
 
 ## Fase 4 — Vitrine (interação)
 
-- [x] `showcase-controller.ts`: Embla + efeito coverflow
+- [x] `showcase-controller.ts`: ~~Embla + efeito coverflow~~ → setas, teclado e swipe próprios (revisão 2026-10-11)
 - [x] Troca de veículo com crossfade e animação escalonada da informação
 - [x] Teclado (←/→), setas, contador `#07 de 10`, clique no card
 - [x] Hash na URL (entrada e atualização com `replaceState`)

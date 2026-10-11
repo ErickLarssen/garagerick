@@ -1,0 +1,84 @@
+---
+// Navegação da vitrine (decisão de 2026-10-11, sem cards): ◀ #07 de 12 ▶.
+// O contador mostra a posição no ranking. As setas só aparecem com JS (.is-enhanced na vitrine).
+import ChevronLeft from '@/assets/icons/chevron-left.svg';
+import ChevronRight from '@/assets/icons/chevron-right.svg';
+import { formatRank } from '@/lib/format';
+import type { RankedVehicle } from '@/lib/rankings';
+
+interface Props {
+  vehicle: RankedVehicle; // ativo na carga
+  total: number;
+}
+
+const { vehicle, total } = Astro.props;
+---
+
+<div class="nav" data-showcase-nav>
+  <button
+    type="button"
+    class="nav__arrow"
+    data-showcase-prev
+    aria-label="Anterior"
+    aria-disabled="true"
+  >
+    <ChevronLeft width={26} height={26} aria-hidden="true" />
+  </button>
+  <p class="nav__counter numeric" data-showcase-counter>
+    <span data-counter-rank>{vehicle.isTop ? 'TOP 1' : formatRank(vehicle.rank)}</span>{' '}
+    <span class="nav__total">de {total}</span>
+  </p>
+  <button type="button" class="nav__arrow" data-showcase-next aria-label="Próximo">
+    <ChevronRight width={26} height={26} aria-hidden="true" />
+  </button>
+</div>
+
+<style>
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .nav__arrow {
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgb(255 255 255 / 0.16);
+    border-radius: 50%;
+    color: var(--color-text);
+    cursor: pointer;
+    transition:
+      background-color 200ms var(--ease-garage),
+      border-color 200ms var(--ease-garage);
+  }
+
+  .nav__arrow:hover {
+    background: rgb(255 255 255 / 0.08);
+    border-color: rgb(255 255 255 / 0.32);
+  }
+
+  /* nas pontas (sem loop): aria-disabled em vez de disabled, para não perder o foco */
+  .nav__arrow[aria-disabled='true'] {
+    opacity: 0.35;
+    cursor: default;
+    background: none;
+    border-color: rgb(255 255 255 / 0.16);
+  }
+
+  /* Sem JS as setas não fazem nada: só aparecem quando o controlador marca a vitrine */
+  :global(.showcase:not(.is-enhanced)) .nav__arrow {
+    visibility: hidden;
+  }
+
+  .nav__counter {
+    min-width: 6.5rem;
+    text-align: center;
+    font-size: 1.25rem;
+  }
+
+  .nav__total {
+    color: var(--color-text-muted);
+  }
+</style>

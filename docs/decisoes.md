@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-11 — Revisão da Fase 4: sem cards, foto à direita e degradê preto
+- **Contexto:** revisão do Erick: os cards do carrossel tampavam boa parte dos veículos (e diminuí-los ainda comprometeria a experiência); a maioria das fotos tem a frente do carro virada para a esquerda, onde ficam as informações. Ele escolheu manter a vitrine (um veículo por tela) com setas, em vez de rolagem vertical como no Cinerick.
+- **Decisão:** removidos `CoverflowCarousel`, `VehicleCard` e a dependência `embla-carousel` (JS da página: ~10 kB → ~3 kB gzip). Novo `ShowcaseNav` (◀ #07 de 12 ▶) no centro da barra inferior (RANKING COMPLETO · navegação · redes). Controlador sem Embla: `go(i)` → `setActive`; swipe próprio por Pointer Events (toque/caneta, ≥ 50 px, horizontal dominante; vitrine com `touch-action: pan-y`); `.is-enhanced` agora na vitrine (setas só com JS). Brilho do Top 1 migrou do card para o **selo**: degradê com faixa de luz guardada fora do selo, animado via `background-position`. **Fundo:** desktop com a foto nos 70% da direita (`object-fit: cover`, recorte guiado pela altura — fica menor), preto sólido até 30% dissolvendo até ~60%, `--ambient` como brilho radial atrás do texto e degradê no topo para o menu; tablet e celular com a foto no topo (56svh, largura total) e as informações a partir de 46svh, abaixo do carro (a primeira versão do tablet com foto a 85% ainda cobria o carro). Testado no Chrome (capturas de tela voltaram a funcionar nesta aba): desktop 1536 px com a Ferrari 458 inteira à direita; tablet/celular sem rolagem horizontal; swipe esquerda/direita troca, gesto vertical é ignorado. **Pendências menores:** quando a linha de specs quebra, o separador aparece no início da 2ª linha; "RANKING COMPLETO" quebra em 2 linhas em telas muito estreitas.
+- **Motivo:** visão dos veículos em primeiro lugar e legibilidade das informações.
+- **Impacto:** `Showcase`, `ShowcaseBackdrop`, `ShowcaseNav` (novo), `RankBadge`, `src/scripts/showcase-controller.ts`, `package.json`, `CLAUDE.md`, `README.md`, `docs/01`, `docs/02`, `docs/04`, `docs/05`, `docs/08`.
+
 ### 2026-10-11 — Movimento reduzido e checklist de interação (fim da Fase 4)
 - **Contexto:** última tarefa da Fase 4; checklist do `docs/05`.
 - **Decisão / ajustes:** setas do carrossel escondidas sem JS (`.carousel:not(.is-enhanced)`; contador fica); `touch-action: pan-y pinch-zoom` no contêiner do Embla (recomendação dele para o swipe); com `prefers-reduced-motion` o encaixe pós-arraste do Embla usa `duration: 10` (padrão 25).

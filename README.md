@@ -3,7 +3,7 @@
 Meus carros e motos favoritos em contagem regressiva até o Top 1.
 Projeto irmão do [Cinerick](https://cinerick.online).
 
-Site estático feito com Astro, TypeScript, Tailwind CSS v4 e Embla Carousel.
+Site estático feito com Astro, TypeScript e Tailwind CSS v4.
 Detalhes da stack em [`docs/02-stack-e-arquitetura.md`](docs/02-stack-e-arquitetura.md).
 
 ## Como rodar
