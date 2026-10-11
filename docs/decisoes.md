@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-11 — Tratamento especial do Top 1
+- **Contexto:** quinta tarefa da Fase 4.
+- **Decisão:** além do selo dourado "TOP 1" (já existente), o controlador liga `.is-top` na vitrine quando o Top 1 está ativo (contador em dourado) e anima uma faixa dourada (`[data-card-shine]`, renderizada só no card do Top 1, `mix-blend-mode: screen`) atravessando o card **uma vez por chegada** — 1,1 s, 250 ms de atraso para o card centralizar; também ao abrir direto pelo hash; desligada com `prefers-reduced-motion`. Card do Top 1 ativo ganha halo dourado (contorno + brilho de 28 px + a sombra de profundidade do ativo). **Bug achado no teste:** a regra do halo empatava em especificidade com a sombra do card ativo definida no `CoverflowCarousel` (cujo CSS vem depois) e perdia → seletor `.card.card--top[aria-current][data-card]`. Testado: `.is-top` liga/desliga, faixa roda ao abrir no Top 1 e ao voltar a ele, halo só no Top 1 ativo.
+- **Motivo:** `docs/01` e `docs/04` (Top 1 com selo dourado e brilho).
+- **Impacto:** `VehicleCard`, `Showcase`, `src/scripts/showcase-controller.ts`.
+
 ### 2026-10-11 — Hash na URL
 - **Contexto:** quarta tarefa da Fase 4.
 - **Decisão:** na carga, se o hash é o slug de um veículo do ranking, o Embla já nasce nele (`startIndex`) e `setActive(i, { instant: true })` troca fundo (na camada visível) e informações sem animação e **sem** `replaceState`. Trocas do usuário gravam `#slug` com `history.replaceState` (preserva `pathname` e `search`). `hashchange` com slug válido → `go(i)`; outros hashes (`#ranking`, `#conteudo`, inexistentes) são ignorados e seguem como âncora. Testado: `/esportivos#porsche-911` abre no 911 com a URL intacta; `/esportivos` continua sem hash; avançar grava `#audi-tt` sem aumentar o histórico nem disparar `hashchange`; `#ranking` só rola até a lista. **Limitação conhecida:** sem JS (ou antes do JS rodar) a vitrine mostra o último colocado e troca para o do hash em seguida, e o hero do último colocado é baixado à toa nesses acessos — aceitável por ser só em links compartilhados.

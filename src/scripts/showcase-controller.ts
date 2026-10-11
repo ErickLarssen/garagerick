@@ -21,6 +21,7 @@ const INFO_OUT_MS = 180;
 const INFO_IN_MS = 400;
 const INFO_STAGGER_MS = 60;
 const ZOOM_MS = 900;
+const SHINE_MS = 1100;
 
 /** Interpola linearmente numa tabela de valores para uma distância contínua (0…2). */
 function lerpStep(values: number[], distance: number): number {
@@ -233,6 +234,8 @@ export class ShowcaseController {
     if (focusedCard) this.cards[i]?.focus({ preventScroll: true });
 
     this.root.style.setProperty('--ambient', vehicle.ambientColor);
+    this.root.classList.toggle('is-top', vehicle.isTop);
+    if (vehicle.isTop) this.shineTop(i);
     this.sheet.render(vehicle);
 
     if (instant) {
@@ -245,6 +248,18 @@ export class ShowcaseController {
     void this.info.swap(vehicle, () => token === this.token);
     // não polui o histórico; só roda em trocas feitas pelo usuário (nunca na carga)
     history.replaceState(null, '', `${location.pathname}${location.search}#${vehicle.slug}`);
+  }
+
+  /** Brilho dourado que percorre o card do Top 1 uma única vez por chegada (docs/04). */
+  private shineTop(i: number): void {
+    const shine = this.cards[i]?.querySelector<HTMLElement>('[data-card-shine]');
+    if (!shine || prefersReducedMotion()) return;
+    shine.getAnimations().forEach((animation) => animation.cancel());
+    shine.animate([{ transform: 'translateX(-130%)' }, { transform: 'translateX(130%)' }], {
+      duration: SHINE_MS,
+      delay: 250, // depois que o card chega ao centro
+      easing: EASE,
+    });
   }
 
   /** Troca o fundo na camada visível, sem crossfade (carga inicial). */

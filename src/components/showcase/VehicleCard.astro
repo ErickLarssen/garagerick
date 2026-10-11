@@ -40,6 +40,7 @@ const rankLabel = vehicle.isTop ? 'TOP 1' : formatRank(vehicle.rank);
     decoding="async"
   />
   <span class="card__shade" aria-hidden="true"></span>
+  {vehicle.isTop && <span class="card__shine" aria-hidden="true" data-card-shine />}
   <span class="card__rank" aria-hidden="true">
     {rankLabel}
   </span>
@@ -101,5 +102,29 @@ const rankLabel = vehicle.isTop ? 'TOP 1' : formatRank(vehicle.rank);
 
   .card--top {
     box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-gold) 60%, transparent);
+  }
+
+  /* Top 1 ativo: leve halo dourado (docs/01). Seletor mais forte que o do carrossel, que também
+     aplica sombra/contorno no card ativo; inclui a sombra de profundidade dele. */
+  .card.card--top[aria-current][data-card] {
+    box-shadow:
+      0 0 0 1px var(--color-gold),
+      0 0 28px -4px color-mix(in srgb, var(--color-gold) 55%, transparent),
+      0 24px 48px -12px rgb(0 0 0 / 0.7);
+  }
+
+  /* Faixa dourada que percorre o card uma vez ao chegar no Top 1 (animada pelo controlador) */
+  .card__shine {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      color-mix(in srgb, var(--color-gold) 55%, transparent) 50%,
+      transparent 70%
+    );
+    mix-blend-mode: screen;
+    transform: translateX(-130%);
+    pointer-events: none;
   }
 </style>

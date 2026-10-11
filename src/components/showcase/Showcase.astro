@@ -129,6 +129,11 @@ const data = toScriptJson(await buildShowcaseData(vehicles));
     margin-inline-end: -0.75rem;
   }
 
+  /* Top 1 ativo (classe .is-top, ligada pelo controlador): contador em dourado */
+  .showcase.is-top :global([data-counter-rank]) {
+    color: var(--color-gold);
+  }
+
   /* Celular (< 640px): imagem no topo, info sobre o degradê inferior, carrossel em faixa */
   @media (max-width: 639px) {
     .showcase__inner {
