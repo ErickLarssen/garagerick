@@ -1,5 +1,7 @@
 ---
 // Linha principal de specs (docs/03 e docs/05): ANO │ RankBadge │ quickSpecs[0] │ quickSpecs[1].
+// Todos os itens são sempre renderizados (vazios ficam com `hidden`) para o controlador da vitrine
+// só preencher texto na troca de veículo — elementos criados por JS não teriam o escopo de estilo.
 import RankBadge from '@/components/showcase/RankBadge.astro';
 import type { RankedVehicle } from '@/lib/rankings';
 
@@ -8,15 +10,20 @@ interface Props {
 }
 
 const { vehicle } = Astro.props;
+const quick = [vehicle.quickSpecs[0], vehicle.quickSpecs[1]];
 ---
 
 <ul class="spec-row" data-spec-row>
-  {vehicle.year !== undefined && <li class="numeric">{vehicle.year}</li>}
+  <li class="numeric" data-spec-year hidden={vehicle.year === undefined}>
+    {vehicle.year}
+  </li>
   <li>
     <RankBadge rank={vehicle.rank} />
   </li>
-  {vehicle.quickSpecs.map((spec) => (
-    <li>{spec}</li>
+  {quick.map((spec) => (
+    <li data-spec-quick hidden={!spec}>
+      {spec}
+    </li>
   ))}
 </ul>
 
@@ -38,8 +45,12 @@ const { vehicle } = Astro.props;
     align-items: center;
   }
 
+  .spec-row > li[hidden] {
+    display: none;
+  }
+
   /* separador │ fino entre itens */
-  .spec-row > li + li::before {
+  .spec-row > li:not([hidden]) ~ li:not([hidden])::before {
     content: '';
     width: 1px;
     height: 0.9em;

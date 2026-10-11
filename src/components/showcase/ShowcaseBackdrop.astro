@@ -65,6 +65,13 @@ const hero = await getHeroImage(vehicle.heroImage);
   .backdrop__img {
     object-fit: cover;
     opacity: 0;
+    transition: opacity 400ms var(--ease-garage); /* crossfade entre as camadas A/B */
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .backdrop__img {
+      transition-duration: 150ms;
+    }
   }
 
   .backdrop__img.is-active {
