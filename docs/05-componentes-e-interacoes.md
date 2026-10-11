@@ -128,6 +128,10 @@ Entradas:
 - Setas ◀ ▶ e teclas ←/→ (quando o foco está na vitrine ou no `body`, nunca em inputs)
 - Swipe/arrastar (nativo do Embla)
 - Roda do mouse **não** troca veículo (evita sequestrar a rolagem da página)
+- Teclado: ←/→ valem com foco na vitrine, no `body` ou no `<main>` (que recebe foco ao clicar em área
+  vazia); nunca em campos, com a ficha técnica aberta ou com o menu mobile aberto.
+- Setas nas pontas usam `aria-disabled="true"` (não `disabled`, para não perder o foco).
+- Roving tabindex: só o card ativo tem `tabindex=0`; se o foco estiver num card, ele acompanha a troca.
 - `hashchange` (ex.: vindo da busca na mesma página) → `scrollTo`
 
 **Hash:** só é tratado como veículo se corresponder a um slug do ranking atual. Qualquer outro

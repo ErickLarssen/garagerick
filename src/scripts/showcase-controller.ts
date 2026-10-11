@@ -93,6 +93,9 @@ export class ShowcaseController {
   private readonly layers: [HTMLImageElement, HTMLImageElement];
   private readonly info: InfoView;
   private readonly sheet: SheetView;
+  private readonly prevButton: HTMLElement;
+  private readonly nextButton: HTMLElement;
+  private readonly counter: HTMLElement;
   private frame = 0;
   private token = 0; // incrementa a cada troca; etapas atrasadas de trocas antigas são descartadas
 
@@ -109,6 +112,9 @@ export class ShowcaseController {
     ];
     this.info = new InfoView(required<HTMLElement>(root, '[data-showcase-info]'));
     this.sheet = new SheetView(required<HTMLDialogElement>(root, '[data-spec-sheet]'));
+    this.prevButton = required<HTMLElement>(root, '[data-carousel-prev]');
+    this.nextButton = required<HTMLElement>(root, '[data-carousel-next]');
+    this.counter = required<HTMLElement>(root, '[data-counter-rank]');
 
     required<HTMLElement>(root, '[data-carousel]').classList.add('is-enhanced');
     this.embla = EmblaCarousel(viewport, {
@@ -124,6 +130,65 @@ export class ShowcaseController {
     this.embla.on('resize', () => this.applyCoverflow());
     this.embla.on('select', () => this.setActive(this.embla.selectedScrollSnap()));
     this.applyCoverflow();
+    this.bindControls(viewport);
+    this.updateNavigation();
+  }
+
+  /** Vai para o índice `i` (limitado às pontas). Com movimento reduzido, pula sem animar. */
+  go(i: number): void {
+    const target = Math.max(0, Math.min(i, this.vehicles.length - 1));
+    this.embla.scrollTo(target, prefersReducedMotion());
+  }
+
+  /** Próximo = em direção ao #1 (índice +1 no array decrescente). */
+  next(): void {
+    this.go(this.index + 1);
+  }
+
+  prev(): void {
+    this.go(this.index - 1);
+  }
+
+  /** Setas, clique nos cards e teclado (docs/05). A roda do mouse não troca de veículo. */
+  private bindControls(viewport: HTMLElement): void {
+    this.prevButton.addEventListener('click', () => this.prev());
+    this.nextButton.addEventListener('click', () => this.next());
+
+    // o Embla v8 já cancela (na captura) o clique que encerra um arraste
+    this.cards.forEach((card, i) => card.addEventListener('click', () => this.go(i)));
+
+    // O viewport tem overflow escondido; se o navegador rolar ao focar algo, desfaz.
+    viewport.addEventListener('scroll', () => (viewport.scrollLeft = 0));
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      if (!this.keyboardAllowed()) return;
+      event.preventDefault();
+      if (event.key === 'ArrowRight') this.next();
+      else this.prev();
+    });
+  }
+
+  /** ←/→ só com foco na vitrine ou na página — nunca em campos, menus ou com a ficha aberta. */
+  private keyboardAllowed(): boolean {
+    if (document.querySelector('dialog[open], :popover-open')) return false;
+    const active = document.activeElement;
+    // body, html e o <main tabindex=-1> (alvo do "pular para o conteúdo", que recebe foco ao
+    // clicar numa área vazia) contam como "foco na página"
+    if (!active || active === document.body || active === document.documentElement) return true;
+    if (active.matches('main')) return true;
+    if (active.closest('input, textarea, select, [contenteditable]')) return false;
+    return this.root.contains(active);
+  }
+
+  /** Contador (posição no ranking, não índice), setas nas pontas e card focável (roving tabindex). */
+  private updateNavigation(): void {
+    const vehicle = this.vehicles[this.index];
+    if (vehicle) this.counter.textContent = vehicle.isTop ? 'TOP 1' : formatRank(vehicle.rank);
+    this.prevButton.setAttribute('aria-disabled', String(this.index === 0));
+    this.nextButton.setAttribute('aria-disabled', String(this.index === this.vehicles.length - 1));
+    this.cards.forEach((card, n) => (card.tabIndex = n === this.index ? 0 : -1));
   }
 
   /** Ativa o veículo de índice `i`: carrossel, tom ambiente, fundo, informações e ficha. */
@@ -140,6 +205,11 @@ export class ShowcaseController {
       if (n === i) card.setAttribute('aria-current', 'true');
       else card.removeAttribute('aria-current');
     });
+
+    // se o foco estava num card, ele acompanha o novo card ativo
+    const focusedCard = this.cards.some((card) => card === document.activeElement);
+    this.updateNavigation();
+    if (focusedCard) this.cards[i]?.focus({ preventScroll: true });
 
     this.root.style.setProperty('--ambient', vehicle.ambientColor);
     this.sheet.render(vehicle);

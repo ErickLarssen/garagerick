@@ -42,7 +42,7 @@ const active = vehicles[activeIndex];
       <ChevronLeft width={24} height={24} aria-hidden="true" />
     </button>
     <p class="carousel__counter numeric" data-carousel-counter>
-      {active && (active.isTop ? 'TOP 1' : formatRank(active.rank))}
+      <span data-counter-rank>{active && (active.isTop ? 'TOP 1' : formatRank(active.rank))}</span>{' '}
       <span class="text-text-muted">de {vehicles.length}</span>
     </p>
     <button type="button" class="carousel__arrow" data-carousel-next aria-label="Próximo">
@@ -160,6 +160,13 @@ const active = vehicles[activeIndex];
 
   .carousel__arrow:hover {
     background: rgb(255 255 255 / 0.08);
+  }
+
+  /* nos extremos (sem loop): aria-disabled em vez de disabled, para não perder o foco */
+  .carousel__arrow[aria-disabled='true'] {
+    opacity: 0.35;
+    cursor: default;
+    background: none;
   }
 
   .carousel__counter {
