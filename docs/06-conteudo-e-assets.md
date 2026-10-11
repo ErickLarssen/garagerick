@@ -3,8 +3,9 @@
 ## Como adicionar um veículo (fluxo do Erick)
 
 1. Garanta que a marca existe em `src/content/brands/<marca>.json` e que o logo está em
-   `src/assets/brands/<marca>.svg`.
-2. Crie a pasta `src/assets/vehicles/<slug>/` com `hero.jpg` e `card.jpg`.
+   `src/assets/brands/<marca>.png` (ou `.svg`).
+2. Coloque a foto em `src/assets/vehicles/<nome>.<ext>` (JPG, PNG, WebP ou AVIF). A mesma foto
+   serve de fundo (16:9) e de card (3:4); se quiser um card diferente, aponte `cardImage` para outra.
 3. Crie `src/content/cars/<slug>.md` (ou `motorcycles/`) com o frontmatter de `docs/03`.
 4. Escreva no corpo do arquivo por que você gosta dele.
 5. Se a posição nova "empurra" outras, ajuste o `rank` dos demais da mesma lista.
@@ -17,8 +18,8 @@
 
 | Arquivo | Proporção | Tamanho mínimo | Conteúdo ideal |
 |---|---|---|---|
-| `hero.jpg` | 16:9 | 2400×1350 | Carro 3/4 dianteiro ou lateral, **ocupando a metade direita**; lado esquerdo mais "vazio"/escuro para o texto |
-| `card.jpg` | 3:4 | 900×1200 | Recorte vertical marcante (frente, detalhe do farol, carro centralizado), estilo pôster |
+| `heroImage` | 16:9 (recortada) | 1920×1080 | Carro 3/4 dianteiro ou lateral, **ocupando a metade direita**; lado esquerdo mais "vazio"/escuro para o texto. Fotos em retrato ou quadradas funcionam com `heroFocus`, mas perdem nitidez |
+| `cardImage` | 3:4 (recortada) | 640 px de largura | Por padrão é a mesma foto; o recorte usa o mesmo `heroFocus` |
 
 - Formatos de origem: JPG ou PNG de alta qualidade. **O Astro gera AVIF/WebP** — não converta à mão.
 - Se o carro estiver do lado errado, ajuste `heroFocus` antes de editar a imagem.
@@ -29,15 +30,19 @@
 
 ## Logos das marcas
 
-- Formato **SVG** e **obrigatoriamente monocromático** (uma cor só, sobre fundo transparente):
-  a interface clareia o logo com filtro CSS, então logos coloridos/degradês perdem detalhes.
+- **PNG com fundo transparente** (ou SVG sem fundo). Margens transparentes são cortadas antes de salvar
+  (o logo é exibido por altura; margem sobrando o deixa minúsculo).
+- Por padrão (`logoTreatment: "white"`) a interface deixa o logo branco com filtro CSS — bom para
+  logos monocromáticos ou de traço. Emblemas preenchidos (escudos, ovais, círculos: Ferrari,
+  Lamborghini, BMW, Ford, Harley-Davidson, Triumph) viram uma forma sólida; para eles use
+  `logoTreatment: "original"`, que mantém as cores do arquivo.
 - Fontes recomendadas: sites/kits de imprensa oficiais das marcas e o Wikimedia Commons
   (confira a licença/uso de marca de cada arquivo).
 - Antes de salvar: remova `width`/`height` fixos (deixe só `viewBox`), remova cores fixas
   quando possível (`fill="currentColor"`), e otimize (sem metadados de editor).
 - Logos muito largos (ex.: "Volkswagen" por extenso) ou muito altos (emblemas) são
   equilibrados com `logoScale` em `brands/*.json`, não editando o SVG.
-- Nome do arquivo = id da marca: `byd.svg`, `volkswagen.svg`, `honda.svg`, `bmw-motorrad.svg`.
+- Nome do arquivo = id da marca, em minúsculas: `byd.png`, `volkswagen.png`, `harley-davidson.png`.
 
 ## Texto "por que eu gosto"
 
@@ -45,7 +50,7 @@
 - Ideal: 300–550 caracteres (cabe na vitrine sem "Ler mais" no desktop).
 - Markdown simples permitido: *itálico* e **negrito**. Sem títulos, listas ou imagens.
 
-## Ranking inicial (semente)
+## Ranking inicial (semente — substituído em 2026-10-11 pela lista de `docs/carros-favoritos.md`)
 
 Para desenvolver a interface, crie **dados de exemplo** com placeholders:
 

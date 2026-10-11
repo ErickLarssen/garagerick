@@ -11,7 +11,7 @@ const { vehicle } = Astro.props;
 ---
 
 <ul class="spec-row" data-spec-row>
-  <li class="numeric">{vehicle.year}</li>
+  {vehicle.year !== undefined && <li class="numeric">{vehicle.year}</li>}
   <li>
     <RankBadge rank={vehicle.rank} />
   </li>

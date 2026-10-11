@@ -12,8 +12,9 @@ Siga `docs/03-modelo-de-dados.md` e `docs/06-conteudo-e-assets.md`.
 3. Marca:
    - Se `src/content/brands/<marca>.json` não existir, crie-o e avise que falta o logo em `src/assets/brands/<marca>.svg`.
 4. Imagens:
-   - Crie `src/assets/vehicles/<slug>/` e verifique se `hero.jpg` e `card.jpg` existem.
-   - Se não existirem, use temporariamente as imagens de `_placeholder/` e liste as pendências no final.
+   - Procure a foto em `src/assets/vehicles/` (uma por veículo, qualquer formato) e use-a em `heroImage` e `cardImage`.
+   - Se não existir, use temporariamente as imagens de `_placeholder/` e liste a pendência no final.
+   - Atualize também `docs/carros-favoritos.md` com a nova posição.
 5. Crie o arquivo do veículo (`src/content/cars/` ou `src/content/motorcycles/`):
    - Preencha só os dados que o Erick informou. Fichas técnicas desconhecidas ficam vazias com `<!-- TODO: confirmar ficha técnica -->`.
    - Corpo: `TODO: escreva por que você gosta deste veículo.` (a menos que o Erick tenha mandado o texto).

@@ -66,8 +66,13 @@ export interface RankedVehicle {
   total: number; // tamanho da lista (para "#07 de 10")
   isTop: boolean; // rank === 1
   name: string;
-  brand: { name: string; logo: ImageMetadata; logoScale: number };
-  year: number;
+  brand: {
+    name: string;
+    logo: ImageMetadata;
+    logoScale: number;
+    logoTreatment: 'white' | 'original';
+  };
+  year?: number; // omitido quando desconhecido
   specs: SpecItem[]; // já formatadas, prontas para exibir
   quickSpecs: string[]; // até 2 itens para a linha principal
   heroImage: ImageMetadata;
@@ -134,6 +139,7 @@ function push<T>(specs: SpecItem[], label: string, value: T | undefined, fmt: (v
 function carSpecs(d: CarEntry['data']): { specs: SpecItem[]; quickSpecs: string[] } {
   const specs: SpecItem[] = [];
   const text = (v: string) => v;
+  push(specs, 'Versão', d.version, (v: string) => v);
   push(specs, 'Motorização', d.powertrain, (v) => POWERTRAIN_LABELS[v]);
   push(specs, 'Motor', d.engine, text);
   push(specs, 'Potência', d.powerCv, formatPower);
@@ -150,7 +156,7 @@ function carSpecs(d: CarEntry['data']): { specs: SpecItem[]; quickSpecs: string[
   const second =
     d.powertrain === 'eletrico'
       ? [POWERTRAIN_LABELS.eletrico, d.drivetrain].filter(Boolean).join(' ')
-      : d.engine;
+      : (d.engine ?? d.version); // sem motor informado, a versão ocupa o lugar
   const quickSpecs = [d.powerCv !== undefined ? formatPower(d.powerCv) : undefined, second].filter(
     (v): v is string => Boolean(v),
   );
@@ -161,6 +167,7 @@ function carSpecs(d: CarEntry['data']): { specs: SpecItem[]; quickSpecs: string[
 function motorcycleSpecs(d: MotorcycleEntry['data']): { specs: SpecItem[]; quickSpecs: string[] } {
   const specs: SpecItem[] = [];
   const text = (v: string) => v;
+  push(specs, 'Versão', d.version, (v: string) => v);
   push(specs, 'Motorização', d.powertrain, (v) => POWERTRAIN_LABELS[v]);
   push(specs, 'Motor', d.engine, text);
   push(specs, 'Cilindrada', d.displacementCc, formatDisplacement);
@@ -175,7 +182,7 @@ function motorcycleSpecs(d: MotorcycleEntry['data']): { specs: SpecItem[]; quick
 
   const quickSpecs = [
     d.powerCv !== undefined ? formatPower(d.powerCv) : undefined,
-    d.displacementCc !== undefined ? formatDisplacement(d.displacementCc) : undefined,
+    d.displacementCc !== undefined ? formatDisplacement(d.displacementCc) : d.version,
   ].filter((v): v is string => Boolean(v));
 
   return { specs, quickSpecs };
@@ -198,7 +205,12 @@ function toRanked(
     total,
     isTop: d.rank === 1,
     name: d.name,
-    brand: { name: brand.data.name, logo: brand.data.logo, logoScale: brand.data.logoScale },
+    brand: {
+      name: brand.data.name,
+      logo: brand.data.logo,
+      logoScale: brand.data.logoScale,
+      logoTreatment: brand.data.logoTreatment,
+    },
     year: d.year,
     specs: details.specs,
     quickSpecs: details.quickSpecs,

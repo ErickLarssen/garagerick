@@ -57,11 +57,9 @@ garagerick/
 │   └── robots.txt
 ├── src/
 │   ├── assets/
-│   │   ├── brands/                # logos das marcas em SVG (byd.svg, volkswagen.svg…)
-│   │   ├── vehicles/              # uma pasta por veículo
-│   │   │   └── byd-seal/
-│   │   │       ├── hero.jpg       # 16:9, fundo da vitrine
-│   │   │       └── card.jpg       # 3:4, card do carrossel
+│   │   ├── brands/                # logos das marcas (PNG transparente ou SVG): byd.png, volkswagen.png…
+│   │   ├── vehicles/              # uma foto por veículo (seal.webp, nivus.jpg…), usada no
+│   │   │                          # fundo (16:9) e no card (3:4); _placeholder/ para pendências
 │   │   ├── icons/                 # ícones SVG da interface (moto, busca, play, redes…)
 │   │   └── about/erick.jpg        # foto do "Sobre mim"
 │   ├── content/

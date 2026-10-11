@@ -1,6 +1,7 @@
 {
   "name": "BYD",
-  "logo": "../../assets/brands/byd.svg",
+  "logo": "../../assets/brands/byd.png",
   "logoScale": 1,
+  "logoTreatment": "white",
   "country": "China"
 }

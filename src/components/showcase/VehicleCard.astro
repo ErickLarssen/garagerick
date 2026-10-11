@@ -34,6 +34,7 @@ const rankLabel = vehicle.isTop ? 'TOP 1' : formatRank(vehicle.rank);
     sizes={card.sizes}
     width={card.width}
     height={card.height}
+    style={`object-position: ${vehicle.heroFocus}`}
     alt=""
     loading={lazy ? 'lazy' : 'eager'}
     decoding="async"
