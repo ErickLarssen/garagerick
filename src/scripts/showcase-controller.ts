@@ -116,12 +116,15 @@ export class ShowcaseController {
     this.nextButton = required<HTMLElement>(root, '[data-carousel-next]');
     this.counter = required<HTMLElement>(root, '[data-counter-rank]');
 
+    // Hash da URL (docs/05): /esportivos#porsche-911 abre direto no veículo
+    const initial = this.indexFromHash() ?? this.index;
+
     required<HTMLElement>(root, '[data-carousel]').classList.add('is-enhanced');
     this.embla = EmblaCarousel(viewport, {
       loop: false,
       align: 'center',
       containScroll: false,
-      startIndex: this.index,
+      startIndex: initial,
       skipSnaps: false,
     });
 
@@ -132,6 +135,15 @@ export class ShowcaseController {
     this.applyCoverflow();
     this.bindControls(viewport);
     this.updateNavigation();
+    if (initial !== this.index) this.setActive(initial, { instant: true });
+  }
+
+  /** Índice do veículo cujo slug está no hash; outros hashes (#ranking, #conteudo) são ignorados. */
+  private indexFromHash(): number | undefined {
+    const slug = decodeURIComponent(location.hash.slice(1));
+    if (!slug) return undefined;
+    const i = this.vehicles.findIndex((v) => v.slug === slug);
+    return i >= 0 ? i : undefined;
   }
 
   /** Vai para o índice `i` (limitado às pontas). Com movimento reduzido, pula sem animar. */
@@ -159,6 +171,12 @@ export class ShowcaseController {
 
     // O viewport tem overflow escondido; se o navegador rolar ao focar algo, desfaz.
     viewport.addEventListener('scroll', () => (viewport.scrollLeft = 0));
+
+    // ex.: a busca navegando para outro veículo na mesma página
+    window.addEventListener('hashchange', () => {
+      const i = this.indexFromHash();
+      if (i !== undefined && i !== this.index) this.go(i);
+    });
 
     document.addEventListener('keydown', (event) => {
       if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
@@ -191,8 +209,11 @@ export class ShowcaseController {
     this.cards.forEach((card, n) => (card.tabIndex = n === this.index ? 0 : -1));
   }
 
-  /** Ativa o veículo de índice `i`: carrossel, tom ambiente, fundo, informações e ficha. */
-  setActive(i: number): void {
+  /**
+   * Ativa o veículo de índice `i`: carrossel, tom ambiente, fundo, informações e ficha.
+   * `instant`: sem animação e sem mexer na URL (carga inicial vinda do hash).
+   */
+  setActive(i: number, { instant = false } = {}): void {
     const vehicle = this.vehicles[i];
     if (i === this.index || !vehicle) return;
     this.index = i;
@@ -213,8 +234,27 @@ export class ShowcaseController {
 
     this.root.style.setProperty('--ambient', vehicle.ambientColor);
     this.sheet.render(vehicle);
+
+    if (instant) {
+      this.showBackdropNow(vehicle);
+      this.info.show(vehicle);
+      return;
+    }
+
     void this.swapBackdrop(vehicle, token);
     void this.info.swap(vehicle, () => token === this.token);
+    // não polui o histórico; só roda em trocas feitas pelo usuário (nunca na carga)
+    history.replaceState(null, '', `${location.pathname}${location.search}#${vehicle.slug}`);
+  }
+
+  /** Troca o fundo na camada visível, sem crossfade (carga inicial). */
+  private showBackdropNow(vehicle: ShowcaseVehicle): void {
+    const visible = this.layers.find((layer) => layer.classList.contains('is-active'));
+    if (!visible) return;
+    visible.style.objectPosition = vehicle.heroFocus;
+    visible.sizes = vehicle.hero.sizes;
+    visible.srcset = vehicle.hero.srcset;
+    visible.src = vehicle.hero.src;
   }
 
   /** Crossfade A/B: carrega na camada oculta, espera decodificar e troca (docs/04). */
@@ -318,7 +358,7 @@ class InfoView {
     await settled(out, INFO_OUT_MS);
     if (!isCurrent()) return;
 
-    this.render(vehicle);
+    this.show(vehicle);
     out.cancel();
 
     if (reduced) {
@@ -336,7 +376,8 @@ class InfoView {
     );
   }
 
-  private render(v: ShowcaseVehicle): void {
+  /** Preenche o bloco com o veículo, sem animação. */
+  show(v: ShowcaseVehicle): void {
     this.logo.src = v.logo.src;
     this.logo.alt = v.brandName;
     this.logo.width = v.logo.width;

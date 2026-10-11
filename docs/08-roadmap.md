@@ -49,7 +49,7 @@
 - [x] `showcase-controller.ts`: Embla + efeito coverflow
 - [x] Troca de veículo com crossfade e animação escalonada da informação
 - [x] Teclado (←/→), setas, contador `#07 de 10`, clique no card
-- [ ] Hash na URL (entrada e atualização com `replaceState`)
+- [x] Hash na URL (entrada e atualização com `replaceState`)
 - [ ] Tratamento especial do Top 1
 - [ ] Pré-carregamento de imagens vizinhas
 - [ ] `prefers-reduced-motion` e checklist de interação de `docs/05`

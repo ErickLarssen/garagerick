@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-11 — Hash na URL
+- **Contexto:** quarta tarefa da Fase 4.
+- **Decisão:** na carga, se o hash é o slug de um veículo do ranking, o Embla já nasce nele (`startIndex`) e `setActive(i, { instant: true })` troca fundo (na camada visível) e informações sem animação e **sem** `replaceState`. Trocas do usuário gravam `#slug` com `history.replaceState` (preserva `pathname` e `search`). `hashchange` com slug válido → `go(i)`; outros hashes (`#ranking`, `#conteudo`, inexistentes) são ignorados e seguem como âncora. Testado: `/esportivos#porsche-911` abre no 911 com a URL intacta; `/esportivos` continua sem hash; avançar grava `#audi-tt` sem aumentar o histórico nem disparar `hashchange`; `#ranking` só rola até a lista. **Limitação conhecida:** sem JS (ou antes do JS rodar) a vitrine mostra o último colocado e troca para o do hash em seguida, e o hero do último colocado é baixado à toa nesses acessos — aceitável por ser só em links compartilhados.
+- **Motivo:** compartilhar um veículo específico (`docs/01`).
+- **Impacto:** `src/scripts/showcase-controller.ts`.
+
 ### 2026-10-11 — Navegação: setas, teclado, contador e clique no card
 - **Contexto:** terceira tarefa da Fase 4.
 - **Decisão:** `go(i)` (limita às pontas; com movimento reduzido `scrollTo` pula sem animar), `next` = em direção ao #1. Clique no card chama `go(i)` direto — o Embla v8 não tem `clickAllowed()` (era da v7) e já cancela na captura o clique que encerra um arraste. Teclado ←/→ global com `preventDefault`, ignorando modificadores, campos de texto, `dialog[open]` e `:popover-open`. **Bug achado no teste:** clicar numa área vazia foca o `<main tabindex=-1>` e bloqueava as setas → `main` conta como "foco na página". Contador atualiza só o `<span data-counter-rank>` ("TOP 1" no primeiro); **bug visual:** o Astro compacta o HTML e juntava "#12de 12" → espaço explícito `{' '}`. Setas com `aria-disabled` nas pontas; roving tabindex nos cards, com o foco acompanhando a troca; listener que zera `scrollLeft` do viewport (o navegador pode rolar um contêiner com overflow escondido ao focar). Testado no Chrome com teclas reais e cliques via `element.click()` (cliques por coordenada não são confiáveis com a aba de automação em segundo plano).
