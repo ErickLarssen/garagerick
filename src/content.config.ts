@@ -34,6 +34,8 @@ const vehicleBase = ({ image }: SchemaContext) => ({
   heroImage: image(), // 16:9
   cardImage: image(), // 3:4
   heroFocus: z.string().default('center'), // object-position do fundo ("70% 50%")
+  // celular: 'contain' mostra a foto inteira na largura (carros cortados); 'cover' preenche a área
+  heroFitMobile: z.enum(['cover', 'contain']).default('cover'),
   ambientColor: z
     .string()
     .regex(/^#[0-9a-f]{6}$/i)

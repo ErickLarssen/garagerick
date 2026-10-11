@@ -8,6 +8,7 @@ version: GLS 2.0
 powertrain: combustao
 heroImage: ../../assets/vehicles/elantra.avif
 cardImage: ../../assets/vehicles/elantra.avif
+heroFitMobile: contain
 tags: [hyundai, populares]
 ---
 

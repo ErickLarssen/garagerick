@@ -8,6 +8,7 @@ version: RT 2.0 Turbo Flex
 powertrain: combustao
 heroImage: ../../assets/vehicles/rampage.webp
 cardImage: ../../assets/vehicles/rampage.webp
+heroFitMobile: contain
 tags: [ram, populares]
 ---
 

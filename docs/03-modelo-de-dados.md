@@ -66,6 +66,7 @@ const vehicleBase = ({ image }) => ({
   heroImage: image(),                         // 16:9
   cardImage: image(),                         // 3:4
   heroFocus: z.string().default('center'),    // object-position do fundo ("70% 50%")
+  heroFitMobile: z.enum(['cover', 'contain']).default('cover'), // celular: 'contain' = foto inteira na largura
   ambientColor: z.string().regex(/^#[0-9a-f]{6}$/i).optional(), // tom do degradê da vitrine
   videoUrl: z.url().optional(),               // YouTube
   tags: z.array(z.string()).default([]),      // usados na busca

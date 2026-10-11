@@ -1,7 +1,7 @@
 {
   "name": "Porsche",
   "logo": "../../assets/brands/porsche.png",
-  "logoScale": 1.2,
-  "logoTreatment": "white",
+  "logoScale": 1.4,
+  "logoTreatment": "original",
   "country": "Alemanha"
 }

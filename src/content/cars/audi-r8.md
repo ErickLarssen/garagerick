@@ -7,6 +7,7 @@ year: 2023
 powertrain: combustao
 heroImage: ../../assets/vehicles/r8.webp
 cardImage: ../../assets/vehicles/r8.webp
+heroFitMobile: contain
 tags: [audi, esportivos]
 ---
 

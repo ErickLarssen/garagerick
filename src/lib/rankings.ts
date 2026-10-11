@@ -78,6 +78,7 @@ export interface RankedVehicle {
   heroImage: ImageMetadata;
   cardImage: ImageMetadata;
   heroFocus: string;
+  heroFitMobile: 'cover' | 'contain';
   ambientColor: string; // fallback: token --color-ambient-default
   videoUrl?: string;
   body: string; // HTML renderizado do Markdown
@@ -217,6 +218,7 @@ function toRanked(
     heroImage: d.heroImage,
     cardImage: d.cardImage,
     heroFocus: d.heroFocus,
+    heroFitMobile: d.heroFitMobile,
     ambientColor: d.ambientColor ?? AMBIENT_FALLBACK,
     videoUrl: d.videoUrl,
     body: stripComments(entry.rendered?.html ?? ''),

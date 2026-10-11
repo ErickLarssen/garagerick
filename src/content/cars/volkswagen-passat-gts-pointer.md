@@ -8,6 +8,7 @@ powertrain: combustao
 heroImage: ../../assets/vehicles/passat-gts-pointer.webp
 cardImage: ../../assets/vehicles/passat-gts-pointer.webp
 heroFocus: '50% 75%'
+heroFitMobile: contain
 tags: [volkswagen, antigos]
 ---
 

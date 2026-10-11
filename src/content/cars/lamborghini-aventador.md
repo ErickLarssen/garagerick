@@ -7,6 +7,7 @@ year: 2022
 powertrain: combustao
 heroImage: ../../assets/vehicles/aventador.webp
 cardImage: ../../assets/vehicles/aventador.webp
+heroFitMobile: contain
 tags: [lamborghini, esportivos]
 ---
 

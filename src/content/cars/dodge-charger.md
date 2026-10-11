@@ -8,6 +8,7 @@ powertrain: combustao
 heroImage: ../../assets/vehicles/charger.avif
 cardImage: ../../assets/vehicles/charger.avif
 heroFocus: '50% 65%'
+heroFitMobile: contain
 tags: [dodge, esportivos]
 ---
 

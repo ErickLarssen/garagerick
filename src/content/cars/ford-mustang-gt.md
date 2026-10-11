@@ -7,6 +7,7 @@ year: 2026
 powertrain: combustao
 heroImage: ../../assets/vehicles/mustang-gt.png
 cardImage: ../../assets/vehicles/mustang-gt.png
+heroFitMobile: contain
 tags: [ford, esportivos]
 ---
 

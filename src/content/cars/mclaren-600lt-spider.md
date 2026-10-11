@@ -7,6 +7,7 @@ year: 2020
 powertrain: combustao
 heroImage: ../../assets/vehicles/600lt-spider.webp
 cardImage: ../../assets/vehicles/600lt-spider.webp
+heroFitMobile: contain
 tags: [mclaren, esportivos]
 ---
 

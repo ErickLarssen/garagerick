@@ -8,6 +8,7 @@ version: Attitude
 powertrain: combustao
 heroImage: ../../assets/vehicles/creta.webp
 cardImage: ../../assets/vehicles/creta.webp
+heroFitMobile: contain
 tags: [hyundai, populares]
 ---
 

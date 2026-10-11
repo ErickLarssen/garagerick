@@ -8,6 +8,7 @@ powertrain: combustao
 heroImage: ../../assets/vehicles/opala.webp
 cardImage: ../../assets/vehicles/opala.webp
 heroFocus: '50% 70%'
+heroFitMobile: contain
 tags: [chevrolet, antigos]
 ---
 

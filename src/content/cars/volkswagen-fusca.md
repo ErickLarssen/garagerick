@@ -9,6 +9,7 @@ powertrain: combustao
 heroImage: ../../assets/vehicles/fusca.jpg
 cardImage: ../../assets/vehicles/fusca.jpg
 heroFocus: '50% 60%'
+heroFitMobile: contain
 tags: [volkswagen, populares]
 ---
 

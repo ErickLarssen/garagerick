@@ -6,6 +6,7 @@ category: populares
 powertrain: combustao
 heroImage: ../../assets/vehicles/lancer.jpg
 cardImage: ../../assets/vehicles/lancer.jpg
+heroFitMobile: contain
 tags: [mitsubishi, populares]
 ---
 

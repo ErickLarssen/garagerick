@@ -8,6 +8,7 @@ version: Lariat
 powertrain: combustao # TODO: confirmar (a Maverick também tem versão híbrida)
 heroImage: ../../assets/vehicles/maverick.webp
 cardImage: ../../assets/vehicles/maverick.webp
+heroFitMobile: contain
 tags: [ford, populares]
 ---
 

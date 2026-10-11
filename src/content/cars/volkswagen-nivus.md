@@ -9,6 +9,7 @@ powertrain: combustao
 bodyStyle: SUV cupê
 heroImage: ../../assets/vehicles/nivus.jpg
 cardImage: ../../assets/vehicles/nivus.jpg
+heroFitMobile: contain
 tags: [volkswagen, populares]
 ---
 

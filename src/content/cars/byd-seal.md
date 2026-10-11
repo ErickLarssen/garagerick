@@ -9,6 +9,7 @@ drivetrain: AWD
 bodyStyle: Sedã
 heroImage: ../../assets/vehicles/seal.webp
 cardImage: ../../assets/vehicles/seal.webp
+heroFitMobile: contain
 tags: [byd, populares]
 ---
 

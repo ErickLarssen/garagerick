@@ -12,6 +12,8 @@ const INFO_IN_MS = 400;
 const INFO_STAGGER_MS = 60;
 const ZOOM_MS = 900;
 const SHINE_MS = 1100;
+/** Espera máxima por foto + logo antes de trocar mesmo assim (rede lenta / dev gerando imagens). */
+const READY_MAX_MS = 2500;
 
 /** Swipe: deslocamento horizontal mínimo, e ele precisa dominar o vertical. */
 const SWIPE_MIN_PX = 50;
@@ -41,6 +43,22 @@ async function imageReady(img: HTMLImageElement): Promise<void> {
   await Promise.race([
     img.decode().catch(() => undefined),
     new Promise<void>((resolve) => setTimeout(resolve, 300)),
+  ]);
+}
+
+/** Carrega (e tenta decodificar) uma imagem fora do DOM — usado para o logo antes da troca. */
+function loadImage(src: string): Promise<void> {
+  const img = new Image();
+  img.decoding = 'async';
+  img.src = src;
+  return imageReady(img);
+}
+
+/** Resolve quando `promise` termina ou após `ms`, o que vier primeiro. */
+function atMost(promise: Promise<unknown>, ms: number): Promise<void> {
+  return Promise.race([
+    promise.then(() => undefined),
+    new Promise<void>((resolve) => setTimeout(resolve, ms)),
   ]);
 }
 
@@ -218,11 +236,18 @@ export class ShowcaseController {
       return;
     }
 
-    void this.swapBackdrop(vehicle, token);
+    // Troca sincronizada: carrega foto e logo enquanto as informações saem; quando ambos estiverem
+    // prontos (ou após READY_MAX_MS), fundo, logo e textos mudam juntos — nunca misturados.
+    const { next, current } = this.prepareBackdrop(vehicle);
+    const ready = atMost(
+      Promise.all([imageReady(next), loadImage(vehicle.logo.src)]),
+      READY_MAX_MS,
+    );
+    const isCurrent = () => token === this.token;
     void this.info
-      .swap(vehicle, () => token === this.token)
-      .then(() => {
-        if (vehicle.isTop && token === this.token) this.shineTop();
+      .swap(vehicle, isCurrent, ready, () => this.commitBackdrop(next, current))
+      .then((shown) => {
+        if (shown && vehicle.isTop) this.shineTop();
       });
     // não polui o histórico; só roda em trocas feitas pelo usuário (nunca na carga)
     history.replaceState(null, '', `${location.pathname}${location.search}#${vehicle.slug}`);
@@ -264,24 +289,38 @@ export class ShowcaseController {
     const visible = this.layers.find((layer) => layer.classList.contains('is-active'));
     if (!visible) return;
     visible.style.objectPosition = vehicle.heroFocus;
+    visible.classList.toggle('backdrop__img--fit', vehicle.heroFitMobile === 'contain');
     visible.sizes = vehicle.hero.sizes;
     visible.srcset = vehicle.hero.srcset;
     visible.src = vehicle.hero.src;
   }
 
-  /** Crossfade A/B: carrega na camada oculta, espera decodificar e troca (docs/04). */
-  private async swapBackdrop(vehicle: ShowcaseVehicle, token: number): Promise<void> {
+  /**
+   * Crossfade A/B, etapa 1: carrega a foto na camada oculta. A camada é escondida na hora (sem
+   * transição) — numa troca rápida ela ainda podia estar sumindo e mostraria a foto nova por um instante.
+   */
+  private prepareBackdrop(vehicle: ShowcaseVehicle): {
+    next: HTMLImageElement;
+    current: HTMLImageElement;
+  } {
     const [a, b] = this.layers;
     const next = a.classList.contains('is-active') ? b : a;
     const current = next === a ? b : a;
 
+    next.getAnimations().forEach((animation) => animation.cancel());
+    next.style.transition = 'none';
+    void next.offsetWidth; // aplica a opacidade 0 sem animar
     next.style.objectPosition = vehicle.heroFocus;
+    next.classList.toggle('backdrop__img--fit', vehicle.heroFitMobile === 'contain');
     next.sizes = vehicle.hero.sizes;
     next.srcset = vehicle.hero.srcset;
     next.src = vehicle.hero.src;
-    await imageReady(next);
-    if (token !== this.token) return;
+    return { next, current };
+  }
 
+  /** Crossfade A/B, etapa 2: mostra a camada preparada e esconde a outra (docs/04). */
+  private commitBackdrop(next: HTMLImageElement, current: HTMLImageElement): void {
+    next.style.transition = '';
     next.classList.add('is-active');
     current.classList.remove('is-active');
     if (!prefersReducedMotion()) {
@@ -324,7 +363,16 @@ class InfoView {
     return [this.logo, this.name, this.specRow, this.body, this.actions];
   }
 
-  async swap(vehicle: ShowcaseVehicle, isCurrent: () => boolean): Promise<void> {
+  /**
+   * Saída → espera `ready` (foto + logo novos) → `commit` (troca o fundo) e conteúdo novo → entrada.
+   * Retorna se a troca chegou a ser exibida (false se outra troca a substituiu no meio).
+   */
+  async swap(
+    vehicle: ShowcaseVehicle,
+    isCurrent: () => boolean,
+    ready: Promise<void>,
+    commit: () => void,
+  ): Promise<boolean> {
     this.root.getAnimations({ subtree: true }).forEach((animation) => animation.cancel());
     const reduced = prefersReducedMotion();
 
@@ -337,15 +385,16 @@ class InfoView {
           ],
       { duration: reduced ? 75 : INFO_OUT_MS, easing: EASE, fill: 'forwards' },
     );
-    await settled(out, INFO_OUT_MS);
-    if (!isCurrent()) return;
+    await Promise.all([settled(out, INFO_OUT_MS), ready]);
+    if (!isCurrent()) return false;
 
+    commit();
     this.show(vehicle);
     out.cancel();
 
     if (reduced) {
       this.root.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 75, easing: EASE });
-      return;
+      return true;
     }
     this.parts.forEach((part, n) =>
       part.animate(
@@ -356,6 +405,7 @@ class InfoView {
         { duration: INFO_IN_MS, delay: n * INFO_STAGGER_MS, easing: EASE, fill: 'backwards' },
       ),
     );
+    return true;
   }
 
   /** Preenche o bloco com o veículo, sem animação. */

@@ -22,6 +22,7 @@ export interface ShowcaseVehicle {
   body: string; // HTML
   hero: Pick<ResponsiveImage, 'src' | 'srcset' | 'sizes'>;
   heroFocus: string;
+  heroFitMobile: 'cover' | 'contain';
   ambientColor: string;
   videoUrl?: string;
 }
@@ -44,6 +45,7 @@ export async function buildShowcaseData(vehicles: RankedVehicle[]): Promise<Show
         body: v.body,
         hero: { src: hero.src, srcset: hero.srcset, sizes: hero.sizes },
         heroFocus: v.heroFocus,
+        heroFitMobile: v.heroFitMobile,
         ambientColor: v.ambientColor,
         videoUrl: v.videoUrl,
       };

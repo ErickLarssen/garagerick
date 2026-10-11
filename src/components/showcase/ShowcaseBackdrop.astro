@@ -11,12 +11,13 @@ interface Props {
 
 const { vehicle } = Astro.props;
 const hero = await getHeroImage(vehicle.heroImage);
+const fit = vehicle.heroFitMobile === 'contain';
 ---
 
 <div class="backdrop" aria-hidden="true">
   <!-- Camada A: visível; é o LCP da página, então nada de lazy -->
   <img
-    class="backdrop__img is-active"
+    class:list={['backdrop__img is-active', { 'backdrop__img--fit': fit }]}
     data-backdrop-layer="a"
     src={hero.src}
     srcset={hero.srcset}
@@ -30,7 +31,7 @@ const hero = await getHeroImage(vehicle.heroImage);
   />
   <!-- Camada B: recebe a próxima imagem na troca (mesma URL agora → vem do cache) -->
   <img
-    class="backdrop__img"
+    class:list={['backdrop__img', { 'backdrop__img--fit': fit }]}
     data-backdrop-layer="b"
     src={hero.src}
     srcset={hero.srcset}
@@ -152,6 +153,18 @@ const hero = await getHeroImage(vehicle.heroImage);
       background:
         linear-gradient(180deg, rgb(7 9 12 / 0.75) 0%, transparent 22%),
         linear-gradient(0deg, var(--color-bg) 0%, rgb(7 9 12 / 0.55) 22%, transparent 50%);
+    }
+  }
+
+  /* Celular, carros com heroFitMobile: "contain": a foto aparece inteira na largura (a área do topo
+     é estreita e o recorte cortava o carro), logo abaixo do header, com bordas superior e inferior
+     dissolvendo no preto. Seletor reforçado para vencer ".backdrop > *" com escopo. */
+  @media (max-width: 639px) {
+    .backdrop > .backdrop__img.backdrop__img--fit {
+      top: var(--header-h);
+      height: auto;
+      object-fit: contain;
+      mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 78%, transparent 100%);
     }
   }
 </style>

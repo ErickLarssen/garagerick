@@ -7,6 +7,7 @@ year: 2024
 powertrain: combustao
 heroImage: ../../assets/vehicles/f-type.jpg
 cardImage: ../../assets/vehicles/f-type.jpg
+heroFitMobile: contain
 tags: [jaguar, esportivos]
 ---
 

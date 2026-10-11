@@ -7,6 +7,7 @@ year: 2024
 powertrain: combustao
 heroImage: ../../assets/vehicles/huracan.jpg
 cardImage: ../../assets/vehicles/huracan.jpg
+heroFitMobile: contain
 tags: [lamborghini, esportivos]
 ---
 

@@ -7,6 +7,7 @@ year: 1996
 powertrain: combustao
 heroImage: ../../assets/vehicles/fusca-itamar.png
 cardImage: ../../assets/vehicles/fusca-itamar.png
+heroFitMobile: contain
 tags: [volkswagen, antigos]
 ---
 

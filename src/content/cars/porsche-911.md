@@ -7,6 +7,7 @@ year: 2023
 powertrain: combustao
 heroImage: ../../assets/vehicles/911.webp
 cardImage: ../../assets/vehicles/911.webp
+heroFitMobile: contain
 tags: [porsche, esportivos]
 ---
 

@@ -23,6 +23,8 @@
 
 - Formatos de origem: JPG ou PNG de alta qualidade. **O Astro gera AVIF/WebP** — não converta à mão.
 - Se o carro estiver do lado errado, ajuste `heroFocus` antes de editar a imagem.
+- Se no **celular** o carro aparecer cortado (fotos largas), use `heroFitMobile: contain`: a foto passa a
+  aparecer inteira na largura da tela, logo abaixo do header, com as bordas dissolvendo no preto.
 - `ambientColor`: escolha um tom **escuro** extraído da imagem (luminância baixa), ex.: `#0b2a3a`.
   O agente pode sugerir um valor a partir da cor média da imagem, mas o Erick decide.
 - Use imagens que você tenha direito de usar (fotos próprias, kits de imprensa das montadoras,
@@ -36,6 +38,8 @@
   logos monocromáticos ou de traço. Emblemas preenchidos (escudos, ovais, círculos: Ferrari,
   Lamborghini, BMW, Ford, Harley-Davidson, Triumph) viram uma forma sólida; para eles use
   `logoTreatment: "original"`, que mantém as cores do arquivo.
+- Logos com brasão colorido **e** texto preto (ex.: Porsche): use `original` e deixe só o texto claro no
+  próprio arquivo (o `porsche.png` foi processado assim: brasão nas cores originais, "PORSCHE" e "®" claros).
 - Fontes recomendadas: sites/kits de imprensa oficiais das marcas e o Wikimedia Commons
   (confira a licença/uso de marca de cada arquivo).
 - Antes de salvar: remova `width`/`height` fixos (deixe só `viewBox`), remova cores fixas

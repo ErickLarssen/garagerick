@@ -7,6 +7,7 @@ year: 1974
 powertrain: combustao
 heroImage: ../../assets/vehicles/maverick-gt-v8.jpg
 cardImage: ../../assets/vehicles/maverick-gt-v8.jpg
+heroFitMobile: contain
 tags: [ford, antigos]
 ---
 

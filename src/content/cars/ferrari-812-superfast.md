@@ -7,6 +7,7 @@ year: 2024
 powertrain: combustao
 heroImage: ../../assets/vehicles/812-superfast.jpg
 cardImage: ../../assets/vehicles/812-superfast.jpg
+heroFitMobile: contain
 tags: [ferrari, esportivos]
 ---
 

@@ -7,6 +7,7 @@ year: 2019
 powertrain: combustao
 heroImage: ../../assets/vehicles/tt.jpg
 cardImage: ../../assets/vehicles/tt.jpg
+heroFitMobile: contain
 tags: [audi, esportivos]
 ---
 
