@@ -1,5 +1,7 @@
 ---
 // Linha principal de specs (docs/03 e docs/05): ANO │ RankBadge │ quickSpecs[0] │ quickSpecs[1].
+// Todos os itens são sempre renderizados (vazios ficam com `hidden`) para o controlador da vitrine
+// só preencher texto na troca de veículo — elementos criados por JS não teriam o escopo de estilo.
 import RankBadge from '@/components/showcase/RankBadge.astro';
 import type { RankedVehicle } from '@/lib/rankings';
 
@@ -8,24 +10,38 @@ interface Props {
 }
 
 const { vehicle } = Astro.props;
+const quick = [vehicle.quickSpecs[0], vehicle.quickSpecs[1]];
 ---
 
 <ul class="spec-row" data-spec-row>
-  <li class="numeric">{vehicle.year}</li>
+  <li class="numeric" data-spec-year hidden={vehicle.year === undefined}>
+    {vehicle.year}
+  </li>
   <li>
     <RankBadge rank={vehicle.rank} />
   </li>
-  {vehicle.quickSpecs.map((spec) => (
-    <li>{spec}</li>
+  {quick.map((spec) => (
+    <li data-spec-quick hidden={!spec}>
+      {spec}
+    </li>
   ))}
 </ul>
 
 <style>
+  /*
+   * Separador │ entre itens, sem aparecer no começo de uma linha quando a lista quebra:
+   * cada separador fica à esquerda do seu item (posição absoluta) e a lista tem margem negativa
+   * + overflow hidden — o separador de quem inicia uma linha cai fora da área visível e é cortado.
+   */
   .spec-row {
+    --sep: 1.5em; /* espaço entre itens; o separador fica no meio */
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    column-gap: calc(var(--sep) / 2);
     row-gap: 0.4rem;
+    margin-inline-start: calc(var(--sep) / -2);
+    overflow: hidden;
     font-size: var(--text-meta);
     line-height: var(--text-meta--line-height);
     font-family: var(--font-display);
@@ -34,16 +50,24 @@ const { vehicle } = Astro.props;
   }
 
   .spec-row > li {
+    position: relative;
     display: flex;
     align-items: center;
+    margin-inline-start: calc(var(--sep) / 2);
   }
 
-  /* separador │ fino entre itens */
-  .spec-row > li + li::before {
+  .spec-row > li[hidden] {
+    display: none;
+  }
+
+  .spec-row > li::before {
     content: '';
+    position: absolute;
+    left: calc(var(--sep) / -2 - 1px);
+    top: 50%;
     width: 1px;
     height: 0.9em;
-    margin-inline: 0.75em;
+    translate: 0 -50%;
     background: rgb(255 255 255 / 0.28);
   }
 </style>

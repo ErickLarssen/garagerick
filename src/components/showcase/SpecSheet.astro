@@ -43,6 +43,14 @@ const { vehicle } = Astro.props;
       </div>
     ))}
   </dl>
+
+  <!-- molde de item para o controlador da vitrine (mantém o escopo de estilo) -->
+  <template data-sheet-item-template>
+    <div class="sheet__item">
+      <dt></dt>
+      <dd></dd>
+    </div>
+  </template>
 </dialog>
 
 <script>

@@ -1,6 +1,7 @@
 {
   "name": "Volkswagen",
-  "logo": "../../assets/brands/volkswagen.svg",
-  "logoScale": 1,
+  "logo": "../../assets/brands/volkswagen.png",
+  "logoScale": 1.3,
+  "logoTreatment": "white",
   "country": "Alemanha"
 }

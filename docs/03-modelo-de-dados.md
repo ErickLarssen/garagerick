@@ -29,6 +29,7 @@ const brands = defineCollection({
       name: z.string(),                       // "Volkswagen"
       logo: image(),                          // "../../assets/brands/volkswagen.svg"
       logoScale: z.number().min(0.5).max(2).default(1), // ajuste ótico (logos largos x altos)
+      logoTreatment: z.enum(['white', 'original']).default('white'), // white = silhueta clara; original = cores do arquivo
       country: z.string().optional(),         // "Alemanha"
     }),
 });
@@ -54,7 +55,8 @@ const vehicleBase = ({ image }) => ({
   name: z.string(),                           // "Seal" (sem a marca)
   brand: reference('brands'),                 // "byd"
   rank: z.number().int().positive(),          // 1 = Top 1
-  year: z.number().int().min(1886).max(2100), // ano-modelo de referência
+  year: z.number().int().min(1886).max(2100).optional(), // ano-modelo (omitido se desconhecido)
+  version: z.string().optional(),             // versão/acabamento: "Highline 200 TSI"
   powertrain,
   powerCv: z.number().positive().optional(),
   torqueKgfm: z.number().positive().optional(),
@@ -64,6 +66,7 @@ const vehicleBase = ({ image }) => ({
   heroImage: image(),                         // 16:9
   cardImage: image(),                         // 3:4
   heroFocus: z.string().default('center'),    // object-position do fundo ("70% 50%")
+  heroFitMobile: z.enum(['cover', 'contain']).default('cover'), // celular: 'contain' = foto inteira na largura
   ambientColor: z.string().regex(/^#[0-9a-f]{6}$/i).optional(), // tom do degradê da vitrine
   videoUrl: z.url().optional(),               // YouTube
   tags: z.array(z.string()).default([]),      // usados na busca
@@ -121,8 +124,8 @@ powertrain: eletrico
 powerCv: 531              # conferir
 drivetrain: AWD
 bodyStyle: Sedã
-heroImage: ../../assets/vehicles/byd-seal/hero.jpg
-cardImage: ../../assets/vehicles/byd-seal/card.jpg
+heroImage: ../../assets/vehicles/seal.webp
+cardImage: ../../assets/vehicles/seal.webp   # a mesma foto serve para o card
 heroFocus: 60% 50%
 ambientColor: '#0b2a3a'
 videoUrl: https://www.youtube.com/watch?v=XXXXXXXXXXX
@@ -166,7 +169,7 @@ export interface RankedVehicle {
   isTop: boolean;            // rank === 1
   name: string;
   brand: { name: string; logo: ImageMetadata; logoScale: number };
-  year: number;
+  year?: number;             // omitido na UI quando ausente
   specs: SpecItem[];         // já formatadas, prontas para exibir
   quickSpecs: string[];      // 2 itens para a linha principal (ex.: "531 cv", "Elétrico AWD")
   heroImage: ImageMetadata;
@@ -193,9 +196,9 @@ Formato final: `ANO │ #RANK │ quickSpecs[0] │ quickSpecs[1]`
 
 | Tipo | quickSpecs[0] | quickSpecs[1] |
 |---|---|---|
-| Carro a combustão/híbrido | potência (`128 cv`) | motor (`1.0 TSI`) |
+| Carro a combustão/híbrido | potência (`128 cv`) | motor (`1.0 TSI`); sem motor → `version` |
 | Carro elétrico | potência (`531 cv`) | `Elétrico` + tração (`Elétrico AWD`) |
-| Moto | potência (`200 cv`) | cilindrada (`998 cc`) |
+| Moto | potência (`200 cv`) | cilindrada (`998 cc`); sem cilindrada → `version` |
 
 Campo ausente → item omitido (nunca exibir "undefined" ou "—" na linha principal).
 

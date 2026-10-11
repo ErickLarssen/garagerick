@@ -7,8 +7,8 @@ A referência é uma interface de streaming (mockup "iMovies") com:
 - **Fundo em tela cheia** com a imagem do título ativo, escurecida e com degradê azul-petróleo
 - **Coluna esquerda**: logo do título, linha de metadados separada por barras verticais,
   um selo colorido (`12+`), sinopse curta e dois botões (primário laranja-vermelho + secundário escuro)
-- **Coluna direita**: painel translúcido com **carrossel coverflow** — card ativo maior e nítido
-  no centro, vizinhos menores, escurecidos e levemente desfocados nas bordas
+- ~~**Coluna direita**: painel translúcido com carrossel coverflow~~ — **removido** no Garagerick
+  (2026-10-11): os cards tampavam os veículos. A foto ocupa a direita e a navegação é ◀ #07 de 12 ▶.
 - Topo: logo à esquerda, nav centralizada, busca com sublinhado à direita
 - Rodapé da vitrine: "WATCH TRAILER" com ícone de play circular à esquerda, redes à direita
 
@@ -21,7 +21,7 @@ Mantemos essa composição e trocamos a atmosfera subaquática por uma **atmosfe
 @theme {
   --color-bg:            #07090c;  /* fundo base, quase preto azulado */
   --color-surface:       #11151b;  /* painéis, cards da lista */
-  --color-surface-glass: rgb(17 21 27 / 0.45); /* painel do carrossel (com backdrop-blur) */
+  --color-surface-glass: rgb(17 21 27 / 0.45); /* painel translúcido (com backdrop-blur) */
   --color-border:        rgb(255 255 255 / 0.08);
   --color-text:          #f2f4f7;
   --color-text-muted:    #9aa3ae;  /* metadados (como "2023 | 2h 14min" na referência) */
@@ -73,13 +73,13 @@ Escala (fluida com `clamp`):
   cor `--color-text-muted`, exceto o selo de rank.
 - **Selo de rank** (`RankBadge`): fundo `--color-accent`, texto `--color-bg` (contraste), Rajdhani, cantos
   levemente chanfrados (`clip-path`) — equivalente ao `12+`. Top 1: fundo `--color-gold`,
-  texto escuro e rótulo "TOP 1" **no lugar de** `#01` (na linha de specs, no card e na lista).
+  texto escuro e rótulo "TOP 1" **no lugar de** `#01` (na linha de specs e na lista). Ao chegar no
+  Top 1, uma faixa de luz atravessa o selo uma vez.
 - **Botões**: primário sólido `--color-accent` com **texto e ícone `--color-bg`** (contraste 5,6:1 —
   branco sobre o accent dá só 3,56:1) e ícone ▶; secundário `--color-surface` com
   borda sutil. Altura 44px, raio 4px (cantos quase retos, como a referência).
-- **Cards do carrossel**: proporção 3:4, raio 8px. Ativo: escala 1, sombra forte, sem filtro.
-  Vizinhos: escala ~0.85, `brightness(0.5)`, `blur(1px)`. Extremos: escala ~0.7, mais escuros.
-- **Painel do carrossel**: `--color-surface-glass` + `backdrop-filter: blur(12px)`, borda `--color-border`.
+- **Navegação da vitrine** (`ShowcaseNav`): setas circulares de 44px com borda sutil + contador
+  `#07 de 12` em Rajdhani (dourado no Top 1), no centro da barra inferior.
 - **Busca**: ícone de lupa + campo sem caixa, só com sublinhado de 1px.
 - **Ícones**: traço de 1.5–2px, estilo linear, em SVG próprio (`src/assets/icons/`).
   Ícone de **motocicleta** no lugar do ícone de casa.
@@ -91,39 +91,38 @@ Escala (fluida com `clamp`):
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │ GARAGERICK        🏍  Populares  Esportivos  Antigos     🔍 ___│
-│                                                              │
-│                                ┌────────────────────────┐    │
-│  [logo marca]                  │  ▫  ▢  ▣  ▢  ▫         │    │
-│  NOME DO MODELO                │      carrossel         │    │
-│  2024 │ #01 │ 531 cv │ Elét.   └────────────────────────┘    │
-│  Texto "por que eu gosto"…            ◀  #07 de 10  ▶         │
+│ ░░░░░░░░░░░░░░░░░░░▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓│
+│  [logo marca]       ▒▒▒▓▓▓▓   foto do veículo   ▓▓▓▓▓▓▓▓▓▓▓▓│
+│  NOME DO MODELO     ▒▒▒▓▓▓▓   (70% da direita)  ▓▓▓▓▓▓▓▓▓▓▓▓│
+│  2024 │ #01 │ 531 cv ▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓│
+│  Texto "por que eu gosto"…                                   │
 │  [▶ VÍDEO] [FICHA TÉCNICA]                                   │
-│                                                              │
-│ (◎) RANKING COMPLETO                              ◎  ▶  ⌥    │
+│ (◎) RANKING COMPLETO       ◀  #07 de 12  ▶         ◎  in  ⌥ │
 └──────────────────────────────────────────────────────────────┘
 ```
 
-- Grade de 12 colunas; info ocupa colunas 1–5, carrossel 7–12.
-- Margens laterais `clamp(1.5rem, 5vw, 6rem)`.
+- Foto nos **70% da direita** (`object-fit: cover`, recorte guiado pela altura — fica menor e a
+  frente dos carros, quase sempre virada para a esquerda, não disputa espaço com o texto).
+- À esquerda, **preto sólido até 30%** dissolvendo sobre a borda da foto até ~60%; o tom do
+  veículo (`--ambient`) vira um brilho radial suave atrás das informações.
+- Info com largura máxima `min(40rem, 42vw)`. Margens laterais `clamp(1.5rem, 5vw, 6rem)`.
 
-### Tablet (640–1023px)
+### Tablet (640–1023px) e celular (< 640px)
 
-Info em cima (largura total), carrossel abaixo em faixa horizontal.
-
-### Celular (< 640px)
-
-- Header: logo + botão de menu (abre gaveta com nav e busca).
-- Vitrine com altura `100svh`: imagem no topo, info sobre o degradê inferior.
-- Carrossel vira faixa com swipe horizontal (cards menores, sem efeito 3D).
-- Texto "por que eu gosto" limitado a 4 linhas com "Ler mais" (o corte só é aplicado com JS;
-  sem JS o texto aparece inteiro).
+- Foto no topo, em largura total, com **~56svh** de altura, fundindo em preto na base.
+- Informações começam em ~46svh, abaixo do carro (não o cobrem); barra inferior com
+  RANKING COMPLETO + navegação (no celular as redes ficam só no rodapé).
+- Swipe horizontal troca o veículo (esquerda = próximo).
+- Celular: header com logo + botão de menu (gaveta com nav e busca).
+- Texto "por que eu gosto" limitado a 4 linhas com "Ler mais" no celular (o corte só é aplicado
+  com JS; sem JS o texto aparece inteiro).
 
 ## Movimento
 
 - Troca de veículo: fundo faz **crossfade** (400ms) + leve zoom (1.04 → 1);
   bloco de informações sai/entra com fade + translateY(12px), escalonado (logo → nome → specs → texto).
 - Easing padrão: `cubic-bezier(0.22, 1, 0.36, 1)` — token `--ease-garage` (utilitário `ease-garage`).
-- Ao chegar no **Top 1**: um brilho dourado percorre o card uma única vez.
+- Ao chegar no **Top 1**: uma faixa de luz percorre o selo dourado uma única vez.
 - `prefers-reduced-motion: reduce` → só crossfade de 150ms, sem zoom, sem translate, sem brilho.
 
 ## Tom de voz da interface

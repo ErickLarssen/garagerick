@@ -1,5 +1,6 @@
 ---
-// Logo da marca (docs/04): SVG monocromático clareado com filtro, altura base 40px × logoScale.
+// Logo da marca (docs/04). Dimensões e tratamento vêm de getBrandLogo (lib/images.ts).
+import { getBrandLogo } from '@/lib/images';
 import type { RankedVehicle } from '@/lib/rankings';
 
 interface Props {
@@ -10,17 +11,16 @@ interface Props {
 }
 
 const { brand, baseHeight = 40, class: className } = Astro.props;
-const height = Math.round(baseHeight * brand.logoScale);
-const width = Math.round((brand.logo.width / brand.logo.height) * height);
+const logo = await getBrandLogo(brand, baseHeight);
 ---
 
 <img
-  src={brand.logo.src}
+  src={logo.src}
   alt={brand.name}
-  width={width}
-  height={height}
-  style={`height: ${height}px`}
-  class:list={['brand-logo', className]}
+  width={logo.width}
+  height={logo.height}
+  style={`height: ${logo.height}px`}
+  class:list={['brand-logo', { 'brand-logo--white': logo.white }, className]}
   data-brand-logo
   decoding="async"
 />
@@ -28,8 +28,11 @@ const width = Math.round((brand.logo.width / brand.logo.height) * height);
 <style>
   .brand-logo {
     display: block;
-    width: auto; /* altura fixa via style: o reset do Tailwind (height: auto) faria o SVG crescer */
-    /* deixa qualquer SVG monocromático branco, levemente creme */
+    width: auto; /* altura fixa via style: o reset do Tailwind (height: auto) faria a imagem crescer */
+  }
+
+  /* deixa logos monocromáticos brancos, levemente creme */
+  .brand-logo--white {
     filter: brightness(0) invert(0.96) sepia(0.08);
   }
 </style>

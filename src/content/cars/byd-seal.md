@@ -3,13 +3,14 @@ name: Seal
 brand: byd
 rank: 1
 category: populares
-year: 2024 # TODO: confirmar ano-modelo de referência
+year: 2025
 powertrain: eletrico
+drivetrain: AWD
 bodyStyle: Sedã
-# imagens: placeholder — trocar por ../../assets/vehicles/byd-seal/hero.jpg e card.jpg
-heroImage: ../../assets/vehicles/_placeholder/hero-1.png
-cardImage: ../../assets/vehicles/_placeholder/card-1.png
-tags: [byd, eletrico, seda]
+heroImage: ../../assets/vehicles/seal.webp
+cardImage: ../../assets/vehicles/seal.webp
+heroFitMobile: contain
+tags: [byd, populares]
 ---
 
 <!-- TODO: confirmar ficha técnica -->

@@ -10,6 +10,8 @@ const brands = defineCollection({
       name: z.string(), // "Volkswagen"
       logo: image(), // "../../assets/brands/volkswagen.svg" — SVG monocromático
       logoScale: z.number().min(0.5).max(2).default(1), // ajuste ótico (logos largos x altos)
+      // white: silhueta clara via filtro (padrão); original: cores do arquivo (emblemas coloridos)
+      logoTreatment: z.enum(['white', 'original']).default('white'),
       country: z.string().optional(), // "Alemanha"
     }),
 });
@@ -21,7 +23,8 @@ const vehicleBase = ({ image }: SchemaContext) => ({
   name: z.string(), // "Seal" (sem a marca)
   brand: reference('brands'), // "byd"
   rank: z.number().int().positive(), // 1 = Top 1
-  year: z.number().int().min(1886).max(2100), // ano-modelo de referência
+  year: z.number().int().min(1886).max(2100).optional(), // ano-modelo de referência (omitido se desconhecido)
+  version: z.string().optional(), // versão/acabamento informado pelo Erick ("Highline 200 TSI")
   powertrain,
   powerCv: z.number().positive().optional(),
   torqueKgfm: z.number().positive().optional(),
@@ -31,6 +34,8 @@ const vehicleBase = ({ image }: SchemaContext) => ({
   heroImage: image(), // 16:9
   cardImage: image(), // 3:4
   heroFocus: z.string().default('center'), // object-position do fundo ("70% 50%")
+  // celular: 'contain' mostra a foto inteira na largura (carros cortados); 'cover' preenche a área
+  heroFitMobile: z.enum(['cover', 'contain']).default('cover'),
   ambientColor: z
     .string()
     .regex(/^#[0-9a-f]{6}$/i)

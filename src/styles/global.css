@@ -45,6 +45,13 @@
   --ease-garage: cubic-bezier(0.22, 1, 0.36, 1); /* easing padrão */
 }
 
+/* --ambient registrada como cor para poder transitar entre veículos (docs/04) */
+@property --ambient {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #0d2230;
+}
+
 @layer base {
   :root {
     color-scheme: dark;

@@ -42,7 +42,8 @@ decrescentes por categoria, terminando no **Top 1** de cada uma.
 
 Cada página de ranking tem a mesma estrutura:
 
-1. **Vitrine (hero, 100vh)** — veículo ativo em destaque + carrossel coverflow com os demais.
+1. **Vitrine (hero, 100vh)** — veículo ativo em destaque; troca por setas ◀ ▶ com contador, teclado e
+   swipe. **Sem cards/carrossel** (decisão do Erick em 2026-10-11: os cards tampavam os veículos).
 2. **Ranking completo** — lista/grade de todos os itens em ordem decrescente (#N → #1),
    para quem prefere rolar como no Cinerick. Clicar num item volta à vitrine com ele ativo.
 3. **Sobre mim** (apenas em `/`) — bloco curto no espírito do Cinerick, com foto e texto do Erick.

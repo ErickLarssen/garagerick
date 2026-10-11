@@ -11,12 +11,13 @@ interface Props {
 
 const { vehicle } = Astro.props;
 const hero = await getHeroImage(vehicle.heroImage);
+const fit = vehicle.heroFitMobile === 'contain';
 ---
 
 <div class="backdrop" aria-hidden="true">
   <!-- Camada A: visível; é o LCP da página, então nada de lazy -->
   <img
-    class="backdrop__img is-active"
+    class:list={['backdrop__img is-active', { 'backdrop__img--fit': fit }]}
     data-backdrop-layer="a"
     src={hero.src}
     srcset={hero.srcset}
@@ -30,7 +31,7 @@ const hero = await getHeroImage(vehicle.heroImage);
   />
   <!-- Camada B: recebe a próxima imagem na troca (mesma URL agora → vem do cache) -->
   <img
-    class="backdrop__img"
+    class:list={['backdrop__img', { 'backdrop__img--fit': fit }]}
     data-backdrop-layer="b"
     src={hero.src}
     srcset={hero.srcset}
@@ -65,58 +66,107 @@ const hero = await getHeroImage(vehicle.heroImage);
   .backdrop__img {
     object-fit: cover;
     opacity: 0;
+    transition: opacity 400ms var(--ease-garage); /* crossfade entre as camadas A/B */
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .backdrop__img {
+      transition-duration: 150ms;
+    }
   }
 
   .backdrop__img.is-active {
     opacity: 1;
   }
 
-  /* 2. Degradê lateral: escurece a esquerda (texto) e tinge com o tom do veículo */
+  /* 2. Lateral: preto sólido sob as informações, dissolvendo sobre a borda esquerda da foto, e o
+     tom do veículo (--ambient) como um brilho suave atrás do texto */
   .backdrop__side {
-    background: linear-gradient(90deg, var(--color-bg) 0%, rgb(7 9 12 / 0.6) 45%, transparent 75%);
+    background: linear-gradient(
+      90deg,
+      var(--color-bg) 0%,
+      var(--color-bg) 30%,
+      rgb(7 9 12 / 0.85) 36%,
+      rgb(7 9 12 / 0.4) 46%,
+      transparent 60%
+    );
   }
 
   @supports (background: color-mix(in srgb, red 50%, transparent)) {
     .backdrop__side {
-      background: linear-gradient(
-        90deg,
-        var(--color-bg) 0%,
-        color-mix(in srgb, var(--ambient) 70%, transparent) 45%,
-        transparent 75%
-      );
+      background:
+        radial-gradient(
+          ellipse 40% 55% at 12% 62%,
+          color-mix(in srgb, var(--ambient) 55%, transparent),
+          transparent 70%
+        ),
+        linear-gradient(
+          90deg,
+          var(--color-bg) 0%,
+          var(--color-bg) 30%,
+          rgb(7 9 12 / 0.85) 36%,
+          rgb(7 9 12 / 0.4) 46%,
+          transparent 60%
+        );
     }
   }
 
-  /* 3. Degradê inferior: funde a vitrine com o resto da página */
+  /* 3. Topo (legibilidade do menu) e base (funde a vitrine com o resto da página) */
   .backdrop__bottom {
-    background: linear-gradient(0deg, var(--color-bg) 0%, transparent 35%);
+    background:
+      linear-gradient(180deg, rgb(7 9 12 / 0.55) 0%, transparent 18%),
+      linear-gradient(0deg, var(--color-bg) 0%, transparent 35%);
   }
 
   /* 4. Vinheta radial sutil + ruído (feTurbulence) para textura */
   .backdrop__texture {
     background:
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E"),
-      radial-gradient(ellipse at 60% 45%, transparent 55%, rgb(7 9 12 / 0.55) 100%);
+      radial-gradient(ellipse at 65% 45%, transparent 55%, rgb(7 9 12 / 0.55) 100%);
     pointer-events: none;
   }
 
-  /* Celular: imagem no topo, info sobre o degradê inferior (docs/04) — reforça o degradê de baixo */
-  /* Celular: a imagem ocupa só o topo (a vitrine pode ser mais alta que a tela) e o degradê
-     inferior a funde com o fundo, onde ficam as informações. */
-  @media (max-width: 639px) {
-    /* seletor com .backdrop > para vencer a especificidade de ".backdrop > *" com escopo */
+  /* Desktop: a foto ocupa os 70% da direita — fica um pouco menor e a frente dos carros (quase
+     sempre virada para a esquerda) aparece sem disputar espaço com as informações.
+     Seletor com .backdrop > para vencer a especificidade de ".backdrop > *" com escopo. */
+  @media (min-width: 1024px) {
+    .backdrop > .backdrop__img {
+      left: auto;
+      width: 70%;
+    }
+  }
+
+  /* Tablet e celular: a foto ocupa o topo (~55% da altura) em largura total e funde em preto na
+     base; as informações ficam abaixo dela, sem cobrir o carro. */
+  @media (max-width: 1023px) {
     .backdrop > .backdrop__img,
     .backdrop > .backdrop__side,
     .backdrop > .backdrop__bottom {
-      height: 72svh;
+      height: 56svh;
     }
 
     .backdrop__side {
-      background: linear-gradient(90deg, rgb(7 9 12 / 0.45) 0%, transparent 70%);
+      background: linear-gradient(90deg, rgb(7 9 12 / 0.35) 0%, transparent 60%);
     }
 
     .backdrop__bottom {
-      background: linear-gradient(0deg, var(--color-bg) 0%, rgb(7 9 12 / 0.6) 30%, transparent 65%);
+      background:
+        linear-gradient(180deg, rgb(7 9 12 / 0.75) 0%, transparent 22%),
+        linear-gradient(0deg, var(--color-bg) 0%, rgb(7 9 12 / 0.55) 22%, transparent 50%);
+    }
+  }
+
+  /* Celular, carros com heroFitMobile: "contain": a foto aparece inteira na largura (a área do topo
+     é estreita e o recorte cortava o carro), logo abaixo do header, com bordas superior e inferior
+     dissolvendo no preto. Seletor reforçado para vencer ".backdrop > *" com escopo. */
+  @media (max-width: 639px) {
+    .backdrop > .backdrop__img.backdrop__img--fit {
+      top: var(--header-h);
+      height: auto;
+      /* fotos mais altas (ex.: 4:3) não podem invadir as informações: encolhem e centralizam */
+      max-height: calc(56svh - var(--header-h));
+      object-fit: contain;
+      mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 78%, transparent 100%);
     }
   }
 </style>

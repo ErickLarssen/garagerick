@@ -3,7 +3,7 @@
 Meus carros e motos favoritos em contagem regressiva até o Top 1.
 Projeto irmão do [Cinerick](https://cinerick.online).
 
-Site estático feito com Astro, TypeScript, Tailwind CSS v4 e Embla Carousel.
+Site estático feito com Astro, TypeScript e Tailwind CSS v4.
 Detalhes da stack em [`docs/02-stack-e-arquitetura.md`](docs/02-stack-e-arquitetura.md).
 
 ## Como rodar
@@ -23,8 +23,8 @@ npm run format     # formatar o código com Prettier
 
 1. Garanta que a marca existe em `src/content/brands/<marca>.json` e que o logo está em
    `src/assets/brands/<marca>.svg` (SVG **monocromático**).
-2. Crie a pasta `src/assets/vehicles/<slug>/` com `hero.jpg` (16:9, mín. 2400×1350) e
-   `card.jpg` (3:4, mín. 900×1200).
+2. Coloque a foto em `src/assets/vehicles/<nome>.<ext>` (mín. 1920 px de largura). Ela é usada
+   no fundo da vitrine (16:9) e no card (3:4); ajuste o enquadramento com `heroFocus`.
 3. Crie `src/content/cars/<slug>.md` (ou `src/content/motorcycles/<slug>.md`) com o frontmatter
    descrito em [`docs/03-modelo-de-dados.md`](docs/03-modelo-de-dados.md).
 4. Escreva no corpo do arquivo por que você gosta dele.
@@ -47,6 +47,7 @@ Mais detalhes (imagens, logos, cor ambiente) em
 
 - Veículos: `src/content/cars/` e `src/content/motorcycles/`
 - Marcas: `src/content/brands/` (+ logos em `src/assets/brands/`)
-- Imagens: `src/assets/vehicles/<slug>/hero.jpg` e `card.jpg`
+- Imagens: `src/assets/vehicles/<nome>.<ext>` (uma foto por veículo)
+- Lista oficial do ranking: [`docs/carros-favoritos.md`](docs/carros-favoritos.md)
 - Progresso do projeto: [`docs/08-roadmap.md`](docs/08-roadmap.md)
 - Documentação completa: `docs/`

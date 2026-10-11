@@ -11,8 +11,8 @@ de Erick Silva — designer gráfico e desenvolvedor front-end de São Paulo —
 
 Cada veículo aparece numa vitrine em tela cheia inspirada em interfaces de streaming:
 logo da marca + nome do modelo em destaque, linha de especificações (ano, cv, motor…),
-um texto em primeira pessoa sobre por que o Erick gosta dele, e um carrossel lateral
-com os demais veículos do ranking.
+um texto em primeira pessoa sobre por que o Erick gosta dele, e navegação por setas
+(◀ #07 de 12 ▶), teclado e swipe pelos demais veículos do ranking — sem cards.
 
 Páginas: **Populares**, **Esportivos**, **Antigos** e **Motos** (ícone de motocicleta no menu).
 
@@ -35,7 +35,6 @@ Páginas: **Populares**, **Esportivos**, **Antigos** e **Motos** (ícone de moto
 - **Astro** (última versão estável) com saída 100% estática
 - **TypeScript** em modo `strict`
 - **Tailwind CSS v4** (via plugin Vite oficial) + CSS custom properties para tokens
-- **Embla Carousel** (API vanilla) para o carrossel coverflow
 - Interações em **TypeScript vanilla** dentro de `<script>` dos componentes Astro — **sem React/Vue**
 - Conteúdo em **Astro Content Collections** validadas com Zod
 - Deploy na **Vercel** (estático)

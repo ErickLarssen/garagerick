@@ -36,7 +36,18 @@ const isTop = rank === 1;
     );
   }
 
+  /* Top 1: dourado com uma faixa de luz guardada fora do selo (background-position 100%);
+     o controlador anima a posição para a luz atravessar o selo uma vez (docs/04) */
   .rank-badge--top {
-    background: var(--color-gold);
+    background-color: var(--color-gold);
+    background-image: linear-gradient(
+      105deg,
+      transparent 40%,
+      rgb(255 247 214 / 0.9) 50%,
+      transparent 60%
+    );
+    background-size: 300% 100%;
+    background-position: 100% 0;
+    background-repeat: no-repeat;
   }
 </style>
