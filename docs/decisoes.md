@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-11 — Pré-carregamento dos vizinhos
+- **Contexto:** sexta tarefa da Fase 4.
+- **Decisão:** `preloadAround(i)` cria `new Image()` fora do DOM com o mesmo `srcset`/`sizes` do fundo (o navegador baixa a mesma variante que a troca usará) e pré-carrega o logo; cada índice uma vez só (`Set`). Na carga, só após `load` + `requestIdleCallback` (timeout 2 s; reserva `setTimeout`) para não disputar com o LCP; depois, a cada `setActive`. Não pré-carrega com `navigator.connection.saveData`. Testado (Resource Timing): na home, o hero do Taos chega após a ociosidade; ao ir para o Taos, chega o do Elantra e o do Lancer não é baixado de novo.
+- **Motivo:** troca de fundo sem espera (`docs/05`).
+- **Impacto:** `src/scripts/showcase-controller.ts`.
+
 ### 2026-10-11 — Tratamento especial do Top 1
 - **Contexto:** quinta tarefa da Fase 4.
 - **Decisão:** além do selo dourado "TOP 1" (já existente), o controlador liga `.is-top` na vitrine quando o Top 1 está ativo (contador em dourado) e anima uma faixa dourada (`[data-card-shine]`, renderizada só no card do Top 1, `mix-blend-mode: screen`) atravessando o card **uma vez por chegada** — 1,1 s, 250 ms de atraso para o card centralizar; também ao abrir direto pelo hash; desligada com `prefers-reduced-motion`. Card do Top 1 ativo ganha halo dourado (contorno + brilho de 28 px + a sombra de profundidade do ativo). **Bug achado no teste:** a regra do halo empatava em especificidade com a sombra do card ativo definida no `CoverflowCarousel` (cujo CSS vem depois) e perdia → seletor `.card.card--top[aria-current][data-card]`. Testado: `.is-top` liga/desliga, faixa roda ao abrir no Top 1 e ao voltar a ele, halo só no Top 1 ativo.

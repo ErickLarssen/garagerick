@@ -77,6 +77,18 @@ async function imageReady(img: HTMLImageElement): Promise<void> {
   ]);
 }
 
+/** Roda quando o navegador estiver ocioso (com reserva para quem não tem requestIdleCallback). */
+function whenIdle(callback: () => void): void {
+  if ('requestIdleCallback' in window) requestIdleCallback(() => callback(), { timeout: 2000 });
+  else setTimeout(callback, 200);
+}
+
+/** Modo de economia de dados ligado (Network Information API, quando disponível). */
+function saveData(): boolean {
+  const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+  return connection?.saveData === true;
+}
+
 function required<T extends Element>(parent: ParentNode, selector: string): T {
   const el = parent.querySelector<T>(selector);
   if (!el) throw new Error(`Vitrine: elemento ${selector} não encontrado.`);
@@ -98,6 +110,7 @@ export class ShowcaseController {
   private readonly nextButton: HTMLElement;
   private readonly counter: HTMLElement;
   private frame = 0;
+  private readonly preloaded = new Set<number>();
   private token = 0; // incrementa a cada troca; etapas atrasadas de trocas antigas são descartadas
 
   constructor(root: HTMLElement) {
@@ -137,6 +150,11 @@ export class ShowcaseController {
     this.bindControls(viewport);
     this.updateNavigation();
     if (initial !== this.index) this.setActive(initial, { instant: true });
+
+    // Vizinhos só depois da carga, quando a página estiver ociosa (não disputa com o LCP)
+    const preloadInitial = () => whenIdle(() => this.preloadAround(this.index));
+    if (document.readyState === 'complete') preloadInitial();
+    else window.addEventListener('load', preloadInitial, { once: true });
   }
 
   /** Índice do veículo cujo slug está no hash; outros hashes (#ranking, #conteudo) são ignorados. */
@@ -236,6 +254,7 @@ export class ShowcaseController {
     this.root.style.setProperty('--ambient', vehicle.ambientColor);
     this.root.classList.toggle('is-top', vehicle.isTop);
     if (vehicle.isTop) this.shineTop(i);
+    this.preloadAround(i);
     this.sheet.render(vehicle);
 
     if (instant) {
@@ -248,6 +267,25 @@ export class ShowcaseController {
     void this.info.swap(vehicle, () => token === this.token);
     // não polui o histórico; só roda em trocas feitas pelo usuário (nunca na carga)
     history.replaceState(null, '', `${location.pathname}${location.search}#${vehicle.slug}`);
+  }
+
+  /**
+   * Pré-carrega fundo e logo do anterior e do próximo (docs/05). Uma <img> fora do DOM com o mesmo
+   * srcset/sizes faz o navegador baixar a variante que a troca vai usar. Respeita "Save-Data".
+   */
+  private preloadAround(i: number): void {
+    if (saveData()) return;
+    for (const n of [i + 1, i - 1]) {
+      const vehicle = this.vehicles[n];
+      if (!vehicle || this.preloaded.has(n)) continue;
+      this.preloaded.add(n);
+      const hero = new Image();
+      hero.decoding = 'async';
+      hero.sizes = vehicle.hero.sizes;
+      hero.srcset = vehicle.hero.srcset;
+      hero.src = vehicle.hero.src;
+      new Image().src = vehicle.logo.src;
+    }
   }
 
   /** Brilho dourado que percorre o card do Top 1 uma única vez por chegada (docs/04). */
