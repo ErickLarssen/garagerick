@@ -41,7 +41,7 @@ const data = toScriptJson(await buildShowcaseData(vehicles));
       <div class="showcase__bar">
         <a href="#ranking" class="showcase__more">
           <ArrowDownCircle width={40} height={40} aria-hidden="true" />
-          Ranking completo
+          <span class="showcase__more-label">Ranking completo</span>
         </a>
         <ShowcaseNav vehicle={active} total={vehicles.length} />
         <SocialLinks class="showcase__social" />
@@ -103,7 +103,20 @@ const data = toScriptJson(await buildShowcaseData(vehicles));
     font-weight: var(--text-button--font-weight);
     letter-spacing: var(--text-button--letter-spacing);
     text-transform: uppercase;
+    white-space: nowrap;
     color: var(--color-text);
+  }
+
+  /* Telas estreitas: só o ícone (o texto continua para leitores de tela), para a navegação caber */
+  @media (max-width: 479px) {
+    .showcase__more-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
   }
 
   .showcase__more :global(svg) {

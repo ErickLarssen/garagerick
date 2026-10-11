@@ -163,6 +163,8 @@ const fit = vehicle.heroFitMobile === 'contain';
     .backdrop > .backdrop__img.backdrop__img--fit {
       top: var(--header-h);
       height: auto;
+      /* fotos mais altas (ex.: 4:3) não podem invadir as informações: encolhem e centralizam */
+      max-height: calc(56svh - var(--header-h));
       object-fit: contain;
       mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 78%, transparent 100%);
     }
