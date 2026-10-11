@@ -87,6 +87,8 @@ const active = vehicles[activeIndex];
   /* Com Embla: ele centraliza as pontas (containScroll: false), então o padding sai */
   .carousel.is-enhanced .carousel__container {
     padding-inline: 0;
+    /* swipe horizontal fica com o Embla; rolagem vertical e zoom continuam com o navegador */
+    touch-action: pan-y pinch-zoom;
   }
 
   /* Coverflow contínuo: o controlador atualiza as variáveis a cada quadro do scroll */
@@ -145,6 +147,11 @@ const active = vehicles[activeIndex];
     justify-content: center;
     gap: 1rem;
     margin-top: 0.5rem;
+  }
+
+  /* Sem JS as setas não fazem nada: só aparecem com o Embla (o contador continua útil) */
+  .carousel:not(.is-enhanced) .carousel__arrow {
+    visibility: hidden;
   }
 
   .carousel__arrow {

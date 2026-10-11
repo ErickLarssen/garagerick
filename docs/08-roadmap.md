@@ -52,7 +52,7 @@
 - [x] Hash na URL (entrada e atualização com `replaceState`)
 - [x] Tratamento especial do Top 1
 - [x] Pré-carregamento de imagens vizinhas
-- [ ] `prefers-reduced-motion` e checklist de interação de `docs/05`
+- [x] `prefers-reduced-motion` e checklist de interação de `docs/05`
 
 **Entrega:** vitrine completa. 🛑 Pausa para revisão.
 

@@ -140,6 +140,8 @@ export class ShowcaseController {
       containScroll: false,
       startIndex: initial,
       skipSnaps: false,
+      // movimento reduzido: o encaixe depois de um arraste fica quase imediato (padrão do Embla: 25)
+      duration: prefersReducedMotion() ? 10 : 25,
     });
 
     this.embla.on('scroll', () => this.scheduleCoverflow());

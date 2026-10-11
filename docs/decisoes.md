@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-11 — Movimento reduzido e checklist de interação (fim da Fase 4)
+- **Contexto:** última tarefa da Fase 4; checklist do `docs/05`.
+- **Decisão / ajustes:** setas do carrossel escondidas sem JS (`.carousel:not(.is-enhanced)`; contador fica); `touch-action: pan-y pinch-zoom` no contêiner do Embla (recomendação dele para o swipe); com `prefers-reduced-motion` o encaixe pós-arraste do Embla usa `duration: 10` (padrão 25).
+- **Resultado do checklist:** (1) teclado — ordem de Tab com 20 paradas e um único card (roving tabindex), ←/→ e Esc testados; Enter no card ativo não faz nada (já está ativo). (2) Leitor de tela — única região `aria-live="polite"` no `ShowcaseInfo`, um só `<h1>`, vitrine com `aria-roledescription`. (3) Hash — testado na tarefa própria. (4) Sem JS (iframe `sandbox` sem scripts) — último colocado visível com hero, faixa rolável com scroll-snap, lista com os 12, texto inteiro, ficha e menu funcionando. (5) Movimento reduzido — **verificado por revisão de código** (a ferramenta não emula a media query): crossfade 150 ms, sem zoom/deslocamento/faixa do Top 1, `scrollTo` com salto, Embla rápido, gaveta e ficha reduzidas, regra global para animações CSS; a preferência é lida na hora. (6) Celular 390 px — sem 3D, sem rolagem horizontal; swipe real não testável por automação. **Pendências conhecidas:** sem JS os cards continuam botões focáveis sem ação; o leitor de tela pode anunciar também o texto "Ler mais/Ler menos" (está dentro da região viva).
+- **Impacto:** `CoverflowCarousel`, `src/scripts/showcase-controller.ts`.
+
 ### 2026-10-11 — Pré-carregamento dos vizinhos
 - **Contexto:** sexta tarefa da Fase 4.
 - **Decisão:** `preloadAround(i)` cria `new Image()` fora do DOM com o mesmo `srcset`/`sizes` do fundo (o navegador baixa a mesma variante que a troca usará) e pré-carrega o logo; cada índice uma vez só (`Set`). Na carga, só após `load` + `requestIdleCallback` (timeout 2 s; reserva `setTimeout`) para não disputar com o LCP; depois, a cada `setActive`. Não pré-carrega com `navigator.connection.saveData`. Testado (Resource Timing): na home, o hero do Taos chega após a ociosidade; ao ir para o Taos, chega o do Elantra e o do Lancer não é baixado de novo.
