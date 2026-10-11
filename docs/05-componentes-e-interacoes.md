@@ -92,6 +92,12 @@ invocador (evento `command`) e devolve o foco a ele se ele se perder (Safari nã
   Card: imagem 3:4 + logo da marca pequeno + número da posição grande e translúcido no canto.
 - Efeito coverflow calculado no evento `scroll` do Embla: para cada slide, a distância ao
   centro define `scale`, `filter` e `z-index` (ver tokens em `docs/04`). Use `requestAnimationFrame`.
+  O controlador grava variáveis CSS por slide (`--cf-scale`, `--cf-brightness`, `--cf-blur`, `--cf-shift`,
+  `--cf-focus`) e o CSS do carrossel as aplica (no celular só `--cf-focus`, sem 3D). A sobreposição dos
+  cards vem de `--cf-shift` (6% da largura), **não** de margem negativa — margem negativa desalinha o
+  centro calculado pelo Embla.
+- Dados do cliente: `lib/showcase-data.ts` (`ShowcaseVehicle`, `buildShowcaseData`) → JSON em
+  `<script type="application/json" id="showcase-data">` dentro da vitrine.
 - Controles: setas ◀ ▶ (`aria-label="Anterior"/"Próximo"`) + contador `#07 de 10`.
   "Próximo" (▶ / →) avança **em direção ao #1** (índice +1 no array decrescente).
 - Rótulo do contador conta **a posição do ranking**, não o índice do slide.

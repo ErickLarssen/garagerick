@@ -84,6 +84,21 @@ const active = vehicles[activeIndex];
     scroll-snap-type: none;
   }
 
+  /* Com Embla: ele centraliza as pontas (containScroll: false), então o padding sai */
+  .carousel.is-enhanced .carousel__container {
+    padding-inline: 0;
+  }
+
+  /* Coverflow contínuo: o controlador atualiza as variáveis a cada quadro do scroll */
+  /* margem negativa desalinha o centro calculado pelo Embla; a sobreposição vem de --cf-shift */
+  .carousel.is-enhanced .carousel__slide[data-slide] {
+    margin-inline: 0;
+    transform: translateX(var(--cf-shift, 0px)) scale(var(--cf-scale, 1));
+    filter: brightness(var(--cf-brightness, 1)) blur(var(--cf-blur, 0px));
+    transition: none;
+    will-change: transform;
+  }
+
   .carousel__container {
     display: flex;
     align-items: center;
@@ -187,6 +202,12 @@ const active = vehicles[activeIndex];
 
     .carousel__slide[data-distance='0'] {
       filter: none;
+    }
+
+    .carousel.is-enhanced .carousel__slide[data-slide] {
+      margin-inline: 0.3rem;
+      transform: none;
+      filter: brightness(calc(0.6 + 0.4 * var(--cf-focus, 0)));
     }
 
     .carousel__slide[data-distance='0'] :global(.card) {

@@ -1,7 +1,6 @@
 ---
-// Logo da marca (docs/04): altura base 40px × logoScale, com largura máxima de 4,5× a base
-// (logos muito largos encolhem). logoTreatment "white" clareia com filtro; "original" mantém as cores.
-import { getLogoImage } from '@/lib/images';
+// Logo da marca (docs/04). Dimensões e tratamento vêm de getBrandLogo (lib/images.ts).
+import { getBrandLogo } from '@/lib/images';
 import type { RankedVehicle } from '@/lib/rankings';
 
 interface Props {
@@ -12,22 +11,16 @@ interface Props {
 }
 
 const { brand, baseHeight = 40, class: className } = Astro.props;
-const ratio = brand.logo.width / brand.logo.height;
-const maxWidth = baseHeight * 4.5;
-let height = baseHeight * brand.logoScale;
-if (height * ratio > maxWidth) height = maxWidth / ratio;
-height = Math.round(height);
-const width = Math.round(height * ratio);
-const src = await getLogoImage(brand.logo, height);
+const logo = await getBrandLogo(brand, baseHeight);
 ---
 
 <img
-  src={src}
+  src={logo.src}
   alt={brand.name}
-  width={width}
-  height={height}
-  style={`height: ${height}px`}
-  class:list={['brand-logo', { 'brand-logo--white': brand.logoTreatment === 'white' }, className]}
+  width={logo.width}
+  height={logo.height}
+  style={`height: ${logo.height}px`}
+  class:list={['brand-logo', { 'brand-logo--white': logo.white }, className]}
   data-brand-logo
   decoding="async"
 />

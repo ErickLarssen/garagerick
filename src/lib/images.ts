@@ -57,3 +57,32 @@ export async function getLogoImage(image: ImageMetadata, height: number): Promis
   const result = await getImage({ src: image, height: target, format: 'webp' });
   return result.src;
 }
+
+export interface BrandLogoImage {
+  src: string;
+  width: number;
+  height: number;
+  /** true → aplicar o filtro que deixa o logo branco (logoTreatment "white") */
+  white: boolean;
+}
+
+/**
+ * Logo da marca dimensionado (docs/04): altura base × logoScale, com largura máxima de 4,5× a
+ * altura base — logos muito largos encolhem.
+ */
+export async function getBrandLogo(
+  brand: { logo: ImageMetadata; logoScale: number; logoTreatment: 'white' | 'original' },
+  baseHeight: number,
+): Promise<BrandLogoImage> {
+  const ratio = brand.logo.width / brand.logo.height;
+  const maxWidth = baseHeight * 4.5;
+  let height = baseHeight * brand.logoScale;
+  if (height * ratio > maxWidth) height = maxWidth / ratio;
+  height = Math.round(height);
+  return {
+    src: await getLogoImage(brand.logo, height),
+    width: Math.round(height * ratio),
+    height,
+    white: brand.logoTreatment === 'white',
+  };
+}

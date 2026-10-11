@@ -46,7 +46,7 @@
 
 ## Fase 4 — Vitrine (interação)
 
-- [ ] `showcase-controller.ts`: Embla + efeito coverflow
+- [x] `showcase-controller.ts`: Embla + efeito coverflow
 - [ ] Troca de veículo com crossfade e animação escalonada da informação
 - [ ] Teclado (←/→), setas, contador `#07 de 10`, clique no card
 - [ ] Hash na URL (entrada e atualização com `replaceState`)
