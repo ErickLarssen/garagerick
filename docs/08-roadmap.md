@@ -61,7 +61,7 @@
 - [x] `RankingList` + `RankingItem` com `<ol reversed>` e destaque do Top 1
 - [x] Clique no item → ativa na vitrine e rola para o topo
 - [x] Link "RANKING COMPLETO" da vitrine rola até a lista
-- [ ] `About.astro` em `/` com placeholder de texto e foto
+- [x] `About.astro` em `/` com placeholder de texto e foto
 
 ## Fase 6 — Busca
 

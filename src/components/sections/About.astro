@@ -1,0 +1,149 @@
+---
+// "Sobre mim" (docs/01 e docs/05), só na home: foto + texto do Erick (collection `about`) + links
+// para o Cinerick e o portfólio. Sem foto, mostra as iniciais do autor como espaço reservado.
+import { getImage } from 'astro:assets';
+import { getAbout } from '@/lib/about';
+import { SITE } from '@/lib/site';
+
+const about = await getAbout();
+const photo = about.photo
+  ? await getImage({ src: about.photo, widths: [320, 640], format: 'avif' })
+  : undefined;
+const initials = SITE.author
+  .split(/\s+/)
+  .map((part) => part[0])
+  .join('')
+  .slice(0, 2)
+  .toUpperCase();
+const links = [
+  { href: SITE.links.cinerick, label: 'Cinerick', hint: 'meus filmes favoritos' },
+  { href: SITE.links.portfolio, label: 'Portfólio', hint: 'ericksilva.dev' },
+];
+---
+
+<section id="sobre" class="about" aria-labelledby="about-title">
+  <div class="about__media">
+    {photo && about.photo ? (
+      <img
+        class="about__photo"
+        src={photo.src}
+        srcset={photo.srcSet.attribute}
+        sizes="(min-width: 768px) 18rem, 60vw"
+        width={about.photo.width}
+        height={about.photo.height}
+        alt={about.photoAlt}
+        loading="lazy"
+        decoding="async"
+      />
+    ) : (
+      <div class="about__placeholder" aria-hidden="true">
+        {initials}
+      </div>
+    )}
+  </div>
+
+  <div class="about__content">
+    <h2 id="about-title" class="about__title">
+      {about.title}
+    </h2>
+    <div class="about__body" set:html={about.body} />
+    <ul class="about__links">
+      {links.map(({ href, label, hint }) => (
+        <li>
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener"
+            class="about__link"
+            aria-label={`${label} — ${hint} (abre em nova aba)`}
+          >
+            {label} <span class="about__hint">— {hint}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .about {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+    padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 6rem);
+    border-top: 1px solid var(--color-border);
+  }
+
+  @media (min-width: 768px) {
+    .about {
+      grid-template-columns: 18rem 1fr;
+      gap: clamp(2rem, 5vw, 4rem);
+    }
+  }
+
+  .about__media {
+    width: min(18rem, 60vw);
+  }
+
+  .about__photo,
+  .about__placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+  .about__placeholder {
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--color-border);
+    background:
+      radial-gradient(circle at 30% 20%, rgb(255 255 255 / 0.06), transparent 60%),
+      var(--color-surface);
+    font-family: var(--font-display);
+    font-size: 5rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+  }
+
+  .about__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .about__body {
+    max-width: 60ch;
+    margin-top: 1rem;
+    line-height: var(--text-body--line-height);
+  }
+
+  .about__body :global(p + p) {
+    margin-top: 0.75em;
+  }
+
+  .about__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    margin-top: 1.25rem;
+  }
+
+  .about__link {
+    display: inline-block;
+    padding-block: 0.7rem; /* ~44px de área de toque */
+    line-height: 1.25;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent);
+    text-underline-offset: 4px;
+  }
+
+  .about__hint {
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+</style>

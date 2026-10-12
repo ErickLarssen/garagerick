@@ -15,6 +15,11 @@
 
 ---
 
+### 2026-10-12 — "Sobre mim" na home
+- **Contexto:** última tarefa da Fase 5; a foto `src/assets/about/erick.jpg` ainda não existe e o texto é do Erick (regra 4).
+- **Decisão:** nova collection `about` (um arquivo, `src/content/about/sobre.md`: `title` padrão "Sobre mim", `photo?`, `photoAlt?`, corpo = texto) para respeitar a regra 6 (nada de conteúdo no componente); `lib/about.ts` → `getAbout()`. `sections/About.astro` (`<section id="sobre">`, só em `/`, entre o ranking completo e o rodapé): foto em AVIF 320/640 (4:5, lazy) ou, sem foto, bloco com as iniciais de `SITE.author` ("ES"); texto; links para o Cinerick e o portfólio (de `SITE.links`). Texto inicial: `TODO: escreva sua apresentação.`
+- **Impacto:** `content.config.ts`, `src/content/about/sobre.md`, `src/lib/about.ts`, `src/components/sections/About.astro`, `src/pages/index.astro`, `docs/02`, `docs/05`, `docs/06`.
+
 ### 2026-10-12 — Rolagem suave até o "Ranking completo"
 - **Contexto:** terceira tarefa da Fase 5.
 - **Decisão:** sem JS: `html { scroll-behavior: smooth }` só em `prefers-reduced-motion: no-preference` (a regra global de movimento reduzido já força `auto`); `#ranking` tem `scroll-margin-top: var(--header-h)`. Vale também para o "Pular para o conteúdo". Testado: o link leva a `#ranking` e a seção para logo abaixo do header fixo (72 px); a vitrine ignora o hash `#ranking`.

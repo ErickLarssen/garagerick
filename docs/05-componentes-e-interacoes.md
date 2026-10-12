@@ -147,6 +147,8 @@ Top 1 com borda dourada.
 ## `About.astro` (só em `/`)
 Foto do Erick (`src/assets/about/erick.jpg`), título curto e texto de apresentação
 **fornecido pelo Erick** (placeholder `TODO` até lá), com link para o Cinerick e o portfólio.
+Conteúdo na collection `about` (`src/content/about/sobre.md`: `title`, `photo?`, `photoAlt?` + corpo),
+lido por `lib/about.ts`. Sem foto, mostra as iniciais de `SITE.author` como espaço reservado.
 
 ## 404
 "Saiu da pista." + botão "Voltar para a garagem" → `/`. Mesmo fundo atmosférico, sem imagem pesada.

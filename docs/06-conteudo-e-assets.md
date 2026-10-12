@@ -75,6 +75,12 @@ para exercitar a UI — a regra 3 do `CLAUDE.md` vale para veículos reais.
 > O Erick vai substituir os placeholders pelos veículos reais. Não pesquise nem escolha
 > veículos por ele.
 
+## "Sobre mim" (home)
+
+Edite `src/content/about/sobre.md`: o corpo é o seu texto de apresentação. Para a foto, coloque-a em
+`src/assets/about/` (retrato, idealmente 4:5) e descomente `photo` e `photoAlt` no frontmatter.
+Sem foto, a seção mostra suas iniciais.
+
 ## `lib/site.ts`
 
 Fonte única para:
