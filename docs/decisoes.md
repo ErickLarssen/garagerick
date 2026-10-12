@@ -15,6 +15,11 @@
 
 ---
 
+### 2026-10-12 — Rolagem suave até o "Ranking completo"
+- **Contexto:** terceira tarefa da Fase 5.
+- **Decisão:** sem JS: `html { scroll-behavior: smooth }` só em `prefers-reduced-motion: no-preference` (a regra global de movimento reduzido já força `auto`); `#ranking` tem `scroll-margin-top: var(--header-h)`. Vale também para o "Pular para o conteúdo". Testado: o link leva a `#ranking` e a seção para logo abaixo do header fixo (72 px); a vitrine ignora o hash `#ranking`.
+- **Impacto:** `src/styles/global.css`.
+
 ### 2026-10-12 — Clique no item da lista ativa o veículo e volta à vitrine
 - **Contexto:** segunda tarefa da Fase 5.
 - **Decisão:** delegação de `click` no `document` (no controlador da vitrine) para `[data-ranking-item]`: `preventDefault` (ignora clique com Ctrl/Cmd/botão do meio, que abre o link normalmente), `go(i)` — a troca sincronizada grava `#slug` via `replaceState` —, `scrollIntoView` da vitrine (suave; instantâneo com `prefers-reduced-motion`) e foco no nome do veículo (`<h2 tabindex="-1">`, sem contorno) para quem usa teclado não ficar preso na lista. Item do veículo já ativo: só rola. Testado: clique no Aventador ativa #02, grava o hash e foca o nome; rolagem conferida em modo instantâneo (a suave não anda em aba oculta de automação). Sem JS o link só muda o hash (não há âncora com o slug).

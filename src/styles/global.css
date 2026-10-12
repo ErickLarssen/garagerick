@@ -61,6 +61,14 @@
     --header-h: 4.5rem;
   }
 
+  /* Âncoras (RANKING COMPLETO, pular para o conteúdo) rolam suavemente; com movimento reduzido,
+     a regra mais abaixo força scroll-behavior: auto */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
   body {
     background-color: var(--color-bg);
     color: var(--color-text);
