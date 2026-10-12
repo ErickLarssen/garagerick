@@ -59,7 +59,7 @@
 ## Fase 5 — Ranking completo e Sobre mim
 
 - [x] `RankingList` + `RankingItem` com `<ol reversed>` e destaque do Top 1
-- [ ] Clique no item → ativa na vitrine e rola para o topo
+- [x] Clique no item → ativa na vitrine e rola para o topo
 - [ ] Link "RANKING COMPLETO" da vitrine rola até a lista
 - [ ] `About.astro` em `/` com placeholder de texto e foto
 

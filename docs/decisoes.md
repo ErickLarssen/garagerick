@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-12 — Clique no item da lista ativa o veículo e volta à vitrine
+- **Contexto:** segunda tarefa da Fase 5.
+- **Decisão:** delegação de `click` no `document` (no controlador da vitrine) para `[data-ranking-item]`: `preventDefault` (ignora clique com Ctrl/Cmd/botão do meio, que abre o link normalmente), `go(i)` — a troca sincronizada grava `#slug` via `replaceState` —, `scrollIntoView` da vitrine (suave; instantâneo com `prefers-reduced-motion`) e foco no nome do veículo (`<h2 tabindex="-1">`, sem contorno) para quem usa teclado não ficar preso na lista. Item do veículo já ativo: só rola. Testado: clique no Aventador ativa #02, grava o hash e foca o nome; rolagem conferida em modo instantâneo (a suave não anda em aba oculta de automação). Sem JS o link só muda o hash (não há âncora com o slug).
+- **Motivo:** `docs/05`.
+- **Impacto:** `src/scripts/showcase-controller.ts`, `ShowcaseInfo`.
+
 ### 2026-10-12 — `RankingList` e `RankingItem`
 - **Contexto:** primeira tarefa da Fase 5 (branch `fase-5-ranking-sobre`).
 - **Decisão:** `<section id="ranking">` com `<h2>` "Ranking completo — X", contagem de posições e `<ol reversed>` (lista sem marcadores visuais; a posição aparece no item). Grade `auto-fill, minmax(min(100%, 20rem), 1fr)`: 1 coluna no celular, 2 no tablet (768 px), 3–4 no desktop. Item = link `#slug` (a vitrine já reage ao `hashchange`) com miniatura 4:3 (`getThumbImage`, AVIF 320/640, lazy, mesmo `heroFocus`), posição grande no canto, logo (20 px), nome, linha "ano · quickSpecs" e trecho de 2 linhas; Top 1 com borda e "TOP 1" dourados. Para leitores de tela o nome é "Posição 12: Dodge Charger". Novo `RankedVehicle.excerpt` (texto puro, ausente enquanto o corpo for o placeholder TODO). `getCardImage` (sem uso desde a remoção dos cards) virou `getThumbImage`; `RankingPagePlaceholder` removido.

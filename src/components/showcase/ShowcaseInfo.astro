@@ -18,7 +18,7 @@ const { vehicle } = Astro.props;
 <div class="info" data-showcase-info aria-live="polite">
   <BrandLogo brand={vehicle.brand} class="info__logo" />
 
-  <h2 class="info__name" data-info-name>
+  <h2 class="info__name" data-info-name tabindex="-1">
     <span class="sr-only">{vehicle.brand.name} </span>
     {vehicle.name}
   </h2>
@@ -74,6 +74,11 @@ const { vehicle } = Astro.props;
 
   .info :global(.info__logo) {
     margin-bottom: 0.25rem;
+  }
+
+  /* recebe foco por script (vindo da lista); sem contorno, como um título */
+  .info__name:focus {
+    outline: none;
   }
 
   .info__name {
