@@ -1,0 +1,140 @@
+---
+// Item da lista "Ranking completo" (docs/05): miniatura, posição grande, logo, nome, linha
+// principal de specs e o começo do texto (2 linhas). Link para #<slug>: a vitrine ativa o veículo.
+import BrandLogo from '@/components/showcase/BrandLogo.astro';
+import { formatRank } from '@/lib/format';
+import { getThumbImage } from '@/lib/images';
+import type { RankedVehicle } from '@/lib/rankings';
+
+interface Props {
+  vehicle: RankedVehicle;
+}
+
+const { vehicle } = Astro.props;
+const thumb = await getThumbImage(vehicle.heroImage);
+const rankLabel = vehicle.isTop ? 'TOP 1' : formatRank(vehicle.rank);
+const meta = [vehicle.year !== undefined ? String(vehicle.year) : undefined, ...vehicle.quickSpecs]
+  .filter(Boolean)
+  .join(' · ');
+---
+
+<li class:list={['item', { 'item--top': vehicle.isTop }]}>
+  <a href={`#${vehicle.slug}`} class="item__link" data-ranking-item data-slug={vehicle.slug}>
+    <img
+      class="item__thumb"
+      src={thumb.src}
+      srcset={thumb.srcset}
+      sizes={thumb.sizes}
+      width={thumb.width}
+      height={thumb.height}
+      style={`object-position: ${vehicle.heroFocus}`}
+      alt=""
+      loading="lazy"
+      decoding="async"
+    />
+    <span class="item__body">
+      <span class="item__rank numeric" aria-hidden="true">
+        {rankLabel}
+      </span>
+      <BrandLogo brand={vehicle.brand} baseHeight={20} class="item__logo" />
+      <span class="item__name">
+        <span class="sr-only">{vehicle.isTop ? 'Top 1' : `Posição ${vehicle.rank}`}: </span>
+        <span class="sr-only">{vehicle.brand.name} </span>
+        {vehicle.name}
+      </span>
+      {meta && <span class="item__meta">{meta}</span>}
+      {vehicle.excerpt && <span class="item__excerpt">{vehicle.excerpt}</span>}
+    </span>
+  </a>
+</li>
+
+<style>
+  .item__link {
+    position: relative;
+    display: grid;
+    grid-template-columns: 36% 1fr;
+    gap: 1rem;
+    height: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-surface);
+    transition:
+      border-color 200ms var(--ease-garage),
+      transform 200ms var(--ease-garage);
+  }
+
+  .item__link:hover {
+    border-color: rgb(255 255 255 / 0.2);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .item__link:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  .item__thumb {
+    width: 100%;
+    height: 100%;
+    min-height: 6.5rem;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .item__body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+    min-width: 0;
+  }
+
+  /* Posição grande e translúcida no canto (como os cards da referência) */
+  .item__rank {
+    position: absolute;
+    top: 0.4rem;
+    right: 0.75rem;
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1;
+    color: color-mix(in srgb, var(--color-accent) 85%, transparent);
+  }
+
+  .item__name {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.05;
+    text-transform: uppercase;
+    padding-right: 3.5rem; /* não colide com a posição */
+  }
+
+  .item__meta {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--color-text-muted);
+  }
+
+  .item__excerpt {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+
+  /* Top 1: borda e posição douradas */
+  .item--top .item__link {
+    border-color: color-mix(in srgb, var(--color-gold) 70%, transparent);
+    box-shadow: 0 0 24px -8px color-mix(in srgb, var(--color-gold) 45%, transparent);
+  }
+
+  .item--top .item__rank {
+    font-size: 1.75rem;
+    color: var(--color-gold);
+  }
+</style>

@@ -69,4 +69,15 @@ const motorcycles = defineCollection({
     }),
 });
 
-export const collections = { brands, cars, motorcycles };
+// "Sobre mim" da home (docs/05): um arquivo, src/content/about/sobre.md — o corpo é o texto do Erick
+const about = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/about' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string().default('Sobre mim'),
+      photo: image().optional(), // "../../assets/about/erick.jpg" (retrato, 4:5 de preferência)
+      photoAlt: z.string().optional(), // descrição da foto para leitores de tela
+    }),
+});
+
+export const collections = { brands, cars, motorcycles, about };

@@ -15,6 +15,28 @@
 
 ---
 
+### 2026-10-12 — "Sobre mim" na home
+- **Contexto:** última tarefa da Fase 5; a foto `src/assets/about/erick.jpg` ainda não existe e o texto é do Erick (regra 4).
+- **Decisão:** nova collection `about` (um arquivo, `src/content/about/sobre.md`: `title` padrão "Sobre mim", `photo?`, `photoAlt?`, corpo = texto) para respeitar a regra 6 (nada de conteúdo no componente); `lib/about.ts` → `getAbout()`. `sections/About.astro` (`<section id="sobre">`, só em `/`, entre o ranking completo e o rodapé): foto em AVIF 320/640 (4:5, lazy) ou, sem foto, bloco com as iniciais de `SITE.author` ("ES"); texto; links para o Cinerick e o portfólio (de `SITE.links`). Texto inicial: `TODO: escreva sua apresentação.`
+- **Impacto:** `content.config.ts`, `src/content/about/sobre.md`, `src/lib/about.ts`, `src/components/sections/About.astro`, `src/pages/index.astro`, `docs/02`, `docs/05`, `docs/06`.
+
+### 2026-10-12 — Rolagem suave até o "Ranking completo"
+- **Contexto:** terceira tarefa da Fase 5.
+- **Decisão:** sem JS: `html { scroll-behavior: smooth }` só em `prefers-reduced-motion: no-preference` (a regra global de movimento reduzido já força `auto`); `#ranking` tem `scroll-margin-top: var(--header-h)`. Vale também para o "Pular para o conteúdo". Testado: o link leva a `#ranking` e a seção para logo abaixo do header fixo (72 px); a vitrine ignora o hash `#ranking`.
+- **Impacto:** `src/styles/global.css`.
+
+### 2026-10-12 — Clique no item da lista ativa o veículo e volta à vitrine
+- **Contexto:** segunda tarefa da Fase 5.
+- **Decisão:** delegação de `click` no `document` (no controlador da vitrine) para `[data-ranking-item]`: `preventDefault` (ignora clique com Ctrl/Cmd/botão do meio, que abre o link normalmente), `go(i)` — a troca sincronizada grava `#slug` via `replaceState` —, `scrollIntoView` da vitrine (suave; instantâneo com `prefers-reduced-motion`) e foco no nome do veículo (`<h2 tabindex="-1">`, sem contorno) para quem usa teclado não ficar preso na lista. Item do veículo já ativo: só rola. Testado: clique no Aventador ativa #02, grava o hash e foca o nome; rolagem conferida em modo instantâneo (a suave não anda em aba oculta de automação). Sem JS o link só muda o hash (não há âncora com o slug).
+- **Motivo:** `docs/05`.
+- **Impacto:** `src/scripts/showcase-controller.ts`, `ShowcaseInfo`.
+
+### 2026-10-12 — `RankingList` e `RankingItem`
+- **Contexto:** primeira tarefa da Fase 5 (branch `fase-5-ranking-sobre`).
+- **Decisão:** `<section id="ranking">` com `<h2>` "Ranking completo — X", contagem de posições e `<ol reversed>` (lista sem marcadores visuais; a posição aparece no item). Grade `auto-fill, minmax(min(100%, 20rem), 1fr)`: 1 coluna no celular, 2 no tablet (768 px), 3–4 no desktop. Item = link `#slug` (a vitrine já reage ao `hashchange`) com miniatura 4:3 (`getThumbImage`, AVIF 320/640, lazy, mesmo `heroFocus`), posição grande no canto, logo (20 px), nome, linha "ano · quickSpecs" e trecho de 2 linhas; Top 1 com borda e "TOP 1" dourados. Para leitores de tela o nome é "Posição 12: Dodge Charger". Novo `RankedVehicle.excerpt` (texto puro, ausente enquanto o corpo for o placeholder TODO). `getCardImage` (sem uso desde a remoção dos cards) virou `getThumbImage`; `RankingPagePlaceholder` removido.
+- **Motivo:** `docs/05`; não poluir a lista com 34 "TODO".
+- **Impacto:** `src/components/ranking/{RankingList,RankingItem}.astro`, páginas de ranking, `lib/{rankings,images}.ts`, `docs/05`.
+
 ### 2026-10-11 — Separadores da linha de specs e barra em telas estreitas
 - **Contexto:** pendências da 2ª rodada de revisão, autorizadas pelo Erick.
 - **Decisão:** separador `│` da `SpecRow` por CSS puro: cada separador em posição absoluta à esquerda do item, lista com margem negativa + `overflow: hidden` — o separador de quem inicia uma linha cai fora e é cortado (sem JS e sem mexer no layout; esconder o separador via JS poderia fazer o item voltar à linha de cima). Abaixo de 480 px, "Ranking completo" mostra só o ícone (texto mantido para leitores de tela) e o rótulo nunca quebra. Foto com `heroFitMobile: contain` ganhou `max-height: calc(56svh - header)`: fotos 4:3 (Nivus, Passat) invadiam o nome em telas de ~430 px; agora encolhem e centralizam. Testado em 300/360/430 px: navegação dentro da tela, specs sem separador no início da linha, foto terminando antes do nome. **Observação:** fotos de estúdio com fundo claro, quando encolhem, mostram as laterais do retângulo — trocar por fotos de fundo escuro resolve.

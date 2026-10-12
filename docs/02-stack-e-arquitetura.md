@@ -64,7 +64,8 @@ garagerick/
 │   ├── content/
 │   │   ├── brands/                # um .json por marca
 │   │   ├── cars/                  # um .md por carro (frontmatter + texto "por que eu gosto")
-│   │   └── motorcycles/           # um .md por moto
+│   │   ├── motorcycles/           # um .md por moto
+│   │   └── about/sobre.md         # "Sobre mim" da home (foto + texto do Erick)
 │   ├── content.config.ts          # schemas Zod das collections
 │   ├── components/
 │   │   ├── layout/

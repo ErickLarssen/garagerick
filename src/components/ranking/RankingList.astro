@@ -1,0 +1,57 @@
+---
+// "Ranking completo" (docs/05): todos os itens em contagem regressiva (#N → #1), abaixo da vitrine.
+// <ol reversed>: a semântica de lista ordenada decrescente; a numeração visual vem do RankingItem.
+import RankingItem from '@/components/ranking/RankingItem.astro';
+import { RANKING_LABELS, type RankedVehicle, type RankingKey } from '@/lib/rankings';
+
+interface Props {
+  vehicles: RankedVehicle[]; // ordem decrescente (último colocado primeiro)
+  rankingKey: RankingKey;
+}
+
+const { vehicles, rankingKey } = Astro.props;
+---
+
+<section id="ranking" class="ranking" aria-labelledby="ranking-title">
+  <h2 id="ranking-title" class="ranking__title">
+    Ranking completo <span class="ranking__label">— {RANKING_LABELS[rankingKey]}</span>
+  </h2>
+  <p class="ranking__intro">{vehicles.length} posições, da última até o Top 1.</p>
+  <ol reversed class="ranking__list">
+    {vehicles.map((vehicle) => (
+      <RankingItem vehicle={vehicle} />
+    ))}
+  </ol>
+</section>
+
+<style>
+  .ranking {
+    padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 6rem);
+    scroll-margin-top: var(--header-h);
+  }
+
+  .ranking__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .ranking__label {
+    color: var(--color-text-muted);
+  }
+
+  .ranking__intro {
+    margin-top: 0.5rem;
+    color: var(--color-text-muted);
+  }
+
+  .ranking__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+    list-style: none;
+  }
+</style>

@@ -165,6 +165,7 @@ export class ShowcaseController {
     });
 
     this.bindSwipe();
+    this.bindRankingList();
   }
 
   /**
@@ -191,6 +192,29 @@ export class ShowcaseController {
     });
 
     this.root.addEventListener('pointercancel', () => (start = undefined));
+  }
+
+  /**
+   * Itens da lista "Ranking completo" (docs/05): ativam o veículo e rolam de volta à vitrine.
+   * O foco vai para o nome do veículo — quem usa teclado não fica preso lá embaixo na lista.
+   */
+  private bindRankingList(): void {
+    document.addEventListener('click', (event) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey) return;
+      const link = (event.target as Element | null)?.closest<HTMLAnchorElement>(
+        '[data-ranking-item]',
+      );
+      const i = this.vehicles.findIndex((v) => v.slug === link?.dataset.slug);
+      if (!link || i < 0) return;
+
+      event.preventDefault();
+      this.go(i);
+      this.root.scrollIntoView({
+        behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+        block: 'start',
+      });
+      this.root.querySelector<HTMLElement>('[data-info-name]')?.focus({ preventScroll: true });
+    });
   }
 
   /** ←/→ só com foco na vitrine ou na página — nunca em campos, menus ou com a ficha aberta. */
