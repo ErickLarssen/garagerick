@@ -1,7 +1,7 @@
 ---
-// Populares (home): vitrine + lista completa (temporária até a Fase 5).
+// Populares (home): vitrine + ranking completo.
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import RankingPagePlaceholder from '@/components/ranking/RankingPagePlaceholder.astro';
+import RankingList from '@/components/ranking/RankingList.astro';
 import Showcase from '@/components/showcase/Showcase.astro';
 import { RANKING_SEO, getRanking } from '@/lib/rankings';
 
@@ -11,5 +11,5 @@ const vehicles = await getRanking('populares');
 
 <BaseLayout title={title} description={description} activeNav="populares">
   <Showcase vehicles={vehicles} rankingKey="populares" />
-  <RankingPagePlaceholder vehicles={vehicles} ranking="populares" />
+  <RankingList vehicles={vehicles} rankingKey="populares" />
 </BaseLayout>

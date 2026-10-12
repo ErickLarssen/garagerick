@@ -41,13 +41,9 @@ export function getHeroImage(image: ImageMetadata): Promise<ResponsiveImage> {
   return responsive(image, [640, 1280, 1920], '100vw');
 }
 
-/** Card do carrossel (3:4): AVIF em até 320/640 px (1x/2x do maior tamanho exibido). */
-export function getCardImage(image: ImageMetadata): Promise<ResponsiveImage> {
-  return responsive(
-    image,
-    [320, 640],
-    '(min-width: 1024px) 12.5rem, (min-width: 640px) 9.5rem, 6.75rem',
-  );
+/** Miniatura da lista "Ranking completo" (RankingItem): AVIF em até 320/640 px. */
+export function getThumbImage(image: ImageMetadata): Promise<ResponsiveImage> {
+  return responsive(image, [320, 640], '(min-width: 640px) 11rem, 36vw');
 }
 
 /** Logo da marca na altura exibida ×2 (telas de alta densidade). SVG passa direto. */

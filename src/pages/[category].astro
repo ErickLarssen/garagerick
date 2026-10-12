@@ -2,7 +2,7 @@
 // Esportivos e Antigos (docs/02): mesma estrutura, gerada por getStaticPaths.
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import RankingPagePlaceholder from '@/components/ranking/RankingPagePlaceholder.astro';
+import RankingList from '@/components/ranking/RankingList.astro';
 import Showcase from '@/components/showcase/Showcase.astro';
 import { RANKING_SEO, getRanking } from '@/lib/rankings';
 
@@ -23,5 +23,5 @@ const vehicles = await getRanking(category);
 
 <BaseLayout title={title} description={description} activeNav={category}>
   <Showcase vehicles={vehicles} rankingKey={category} />
-  <RankingPagePlaceholder vehicles={vehicles} ranking={category} />
+  <RankingList vehicles={vehicles} rankingKey={category} />
 </BaseLayout>

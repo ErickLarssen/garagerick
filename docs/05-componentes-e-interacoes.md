@@ -139,6 +139,8 @@ o comportamento normal de âncora.
 
 ### `RankingItem.astro`
 Card horizontal: miniatura, `#04` grande, logo, nome, `quickSpecs`, e o início do texto (2 linhas).
+O trecho (`RankedVehicle.excerpt`, texto puro do corpo) **não aparece** enquanto o texto for o
+placeholder `TODO` — evita repetir "TODO" em todos os cards; a vitrine continua mostrando o TODO.
 É um link para `#<slug>` que rola suavemente até o topo e ativa o veículo na vitrine.
 Top 1 com borda dourada.
 

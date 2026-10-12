@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-12 — `RankingList` e `RankingItem`
+- **Contexto:** primeira tarefa da Fase 5 (branch `fase-5-ranking-sobre`).
+- **Decisão:** `<section id="ranking">` com `<h2>` "Ranking completo — X", contagem de posições e `<ol reversed>` (lista sem marcadores visuais; a posição aparece no item). Grade `auto-fill, minmax(min(100%, 20rem), 1fr)`: 1 coluna no celular, 2 no tablet (768 px), 3–4 no desktop. Item = link `#slug` (a vitrine já reage ao `hashchange`) com miniatura 4:3 (`getThumbImage`, AVIF 320/640, lazy, mesmo `heroFocus`), posição grande no canto, logo (20 px), nome, linha "ano · quickSpecs" e trecho de 2 linhas; Top 1 com borda e "TOP 1" dourados. Para leitores de tela o nome é "Posição 12: Dodge Charger". Novo `RankedVehicle.excerpt` (texto puro, ausente enquanto o corpo for o placeholder TODO). `getCardImage` (sem uso desde a remoção dos cards) virou `getThumbImage`; `RankingPagePlaceholder` removido.
+- **Motivo:** `docs/05`; não poluir a lista com 34 "TODO".
+- **Impacto:** `src/components/ranking/{RankingList,RankingItem}.astro`, páginas de ranking, `lib/{rankings,images}.ts`, `docs/05`.
+
 ### 2026-10-11 — Separadores da linha de specs e barra em telas estreitas
 - **Contexto:** pendências da 2ª rodada de revisão, autorizadas pelo Erick.
 - **Decisão:** separador `│` da `SpecRow` por CSS puro: cada separador em posição absoluta à esquerda do item, lista com margem negativa + `overflow: hidden` — o separador de quem inicia uma linha cai fora e é cortado (sem JS e sem mexer no layout; esconder o separador via JS poderia fazer o item voltar à linha de cima). Abaixo de 480 px, "Ranking completo" mostra só o ícone (texto mantido para leitores de tela) e o rótulo nunca quebra. Foto com `heroFitMobile: contain` ganhou `max-height: calc(56svh - header)`: fotos 4:3 (Nivus, Passat) invadiam o nome em telas de ~430 px; agora encolhem e centralizam. Testado em 300/360/430 px: navegação dentro da tela, specs sem separador no início da linha, foto terminando antes do nome. **Observação:** fotos de estúdio com fundo claro, quando encolhem, mostram as laterais do retângulo — trocar por fotos de fundo escuro resolve.

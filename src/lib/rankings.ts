@@ -82,6 +82,8 @@ export interface RankedVehicle {
   ambientColor: string; // fallback: token --color-ambient-default
   videoUrl?: string;
   body: string; // HTML renderizado do Markdown
+  /** Texto puro do "por que eu gosto" para a lista; ausente enquanto for o placeholder TODO. */
+  excerpt?: string;
 }
 
 type CarEntry = CollectionEntry<'cars'>;
@@ -127,6 +129,16 @@ function toRef(entry: CarEntry | MotorcycleEntry, list: RankingKey): RankingEntr
     brand: entry.data.brand.id,
     file: entry.filePath?.split('/').pop() ?? `${entry.id}.md`,
   };
+}
+
+/** Texto puro do corpo; `undefined` se ainda for o placeholder "TODO: escreva…" (regra 4). */
+function excerptOf(html: string): string | undefined {
+  const text = html
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return !text || text.startsWith('TODO') ? undefined : text;
 }
 
 /** Remove comentários HTML (ex.: `<!-- TODO: confirmar ficha técnica -->`) do texto exibido. */
@@ -222,6 +234,7 @@ function toRanked(
     ambientColor: d.ambientColor ?? AMBIENT_FALLBACK,
     videoUrl: d.videoUrl,
     body: stripComments(entry.rendered?.html ?? ''),
+    excerpt: excerptOf(stripComments(entry.rendered?.html ?? '')),
   };
 }
 
