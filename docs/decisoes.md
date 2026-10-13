@@ -15,6 +15,11 @@
 
 ---
 
+### 2026-10-13 — Índice da busca (`/search-index.json`)
+- **Contexto:** primeira tarefa da Fase 6 (branch `fase-6-busca`).
+- **Decisão:** `lib/search-index.ts` → `buildSearchIndex()` servido por `pages/search-index.json.ts` (estático no build). Formato ajustado ao que existe hoje: sem `cardImageSrc` (cards removidos) → `thumbSrc` (AVIF 160×120, `fit: cover`, a partir do `heroImage`); `href` pronto via `RANKING_ROUTES`; `rankingLabel` ("#03 em Esportivos", "Top 1 em Populares"); `keywords` pré-normalizado (marca, nome, versão, tags) para o cliente não repetir o trabalho. Normalização em `lib/normalize.ts` (NFD sem diacríticos, minúsculas, só letras/números) — módulo puro, separado porque `search-index.ts` importa `astro:assets`. `RankedVehicle` passou a expor `version` e `tags`. Ordem: por ranking e, dentro dele, do Top 1 para baixo. Resultado: 34 entradas, 9,1 kB (2,2 kB gzip).
+- **Impacto:** `src/lib/{search-index,normalize,rankings}.ts`, `src/pages/search-index.json.ts`, `docs/05`.
+
 ### 2026-10-12 — "Sobre mim" na home
 - **Contexto:** última tarefa da Fase 5; a foto `src/assets/about/erick.jpg` ainda não existe e o texto é do Erick (regra 4).
 - **Decisão:** nova collection `about` (um arquivo, `src/content/about/sobre.md`: `title` padrão "Sobre mim", `photo?`, `photoAlt?`, corpo = texto) para respeitar a regra 6 (nada de conteúdo no componente); `lib/about.ts` → `getAbout()`. `sections/About.astro` (`<section id="sobre">`, só em `/`, entre o ranking completo e o rodapé): foto em AVIF 320/640 (4:5, lazy) ou, sem foto, bloco com as iniciais de `SITE.author` ("ES"); texto; links para o Cinerick e o portfólio (de `SITE.links`). Texto inicial: `TODO: escreva sua apresentação.`

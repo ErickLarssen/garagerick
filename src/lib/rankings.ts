@@ -73,6 +73,8 @@ export interface RankedVehicle {
     logoTreatment: 'white' | 'original';
   };
   year?: number; // omitido quando desconhecido
+  version?: string; // versão/acabamento ("Highline 200 TSI")
+  tags: string[]; // usados na busca
   specs: SpecItem[]; // já formatadas, prontas para exibir
   quickSpecs: string[]; // até 2 itens para a linha principal
   heroImage: ImageMetadata;
@@ -225,6 +227,8 @@ function toRanked(
       logoTreatment: brand.data.logoTreatment,
     },
     year: d.year,
+    version: d.version,
+    tags: d.tags,
     specs: details.specs,
     quickSpecs: details.quickSpecs,
     heroImage: d.heroImage,
