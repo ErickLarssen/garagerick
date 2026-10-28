@@ -2,20 +2,22 @@
 // Busca (docs/05): campo sem caixa com sublinhado de 1px (docs/04) e dropdown de resultados.
 // Combobox ARIA 1.2: o foco fica no campo e a opção marcada é indicada por aria-activedescendant.
 // Fica oculta até o script rodar — sem JS ela não funcionaria.
+// variant "bar": dropdown flutuante no header. "drawer": campo largo e resultados no fluxo da gaveta.
 import SearchIcon from '@/assets/icons/search.svg';
 
 interface Props {
   /** Prefixo dos ids (há uma instância no header e outra na gaveta mobile). */
   id: string;
+  variant?: 'bar' | 'drawer';
   class?: string;
 }
 
-const { id, class: className } = Astro.props;
+const { id, variant = 'bar', class: className } = Astro.props;
 const inputId = `${id}-input`;
 const listboxId = `${id}-listbox`;
 ---
 
-<search class:list={['search', className]} data-search hidden>
+<search class:list={['search', `search--${variant}`, className]} data-search hidden>
   <label for={inputId} class="search__field">
     <SearchIcon width={20} height={20} aria-hidden="true" class="search__icon" />
     <span class="sr-only">Buscar veículo</span>
@@ -35,14 +37,12 @@ const listboxId = `${id}-listbox`;
       data-search-input
     />
   </label>
-  <ul
-    id={listboxId}
-    role="listbox"
-    aria-label="Resultados da busca"
-    class="search__listbox"
-    data-search-listbox
-    hidden
-  ></ul>
+  <div class="search__panel" data-search-panel hidden>
+    <ul id={listboxId} role="listbox" aria-label="Resultados da busca" data-search-listbox></ul>
+    <p class="search__empty" data-search-empty hidden>
+      Nada encontrado nessa garagem.
+    </p>
+  </div>
   <p role="status" class="sr-only" data-search-status></p>
 </search>
 
@@ -103,7 +103,11 @@ const listboxId = `${id}-listbox`;
     box-shadow: 0 1px 0 var(--color-accent);
   }
 
-  .search__listbox {
+  .search--drawer .search__input {
+    width: 100%;
+  }
+
+  .search__panel {
     position: absolute;
     inset-inline-end: 0;
     top: calc(100% + 0.5rem);
@@ -118,12 +122,28 @@ const listboxId = `${id}-listbox`;
     box-shadow: 0 16px 40px rgb(0 0 0 / 0.5);
   }
 
-  .search__listbox[hidden] {
+  .search__panel[hidden],
+  .search__empty[hidden] {
     display: none;
   }
 
+  /* Gaveta: resultados no fluxo, logo abaixo do campo */
+  .search--drawer .search__panel {
+    position: static;
+    width: auto;
+    max-height: none;
+    margin-top: 0.5rem;
+    box-shadow: none;
+  }
+
+  .search__empty {
+    padding: 0.75rem 0.5rem;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
   /* Opções criadas pelo script (fora do escopo do componente) */
-  .search__listbox :global(.search-option) {
+  .search__panel :global(.search-option) {
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -133,16 +153,16 @@ const listboxId = `${id}-listbox`;
     cursor: pointer;
   }
 
-  .search__listbox :global(.search-option:hover),
-  .search__listbox :global(.search-option[aria-selected='true']) {
+  .search__panel :global(.search-option:hover),
+  .search__panel :global(.search-option[aria-selected='true']) {
     background: rgb(255 255 255 / 0.06);
   }
 
-  .search__listbox :global(.search-option[aria-selected='true']) {
+  .search__panel :global(.search-option[aria-selected='true']) {
     box-shadow: inset 2px 0 0 var(--color-accent);
   }
 
-  .search__listbox :global(.search-option__thumb) {
+  .search__panel :global(.search-option__thumb) {
     flex: none;
     width: 4rem;
     height: 3rem;
@@ -151,25 +171,30 @@ const listboxId = `${id}-listbox`;
     background: var(--color-bg);
   }
 
-  .search__listbox :global(.search-option__text) {
+  .search__panel :global(.search-option__text) {
     display: grid;
     min-width: 0;
     line-height: 1.3;
   }
 
-  .search__listbox :global(.search-option__name) {
+  .search__panel :global(.search-option__name) {
     overflow: hidden;
     font-weight: 600;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .search__listbox :global(.search-option__meta) {
+  .search__panel :global(.search-option__meta) {
     overflow: hidden;
     color: var(--color-text-muted);
     font-size: 0.8125rem;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  /* Gaveta estreita: a linha de marca/ranking quebra em vez de cortar "#06 em Populares" */
+  .search--drawer .search__panel :global(.search-option__meta) {
+    white-space: normal;
   }
 </style>
 

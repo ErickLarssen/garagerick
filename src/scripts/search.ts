@@ -52,19 +52,27 @@ function isTyping(target: EventTarget | null): boolean {
 
 class SearchBox {
   private readonly input: HTMLInputElement;
+  private readonly panel: HTMLElement;
   private readonly listbox: HTMLElement;
+  private readonly empty: HTMLElement;
   private readonly status: HTMLElement;
-  private entries: SearchEntry[] = [];
+  private entries: SearchEntry[] | undefined; // undefined até o índice chegar
   private results: SearchEntry[] = [];
   private active = -1;
 
   constructor(private readonly root: HTMLElement) {
     const input = root.querySelector<HTMLInputElement>('[data-search-input]');
+    const panel = root.querySelector<HTMLElement>('[data-search-panel]');
     const listbox = root.querySelector<HTMLElement>('[data-search-listbox]');
+    const empty = root.querySelector<HTMLElement>('[data-search-empty]');
     const status = root.querySelector<HTMLElement>('[data-search-status]');
-    if (!input || !listbox || !status) throw new Error('SearchBox: marcação incompleta.');
+    if (!input || !panel || !listbox || !empty || !status) {
+      throw new Error('SearchBox: marcação incompleta.');
+    }
     this.input = input;
+    this.panel = panel;
     this.listbox = listbox;
+    this.empty = empty;
     this.status = status;
 
     root.hidden = false; // sem JS a busca não funciona, então só aparece com o script
@@ -107,12 +115,13 @@ class SearchBox {
   }
 
   private onKeydown(event: KeyboardEvent): void {
-    const open = this.results.length > 0 && !this.listbox.hidden;
+    const open = !this.panel.hidden;
+    const hasResults = open && this.results.length > 0;
     switch (event.key) {
       case 'ArrowDown':
       case 'ArrowUp': {
         event.preventDefault();
-        if (!open) {
+        if (!hasResults) {
           this.update();
           return;
         }
@@ -124,12 +133,13 @@ class SearchBox {
         break;
       }
       case 'Enter':
-        if (!open) return;
+        if (!hasResults) return;
         event.preventDefault();
         this.select(Math.max(this.active, 0)); // sem item marcado, abre o primeiro resultado
         break;
       case 'Escape':
-        // 1º Esc fecha a lista; 2º limpa o campo (padrão de combobox)
+        // 1º Esc fecha a lista; 2º limpa o campo (padrão de combobox); o 3º segue adiante e,
+        // na gaveta mobile, fecha a gaveta (o preventDefault segura o fechamento antes disso)
         if (open) this.close();
         else if (this.input.value) this.input.value = '';
         else return;
@@ -139,6 +149,7 @@ class SearchBox {
   }
 
   private update(): void {
+    if (!this.entries) return; // ensureIndex chama de novo quando o índice chegar
     this.results = searchEntries(this.entries, this.input.value);
     this.render();
   }
@@ -148,15 +159,20 @@ class SearchBox {
     this.active = -1;
     this.input.removeAttribute('aria-activedescendant');
 
-    const open = this.results.length > 0;
-    this.listbox.hidden = !open;
-    this.input.setAttribute('aria-expanded', String(open));
+    // Com texto, o painel abre: lista de resultados ou "Nada encontrado nessa garagem."
     const n = this.results.length;
-    this.status.textContent = !this.input.value.trim()
+    const hasQuery = normalize(this.input.value) !== '';
+    this.panel.hidden = !hasQuery;
+    this.listbox.hidden = n === 0;
+    this.empty.hidden = n > 0;
+    this.input.setAttribute('aria-expanded', String(n > 0));
+    this.status.textContent = !hasQuery
       ? ''
-      : n === 1
-        ? '1 resultado'
-        : `${n} resultados`;
+      : n === 0
+        ? (this.empty.textContent ?? '')
+        : n === 1
+          ? '1 resultado'
+          : `${n} resultados`;
   }
 
   private option(entry: SearchEntry, i: number): HTMLElement {
@@ -200,7 +216,7 @@ class SearchBox {
   }
 
   private close(): void {
-    this.listbox.hidden = true;
+    this.panel.hidden = true;
     this.input.setAttribute('aria-expanded', 'false');
     this.input.removeAttribute('aria-activedescendant');
     this.active = -1;

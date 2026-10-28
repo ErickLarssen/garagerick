@@ -22,7 +22,7 @@ e link "Pular para o conteúdo".
 - Botão "Abrir menu" + gaveta lateral com **Popover API** (`popover="auto"` + `popovertarget`):
   funciona sem JS, fecha com Esc/clique fora, e o navegador expõe `aria-expanded` no botão.
 - Dentro: botão "Fechar menu" e `Nav variant="drawer"` (lista vertical; o item de moto mostra ícone + "Motos").
-- Busca mobile entra na gaveta na Fase 6.
+- Busca no topo da gaveta (`SearchBox variant="drawer"`): Esc fecha os resultados, depois limpa o campo e só então fecha a gaveta.
 
 ### `SearchBox.astro` + `scripts/search.ts`
 - Busca **client-side** sobre `/search-index.json` (gerado no build por `pages/search-index.json.ts`):
@@ -38,7 +38,7 @@ e link "Pular para o conteúdo".
 - Combobox ARIA 1.2: `<input role="combobox">` + `<ul role="listbox">`, opção marcada via `aria-activedescendant`;
   contagem de resultados num `role="status"` oculto; até 8 resultados. Oculta sem JS.
 - Na mesma página, selecionar troca o hash (a vitrine escuta `hashchange`), rola até a vitrine e foca o nome.
-- Vazio: "Nada encontrado nessa garagem."
+- Vazio: "Nada encontrado nessa garagem." (parágrafo ao lado do `listbox`, no mesmo painel; também anunciado pelo `role="status"`).
 
 ### `Footer.astro` / `SocialLinks.astro`
 Dados vindos de `lib/site.ts`: Instagram (`elarssen.design`), LinkedIn (`ericklarssen`) e

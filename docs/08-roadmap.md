@@ -67,7 +67,7 @@
 
 - [x] Endpoint `search-index.json.ts`
 - [x] `SearchBox` com dropdown acessível, atalho `/`, navegação por teclado
-- [ ] Estado vazio e mobile (dentro da gaveta)
+- [x] Estado vazio e mobile (dentro da gaveta)
 
 ## Fase 7 — Polimento, SEO e deploy
 

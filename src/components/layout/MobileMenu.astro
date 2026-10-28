@@ -1,9 +1,11 @@
 ---
 // Menu mobile (docs/04: < 640px). Gaveta com Popover API nativa: abre/fecha sem JS,
 // fecha com Esc e clique fora, e o navegador expõe aria-expanded no botão automaticamente.
+// Dentro: busca (variant "drawer") e a navegação.
 import CloseIcon from '@/assets/icons/close.svg';
 import MenuIcon from '@/assets/icons/menu.svg';
 import Nav from '@/components/layout/Nav.astro';
+import SearchBox from '@/components/layout/SearchBox.astro';
 import type { RankingKey } from '@/lib/rankings';
 
 interface Props {
@@ -36,9 +38,9 @@ const { activeNav } = Astro.props;
     </button>
   </div>
 
-  <Nav activeNav={activeNav} variant="drawer" class="px-4" />
+  <SearchBox id="drawer-search" variant="drawer" class="mb-4 px-6" />
 
-  <!-- Busca mobile entra aqui na Fase 6 -->
+  <Nav activeNav={activeNav} variant="drawer" class="px-4" />
 </div>
 
 <style>
