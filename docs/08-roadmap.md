@@ -66,7 +66,7 @@
 ## Fase 6 — Busca
 
 - [x] Endpoint `search-index.json.ts`
-- [ ] `SearchBox` com dropdown acessível, atalho `/`, navegação por teclado
+- [x] `SearchBox` com dropdown acessível, atalho `/`, navegação por teclado
 - [ ] Estado vazio e mobile (dentro da gaveta)
 
 ## Fase 7 — Polimento, SEO e deploy

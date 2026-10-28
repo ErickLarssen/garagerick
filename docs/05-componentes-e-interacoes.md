@@ -35,6 +35,9 @@ e link "Pular para o conteúdo".
 - Resultados num dropdown (`role="listbox"`) com miniatura, nome, marca e "#03 em Esportivos".
 - Selecionar → navega para `href` do índice (rota do ranking + `#<slug>`).
 - Teclado: `/` foca a busca, ↑/↓ navega, Enter abre, Esc fecha.
+- Combobox ARIA 1.2: `<input role="combobox">` + `<ul role="listbox">`, opção marcada via `aria-activedescendant`;
+  contagem de resultados num `role="status"` oculto; até 8 resultados. Oculta sem JS.
+- Na mesma página, selecionar troca o hash (a vitrine escuta `hashchange`), rola até a vitrine e foca o nome.
 - Vazio: "Nada encontrado nessa garagem."
 
 ### `Footer.astro` / `SocialLinks.astro`

@@ -15,6 +15,11 @@
 
 ---
 
+### 2026-10-28 — `SearchBox` (combobox) no header
+- **Contexto:** segunda tarefa da Fase 6.
+- **Decisão:** `components/layout/SearchBox.astro` (`<search>` + `<input role="combobox">` + `<ul role="listbox">`, padrão ARIA 1.2: o foco fica no campo e a opção marcada vai em `aria-activedescendant`) e `scripts/search.ts`. Prop `id` prefixa os ids porque haverá uma segunda instância na gaveta. O componente nasce `hidden` e o script o revela — sem JS a busca não funcionaria. Índice baixado no primeiro foco (uma requisição compartilhada; em erro, tenta de novo no próximo foco). Casamento: todos os termos normalizados contidos em `keywords`; ordem = nome começando pela busca → palavra começando pelo 1º termo → resto; máximo 8. Teclado: `/` foca a busca visível (fora de campos e sem diálogo aberto), ↓/↑ circulam, Enter abre a marcada (ou a primeira), 1º Esc fecha a lista e o 2º limpa. Contagem anunciada num `role="status"` oculto. Selecionar na mesma página troca só o hash (o controlador da vitrine já escuta `hashchange`), rola até a vitrine e foca o nome do veículo, como a lista do ranking; em outra página, navega. No header fica à direita, visível a partir de 640 px (largura do campo `clamp(6rem, 14vw, 12rem)`, testado em 640/768/1024 sem sobreposição).
+- **Impacto:** `src/components/layout/{SearchBox,Header}.astro`, `src/scripts/search.ts`, `src/assets/icons/search.svg`, `docs/05`.
+
 ### 2026-10-13 — Índice da busca (`/search-index.json`)
 - **Contexto:** primeira tarefa da Fase 6 (branch `fase-6-busca`).
 - **Decisão:** `lib/search-index.ts` → `buildSearchIndex()` servido por `pages/search-index.json.ts` (estático no build). Formato ajustado ao que existe hoje: sem `cardImageSrc` (cards removidos) → `thumbSrc` (AVIF 160×120, `fit: cover`, a partir do `heroImage`); `href` pronto via `RANKING_ROUTES`; `rankingLabel` ("#03 em Esportivos", "Top 1 em Populares"); `keywords` pré-normalizado (marca, nome, versão, tags) para o cliente não repetir o trabalho. Normalização em `lib/normalize.ts` (NFD sem diacríticos, minúsculas, só letras/números) — módulo puro, separado porque `search-index.ts` importa `astro:assets`. `RankedVehicle` passou a expor `version` e `tags`. Ordem: por ranking e, dentro dele, do Top 1 para baixo. Resultado: 34 entradas, 9,1 kB (2,2 kB gzip).
