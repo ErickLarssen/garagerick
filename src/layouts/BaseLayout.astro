@@ -18,11 +18,20 @@ interface Props {
   ogImage?: OgImage;
   /** Dados estruturados (JSON-LD) da página. */
   structuredData?: object;
+  /** Página fora do índice (ex.: 404): noindex e sem canonical/og:url. */
+  noindex?: boolean;
   /** Item ativo do menu; ausente em páginas fora dos rankings (ex.: 404). */
   activeNav?: RankingKey;
 }
 
-const { title, description = SITE.description, ogImage, structuredData, activeNav } = Astro.props;
+const {
+  title,
+  description = SITE.description,
+  ogImage,
+  structuredData,
+  noindex = false,
+  activeNav,
+} = Astro.props;
 
 const fullTitle = `${title} | ${SITE.name}`;
 // build.format 'file' gera /esportivos.html; a URL pública não tem extensão (cleanUrls na Vercel)
@@ -46,7 +55,7 @@ const og = share && {
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="author" content={SITE.author} />
-    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="sitemap" href="/sitemap-index.xml" />
@@ -59,7 +68,7 @@ const og = share && {
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
+    {!noindex && <meta property="og:url" content={canonical} />}
     {og && <meta property="og:image" content={og.src} />}
     {og && <meta property="og:image:type" content="image/jpeg" />}
     {og && <meta property="og:image:width" content="1200" />}

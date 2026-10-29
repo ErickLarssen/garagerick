@@ -156,7 +156,10 @@ Conteúdo na collection `about` (`src/content/about/sobre.md`: `title`, `photo?`
 lido por `lib/about.ts`. Sem foto, mostra as iniciais de `SITE.author` como espaço reservado.
 
 ## 404
-"Saiu da pista." + botão "Voltar para a garagem" → `/`. Mesmo fundo atmosférico, sem imagem pesada.
+"Saiu da pista." + botão "Voltar para a garagem" → `/`. Mesmo fundo atmosférico, sem imagem pesada:
+pista em perspectiva em SVG inline com marcas de pneu saindo dela (desenhadas uma vez) e luzes de freio
+no fim. Links para os 4 rankings. `BaseLayout noindex`: `<meta name="robots" content="noindex">`,
+sem canonical nem `og:url`.
 
 ## Checklist de interação (testar em toda mudança na vitrine)
 

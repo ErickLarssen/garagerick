@@ -15,6 +15,11 @@
 
 ---
 
+### 2026-10-28 — Página 404 temática
+- **Contexto:** segunda tarefa da Fase 7.
+- **Decisão:** `pages/404.astro` com o fundo da vitrine (brilho em `--ambient` via `color-mix`, com fallback, + ruído) e uma cena em SVG inline decorativo (`aria-hidden`): pista em perspectiva, marcas de pneu saindo pela direita (traço animado uma vez com `stroke-dashoffset`) e luzes de freio que acendem no fim; com movimento reduzido, a regra global leva direto ao estado final. Botão "Voltar para a garagem" (`Button`) e links para os rankings (de `RANKING_KEYS/LABELS/ROUTES`). `BaseLayout` ganhou `noindex`: `meta robots noindex` e sem canonical/`og:url` (antes a 404 saía com canonical `/404`). Testado em 375/768/1440 px, sem erros no console.
+- **Impacto:** `src/pages/404.astro`, `src/layouts/BaseLayout.astro`, `docs/05`.
+
 ### 2026-10-28 — SEO: Open Graph, JSON-LD, sitemap, robots e canonical
 - **Contexto:** primeira tarefa da Fase 7 (branch `fase-7-polimento-seo-deploy`).
 - **Decisão:** `lib/seo.ts`: `rankingOgImage()` (hero do Top 1, recortado em 1200×630 JPG com `fit: 'cover'`, alt "BYD Seal, Top 1 em Populares") e `rankingStructuredData()` (`ItemList` com `ListItem` position = rank, name = "Marca Modelo", url = página#slug, do Top 1 para baixo). `BaseLayout` ganhou `ogImage` ({ image, alt }), `structuredData` (JSON-LD escapado com `toScriptJson`), `og:image:type/alt` e `twitter:image:alt`. **Sem `public/og-default.jpg`:** o fallback (404) é o Top 1 de Populares, gerado no build — uma imagem estática ficaria desatualizada quando o ranking mudar. `robots.txt` gerado por `pages/robots.txt.ts` (libera tudo + sitemap). URLs sem barra final: `trailingSlash: 'never'` + `build.format: 'file'` (antes o sitemap e o canonical saíam com `/esportivos/`), e `vercel.json` com `cleanUrls: true` + `trailingSlash: false` para a Vercel servir `esportivos.html` em `/esportivos`. O canonical remove `.html`/`index.html` do pathname. Conferido: `astro preview` responde 200 em `/`, `/esportivos`, `/antigos`, `/motos`, `/robots.txt`, `/search-index.json` e 404 no resto.

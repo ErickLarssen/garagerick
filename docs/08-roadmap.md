@@ -72,7 +72,7 @@
 ## Fase 7 — Polimento, SEO e deploy
 
 - [x] Open Graph por página, JSON-LD `ItemList`, sitemap, robots, canonical
-- [ ] Página 404 temática
+- [x] Página 404 temática
 - [ ] Auditoria Lighthouse mobile ≥ 95 nas 4 categorias; corrigir o que faltar
 - [ ] Revisão de acessibilidade (teclado + leitor de tela)
 - [ ] Preparar deploy na Vercel (`docs/07`) e pedir confirmação ao Erick
