@@ -36,9 +36,13 @@ async function responsive(
   };
 }
 
-/** Fundo da vitrine: AVIF em até 640/1280/1920 px, ocupando a largura da tela. */
+/**
+ * Fundo da vitrine: AVIF em até 640/960/1280/1920 px. Ocupa a largura da tela até o tablet e 70%
+ * dela no desktop (ShowcaseBackdrop). O degrau de 960 atende celulares de alta densidade
+ * (~412 px × 1,75–2,6) sem pular direto para 1280.
+ */
 export function getHeroImage(image: ImageMetadata): Promise<ResponsiveImage> {
-  return responsive(image, [640, 1280, 1920], '100vw');
+  return responsive(image, [640, 960, 1280, 1920], '(min-width: 1024px) 70vw, 100vw');
 }
 
 /** Miniatura da lista "Ranking completo" (RankingItem): AVIF em até 320/640 px. */

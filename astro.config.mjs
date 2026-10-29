@@ -10,7 +10,11 @@ export default defineConfig({
   output: 'static',
   // URLs sem barra no fim (docs/07): /esportivos → esportivos.html; a Vercel serve com cleanUrls
   trailingSlash: 'never',
-  build: { format: 'file' },
+  build: {
+    format: 'file',
+    // CSS embutido no HTML (~9 kB): sem requisições bloqueando a primeira pintura (Lighthouse)
+    inlineStylesheets: 'always',
+  },
   integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()],

@@ -15,6 +15,13 @@
 
 ---
 
+### 2026-10-28 — Auditoria Lighthouse (mobile)
+- **Contexto:** terceira tarefa da Fase 7. Lighthouse 12 via `npx -y lighthouse@12` (ferramenta, não dependência do projeto; permissão em `.claude/settings.local.json`, fora do git), perfil mobile padrão, contra `astro preview`. Relatórios em `.lighthouse/` (no `.gitignore`).
+- **Primeira rodada:** Populares 99/100/100/100, Esportivos 98/100/100/100, Antigos 98/100/100/100, Motos 98/100/100/100 (Desempenho/Acessibilidade/Boas práticas/SEO). Apontados: CSS bloqueante (2 arquivos, ~460 ms estimados) e foto da vitrine maior que o necessário (25–48 KiB): em 412 px × DPR 1,75 o navegador pulava de 640 para 1280.
+- **Decisão:** `build.inlineStylesheets: 'always'` (CSS ~9 kB embutido no HTML; perde o cache entre páginas, mas elimina a requisição antes da primeira pintura) e hero com degrau de 960 px + `sizes="(min-width: 1024px) 70vw, 100vw"` (no desktop a foto ocupa 70% da largura). bf-cache reprovado por "CacheLimitPrunedOnCriticalMemoryPressure" (não acionável, memória do Chrome headless).
+- **Resultado final:** Populares 99/100/100/100 (LCP 1,8 s, CLS 0,011, 242 kB), Esportivos 99/100/100/100 (LCP 2,1 s, 283 kB), Antigos 99/100/100/100 (LCP 2,1 s, 211 kB), Motos 98/100/100/100 (LCP 2,2 s, 239 kB); TBT 0 em todas. 404 (`/404.html`): 100/100/100/63 — o SEO baixo é só o `is-crawlable`, consequência intencional do `noindex`. Números locais; repetir na URL de produção após o deploy (`docs/07`).
+- **Impacto:** `astro.config.mjs`, `src/lib/images.ts`, `.gitignore`, `docs/02`, `docs/07`.
+
 ### 2026-10-28 — Página 404 temática
 - **Contexto:** segunda tarefa da Fase 7.
 - **Decisão:** `pages/404.astro` com o fundo da vitrine (brilho em `--ambient` via `color-mix`, com fallback, + ruído) e uma cena em SVG inline decorativo (`aria-hidden`): pista em perspectiva, marcas de pneu saindo pela direita (traço animado uma vez com `stroke-dashoffset`) e luzes de freio que acendem no fim; com movimento reduzido, a regra global leva direto ao estado final. Botão "Voltar para a garagem" (`Button`) e links para os rankings (de `RANKING_KEYS/LABELS/ROUTES`). `BaseLayout` ganhou `noindex`: `meta robots noindex` e sem canonical/`og:url` (antes a 404 saía com canonical `/404`). Testado em 375/768/1440 px, sem erros no console.

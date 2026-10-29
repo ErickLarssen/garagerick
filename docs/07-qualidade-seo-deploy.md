@@ -19,6 +19,17 @@
 | JS total enviado | < 40 kB gzip por página |
 | Peso da página inicial | < 600 kB (sem contar imagens lazy da lista) |
 
+### Como medir
+
+`npm run build && npm run preview` e, em outro terminal (relatórios em `.lighthouse/`, ignorada pelo git):
+
+```bash
+npx -y lighthouse@12 http://localhost:4321/esportivos --chrome-flags="--headless=new" --output=json --output=html --output-path=./.lighthouse/esportivos
+```
+
+O perfil padrão já é mobile (Moto G Power, 4G lenta). A 404 só é auditável por `/404.html` (com status 404 o
+Lighthouse recusa a página) e tem SEO baixo **de propósito** (`noindex`).
+
 ## Acessibilidade
 
 - HTML semântico: `header`, `nav`, `main`, `section`, `ol`, `footer`, `dialog`.
