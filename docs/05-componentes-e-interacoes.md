@@ -22,18 +22,23 @@ e link "Pular para o conteúdo".
 - Botão "Abrir menu" + gaveta lateral com **Popover API** (`popover="auto"` + `popovertarget`):
   funciona sem JS, fecha com Esc/clique fora, e o navegador expõe `aria-expanded` no botão.
 - Dentro: botão "Fechar menu" e `Nav variant="drawer"` (lista vertical; o item de moto mostra ícone + "Motos").
-- Busca mobile entra na gaveta na Fase 6.
+- Busca no topo da gaveta (`SearchBox variant="drawer"`): Esc fecha os resultados, depois limpa o campo e só então fecha a gaveta.
 
 ### `SearchBox.astro` + `scripts/search.ts`
 - Busca **client-side** sobre `/search-index.json` (gerado no build por `pages/search-index.json.ts`):
-  `{ slug, name, brand, ranking, rank, tags, cardImageSrc }`.
+  `{ slug, name, brand, ranking, rank, rankingLabel, href, thumbSrc, keywords }` (`lib/search-index.ts`):
+  `href` já com a rota do ranking (`/#byd-seal`, `/esportivos#audi-tt`), `rankingLabel` = "#03 em Esportivos",
+  `thumbSrc` = miniatura AVIF 160×120 e `keywords` = marca, nome, versão e tags já normalizados
+  (`lib/normalize.ts`, compartilhado com o navegador).
 - Carrega o índice só no primeiro foco do campo.
 - Normaliza acentos e caixa; casa por nome, marca e tags.
 - Resultados num dropdown (`role="listbox"`) com miniatura, nome, marca e "#03 em Esportivos".
-- Selecionar → navega para a rota do ranking + `#<slug>` (`populares` → `/`, demais → `/<ranking>`;
-  usar um único mapa `RankingKey → rota` em `lib/rankings.ts`).
+- Selecionar → navega para `href` do índice (rota do ranking + `#<slug>`).
 - Teclado: `/` foca a busca, ↑/↓ navega, Enter abre, Esc fecha.
-- Vazio: "Nada encontrado nessa garagem."
+- Combobox ARIA 1.2: `<input role="combobox">` + `<ul role="listbox">`, opção marcada via `aria-activedescendant`;
+  contagem de resultados num `role="status"` oculto; até 8 resultados. Oculta sem JS.
+- Na mesma página, selecionar troca o hash (a vitrine escuta `hashchange`), rola até a vitrine e foca o nome.
+- Vazio: "Nada encontrado nessa garagem." (parágrafo ao lado do `listbox`, no mesmo painel; também anunciado pelo `role="status"`).
 
 ### `Footer.astro` / `SocialLinks.astro`
 Dados vindos de `lib/site.ts`: Instagram (`elarssen.design`), LinkedIn (`ericklarssen`) e

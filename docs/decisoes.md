@@ -15,6 +15,21 @@
 
 ---
 
+### 2026-10-28 — Busca: estado vazio e versão mobile
+- **Contexto:** última tarefa da Fase 6.
+- **Decisão:** o dropdown virou um painel (`data-search-panel`) com o `listbox` e, ao lado dele, o `<p>` "Nada encontrado nessa garagem." (fora do `listbox`, que só pode conter opções). Com texto no campo o painel abre; `aria-expanded` só fica `true` quando há opções; o `role="status"` anuncia a contagem ou a frase do estado vazio. Enquanto o índice não chega, nada é renderizado (sem "nada encontrado" falso); ao chegar, a busca roda com o que já foi digitado. Mobile: `SearchBox variant="drawer"` no topo da gaveta (acima da nav), com campo em largura total e resultados no fluxo (sem flutuar); a linha "marca · ranking" quebra em vez de cortar. Esc na gaveta: 1º fecha os resultados, 2º limpa o campo, 3º fecha a gaveta — o `preventDefault` no `keydown` segura o fechamento do popover. Escolher um veículo da mesma página fecha a gaveta. Testado num iframe de 390 px com cliques e teclas reais.
+- **Impacto:** `src/components/layout/{SearchBox,MobileMenu}.astro`, `src/scripts/search.ts`, `docs/05`.
+
+### 2026-10-28 — `SearchBox` (combobox) no header
+- **Contexto:** segunda tarefa da Fase 6.
+- **Decisão:** `components/layout/SearchBox.astro` (`<search>` + `<input role="combobox">` + `<ul role="listbox">`, padrão ARIA 1.2: o foco fica no campo e a opção marcada vai em `aria-activedescendant`) e `scripts/search.ts`. Prop `id` prefixa os ids porque haverá uma segunda instância na gaveta. O componente nasce `hidden` e o script o revela — sem JS a busca não funcionaria. Índice baixado no primeiro foco (uma requisição compartilhada; em erro, tenta de novo no próximo foco). Casamento: todos os termos normalizados contidos em `keywords`; ordem = nome começando pela busca → palavra começando pelo 1º termo → resto; máximo 8. Teclado: `/` foca a busca visível (fora de campos e sem diálogo aberto), ↓/↑ circulam, Enter abre a marcada (ou a primeira), 1º Esc fecha a lista e o 2º limpa. Contagem anunciada num `role="status"` oculto. Selecionar na mesma página troca só o hash (o controlador da vitrine já escuta `hashchange`), rola até a vitrine e foca o nome do veículo, como a lista do ranking; em outra página, navega. No header fica à direita, visível a partir de 640 px (largura do campo `clamp(6rem, 14vw, 12rem)`, testado em 640/768/1024 sem sobreposição).
+- **Impacto:** `src/components/layout/{SearchBox,Header}.astro`, `src/scripts/search.ts`, `src/assets/icons/search.svg`, `docs/05`.
+
+### 2026-10-13 — Índice da busca (`/search-index.json`)
+- **Contexto:** primeira tarefa da Fase 6 (branch `fase-6-busca`).
+- **Decisão:** `lib/search-index.ts` → `buildSearchIndex()` servido por `pages/search-index.json.ts` (estático no build). Formato ajustado ao que existe hoje: sem `cardImageSrc` (cards removidos) → `thumbSrc` (AVIF 160×120, `fit: cover`, a partir do `heroImage`); `href` pronto via `RANKING_ROUTES`; `rankingLabel` ("#03 em Esportivos", "Top 1 em Populares"); `keywords` pré-normalizado (marca, nome, versão, tags) para o cliente não repetir o trabalho. Normalização em `lib/normalize.ts` (NFD sem diacríticos, minúsculas, só letras/números) — módulo puro, separado porque `search-index.ts` importa `astro:assets`. `RankedVehicle` passou a expor `version` e `tags`. Ordem: por ranking e, dentro dele, do Top 1 para baixo. Resultado: 34 entradas, 9,1 kB (2,2 kB gzip).
+- **Impacto:** `src/lib/{search-index,normalize,rankings}.ts`, `src/pages/search-index.json.ts`, `docs/05`.
+
 ### 2026-10-12 — "Sobre mim" na home
 - **Contexto:** última tarefa da Fase 5; a foto `src/assets/about/erick.jpg` ainda não existe e o texto é do Erick (regra 4).
 - **Decisão:** nova collection `about` (um arquivo, `src/content/about/sobre.md`: `title` padrão "Sobre mim", `photo?`, `photoAlt?`, corpo = texto) para respeitar a regra 6 (nada de conteúdo no componente); `lib/about.ts` → `getAbout()`. `sections/About.astro` (`<section id="sobre">`, só em `/`, entre o ranking completo e o rodapé): foto em AVIF 320/640 (4:5, lazy) ou, sem foto, bloco com as iniciais de `SITE.author` ("ES"); texto; links para o Cinerick e o portfólio (de `SITE.links`). Texto inicial: `TODO: escreva sua apresentação.`
