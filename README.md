@@ -45,9 +45,9 @@ Site 100% estático; a configuração está em [`vercel.json`](vercel.json) (bui
 1. Em [vercel.com/new](https://vercel.com/new), importe o repositório `ErickLarssen/garagerick`.
    O framework (Astro) e as configurações são lidos do `vercel.json` — não precisa mudar nada.
 2. Deploy. Cada push em outra branch gera um preview; a `main` vai para produção.
-3. Domínio: em _Settings → Domains_, adicione `garagerick.online` e configure o DNS como a Vercel
-   indicar. Se o domínio for outro, troque `SITE.url` em `src/lib/site.ts` (canonical, Open Graph,
-   sitemap e robots usam esse valor).
+3. Produção (provisória): **https://garagerick.vercel.app**. Quando houver domínio próprio, adicione-o
+   em _Settings → Domains_, configure o DNS como a Vercel indicar e troque `SITE.url` em
+   `src/lib/site.ts` (canonical, Open Graph, sitemap e robots usam esse valor).
 4. Depois do primeiro deploy, rode o Lighthouse na URL de produção e registre os números em
    [`docs/decisoes.md`](docs/decisoes.md) (ver [`docs/07`](docs/07-qualidade-seo-deploy.md)).
 

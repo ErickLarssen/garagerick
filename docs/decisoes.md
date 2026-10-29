@@ -15,6 +15,11 @@
 
 ---
 
+### 2026-10-28 — Primeiro deploy na Vercel (domínio provisório)
+- **Contexto:** o Erick autorizou o deploy e, com o domínio ainda indefinido, o uso do endereço provisório da Vercel.
+- **Decisão:** projeto `garagerick` criado na equipe "Elarssen Code Solutions" (`ericksikva`), ligado a `ErickLarssen/garagerick` — cada push na `main` publica em produção, outras branches geram preview. Produção em **https://garagerick.vercel.app** (público). A equipe usa Deployment Protection `all_except_custom_domains`: os endereços longos (`garagerick-ericksikva.vercel.app`, previews) exigem login na Vercel, o curto não — nenhuma configuração foi alterada. `SITE.url` trocado de `garagerick.online` para `garagerick.vercel.app` (canonical, OG, sitemap, robots). Conferido em produção: rotas sem extensão 200, `/esportivos/` e `/esportivos.html` → 308 para `/esportivos`, 404 com status 404, cabeçalhos de segurança presentes e `/_astro/*` com `immutable`. O primeiro build levou ~8 min (252 imagens AVIF sem cache).
+- **Impacto:** `src/lib/site.ts`, `README.md`, `docs/02`, `docs/06`, `docs/07`.
+
 ### 2026-10-28 — Preparação do deploy na Vercel
 - **Contexto:** última tarefa da Fase 7. O agente não faz deploy nem mexe em domínio sem confirmação (docs/07).
 - **Decisão:** `vercel.json` completo: `framework`, `buildCommand` e `outputDirectory` explícitos (a importação não depende da detecção), `Cache-Control: public, max-age=31536000, immutable` em `/_astro/*` (a Vercel, por padrão, revalida todo arquivo estático; os de `/_astro/` têm hash no nome), `/search-index.json` com `max-age=0, must-revalidate` (nome fixo, muda com o ranking) e cabeçalhos de segurança básicos (`nosniff`, `strict-origin-when-cross-origin`, `X-Frame-Options: DENY`, `Permissions-Policy` sem câmera/microfone/localização). **Sem CSP** por ora: o CSS embutido, o JSON-LD e os scripts inline exigiriam hashes/nonce — fica para depois, se o Erick quiser. README ganhou a seção "Deploy (Vercel)" e teve dois trechos desatualizados corrigidos (logos não precisam ser SVG monocromático — `logoTreatment`; não existe mais card 3:4). `engines.node >=22.12.0` já estava no `package.json` (a Vercel usa para escolher a versão do Node).

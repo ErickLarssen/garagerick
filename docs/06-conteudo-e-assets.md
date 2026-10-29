@@ -88,7 +88,7 @@ Fonte única para:
 ```ts
 export const SITE = {
   name: 'Garagerick',
-  url: 'https://garagerick.online',
+  url: 'https://garagerick.vercel.app',
   author: 'Erick Silva',
   description: 'Meus carros e motos favoritos em contagem regressiva até o Top 1.',
   links: {
@@ -102,4 +102,4 @@ export const SITE = {
 ```
 
 Trocar o nome ou o domínio do site = mudar `SITE.name` / `SITE.url` (o `astro.config.mjs` lê daqui).
-O domínio `garagerick.online` é provisório.
+O endereço `garagerick.vercel.app` é provisório (domínio próprio ainda indefinido).

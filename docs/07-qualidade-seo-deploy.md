@@ -79,7 +79,8 @@ Lighthouse recusa a página) e tem SEO baixo **de propósito** (`noindex`).
    `/search-index.json` sempre revalidado, e cabeçalhos `X-Content-Type-Options`, `Referrer-Policy`,
    `X-Frame-Options: DENY` e `Permissions-Policy`. A 404 é servida pelo `404.html` automaticamente.
 3. Cada push em branch gera um preview; `main` vai para produção.
-4. Domínio: apontar `garagerick.online` (ou o escolhido) nas configurações do projeto.
+4. Domínio: hoje `garagerick.vercel.app` (provisório). Com domínio próprio: adicioná-lo nas configurações
+   do projeto e trocar `SITE.url` em `lib/site.ts`.
 5. Após o primeiro deploy: rodar Lighthouse na URL de produção e registrar os números em
    `docs/decisoes.md`.
 

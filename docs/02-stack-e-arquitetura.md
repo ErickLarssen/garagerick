@@ -152,7 +152,7 @@ src/content/*  ──(Zod)──►  getCollection()  ──►  lib/rankings.ts
 ## Configuração essencial
 
 - `astro.config.mjs`: `output: 'static'`, `site` importado de `SITE.url` em `lib/site.ts`
-  (fonte única; domínio `garagerick.online` ainda provisório), integração `@astrojs/sitemap`,
+  (fonte única; hoje `https://garagerick.vercel.app`, provisório até haver domínio próprio), integração `@astrojs/sitemap`,
   plugin Vite do Tailwind, `trailingSlash: 'never'`, `build.format: 'file'`, `build.inlineStylesheets: 'always'` (CSS embutido, sem requisição bloqueante) (gera `esportivos.html`;
   a Vercel serve em `/esportivos` via `cleanUrls` do `vercel.json`).
 - `.prettierignore`: `docs/`, `.claude/`, `CLAUDE.md` (documentação escrita à mão), além de
