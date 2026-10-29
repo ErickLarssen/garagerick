@@ -52,8 +52,7 @@ garagerick/
 │       └── proxima-tarefa.md      # /proxima-tarefa
 ├── public/
 │   ├── favicon.svg
-│   ├── og-default.jpg             # imagem padrão de compartilhamento (1200×630)
-│   └── robots.txt
+│   └── favicon.ico
 ├── src/
 │   ├── assets/
 │   │   ├── brands/                # logos das marcas (PNG transparente ou SVG): byd.png, volkswagen.png…
@@ -98,7 +97,8 @@ garagerick/
 │   │   ├── rankings.ts            # getRanking(category) → itens ordenados e enriquecidos
 │   │   ├── validate-rankings.ts   # garante posições únicas e contínuas (quebra o build se falhar)
 │   │   ├── format.ts              # formatação de specs (cv, kgfm, s, km/h)
-│   │   └── search-index.ts        # gera o índice de busca
+│   │   ├── search-index.ts        # gera o índice de busca
+│   │   └── seo.ts                 # imagem OG (hero do Top 1) e JSON-LD ItemList por ranking
 │   ├── scripts/                   # TS de interação reaproveitável
 │   │   ├── showcase-controller.ts
 │   │   ├── search.ts
@@ -108,10 +108,12 @@ garagerick/
 │   │   ├── [category].astro       # esportivos | antigos (getStaticPaths)
 │   │   ├── motos.astro
 │   │   ├── search-index.json.ts   # endpoint estático com o índice de busca
+│   │   ├── robots.txt.ts          # robots.txt com a URL do sitemap (de SITE.url)
 │   │   └── 404.astro
 │   └── styles/
 │       └── global.css             # @import tailwind, @theme, tokens, base
 ├── astro.config.mjs
+├── vercel.json                    # cleanUrls + trailingSlash: false
 ├── tsconfig.json                  # strict + alias @/*
 ├── eslint.config.js
 ├── .prettierrc
@@ -151,7 +153,8 @@ src/content/*  ──(Zod)──►  getCollection()  ──►  lib/rankings.ts
 
 - `astro.config.mjs`: `output: 'static'`, `site` importado de `SITE.url` em `lib/site.ts`
   (fonte única; domínio `garagerick.online` ainda provisório), integração `@astrojs/sitemap`,
-  plugin Vite do Tailwind.
+  plugin Vite do Tailwind, `trailingSlash: 'never'`, `build.format: 'file'`, `build.inlineStylesheets: 'always'` (CSS embutido, sem requisição bloqueante) (gera `esportivos.html`;
+  a Vercel serve em `/esportivos` via `cleanUrls` do `vercel.json`).
 - `.prettierignore`: `docs/`, `.claude/`, `CLAUDE.md` (documentação escrita à mão), além de
   `dist/`, `.astro/` e `node_modules/`.
 - `tsconfig.json`: estender o preset `strict` do Astro, `paths: { "@/*": ["src/*"] }`.

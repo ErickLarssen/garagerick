@@ -2,33 +2,50 @@
 // Layout base de todas as páginas (docs/05): <head> com SEO, fontes, favicon e theme-color,
 // link "Pular para o conteúdo", Header, <main> e Footer.
 import '@/styles/global.css';
-import type { ImageMetadata } from 'astro';
 import { getImage } from 'astro:assets';
 import Footer from '@/components/layout/Footer.astro';
 import Header from '@/components/layout/Header.astro';
 import { SITE } from '@/lib/site';
-import type { RankingKey } from '@/lib/rankings';
+import { getRanking, type RankingKey } from '@/lib/rankings';
+import { rankingOgImage, type OgImage } from '@/lib/seo';
+import { toScriptJson } from '@/lib/showcase-data';
 
 interface Props {
   /** Título da página sem o nome do site (ex.: "Esportivos — Ranking de carros favoritos"). */
   title: string;
   description?: string;
-  /** Imagem de compartilhamento (1200×630). Sem ela, não há og:image (fallback chega na Fase 7). */
-  ogImage?: ImageMetadata;
+  /** Imagem de compartilhamento (recortada em 1200×630). Sem ela, usa o Top 1 de Populares. */
+  ogImage?: OgImage;
+  /** Dados estruturados (JSON-LD) da página. */
+  structuredData?: object;
+  /** Página fora do índice (ex.: 404): noindex e sem canonical/og:url. */
+  noindex?: boolean;
   /** Item ativo do menu; ausente em páginas fora dos rankings (ex.: 404). */
   activeNav?: RankingKey;
 }
 
-const { title, description = SITE.description, ogImage, activeNav } = Astro.props;
+const {
+  title,
+  description = SITE.description,
+  ogImage,
+  structuredData,
+  noindex = false,
+  activeNav,
+} = Astro.props;
 
 const fullTitle = `${title} | ${SITE.name}`;
-const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
-const og = ogImage
-  ? new URL(
-      (await getImage({ src: ogImage, width: 1200, height: 630, format: 'jpg' })).src,
-      Astro.site ?? SITE.url,
-    ).href
-  : undefined;
+// build.format 'file' gera /esportivos.html; a URL pública não tem extensão (cleanUrls na Vercel)
+const pathname = Astro.url.pathname.replace(/(index)?\.html$/, '');
+const canonical = new URL(pathname, Astro.site ?? SITE.url).href;
+const share = ogImage ?? rankingOgImage(await getRanking('populares'));
+const og = share && {
+  src: new URL(
+    (await getImage({ src: share.image, width: 1200, height: 630, fit: 'cover', format: 'jpg' }))
+      .src,
+    Astro.site ?? SITE.url,
+  ).href,
+  alt: share.alt,
+};
 ---
 
 <html lang="pt-BR">
@@ -38,7 +55,7 @@ const og = ogImage
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="author" content={SITE.author} />
-    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="sitemap" href="/sitemap-index.xml" />
@@ -51,14 +68,21 @@ const og = ogImage
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
-    {og && <meta property="og:image" content={og} />}
+    {!noindex && <meta property="og:url" content={canonical} />}
+    {og && <meta property="og:image" content={og.src} />}
+    {og && <meta property="og:image:type" content="image/jpeg" />}
     {og && <meta property="og:image:width" content="1200" />}
     {og && <meta property="og:image:height" content="630" />}
+    {og && <meta property="og:image:alt" content={og.alt} />}
     <meta name="twitter:card" content={og ? 'summary_large_image' : 'summary'} />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
-    {og && <meta name="twitter:image" content={og} />}
+    {og && <meta name="twitter:image" content={og.src} />}
+    {og && <meta name="twitter:image:alt" content={og.alt} />}
+
+    {structuredData && (
+      <script type="application/ld+json" set:html={toScriptJson(structuredData)} />
+    )}
 
     <slot name="head" />
   </head>

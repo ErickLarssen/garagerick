@@ -22,9 +22,11 @@ npm run format     # formatar o código com Prettier
 ## Como adicionar um veículo
 
 1. Garanta que a marca existe em `src/content/brands/<marca>.json` e que o logo está em
-   `src/assets/brands/<marca>.svg` (SVG **monocromático**).
+   `src/assets/brands/<marca>.png` (PNG transparente ou SVG). `logoTreatment: "white"` deixa o logo
+   branco; `"original"` mantém as cores.
 2. Coloque a foto em `src/assets/vehicles/<nome>.<ext>` (mín. 1920 px de largura). Ela é usada
-   no fundo da vitrine (16:9) e no card (3:4); ajuste o enquadramento com `heroFocus`.
+   no fundo da vitrine e na miniatura da lista; ajuste o enquadramento com `heroFocus` (e
+   `heroFitMobile: contain` se o carro aparecer cortado no celular).
 3. Crie `src/content/cars/<slug>.md` (ou `src/content/motorcycles/<slug>.md`) com o frontmatter
    descrito em [`docs/03-modelo-de-dados.md`](docs/03-modelo-de-dados.md).
 4. Escreva no corpo do arquivo por que você gosta dele.
@@ -34,6 +36,20 @@ npm run format     # formatar o código com Prettier
 O slug segue o padrão `marca-modelo` em kebab-case: `byd-seal`, `volkswagen-nivus`.
 Mais detalhes (imagens, logos, cor ambiente) em
 [`docs/06-conteudo-e-assets.md`](docs/06-conteudo-e-assets.md).
+
+## Deploy (Vercel)
+
+Site 100% estático; a configuração está em [`vercel.json`](vercel.json) (build `npm run build`, saída
+`dist/`, URLs sem `.html` nem barra final, cache longo para `/_astro/` e cabeçalhos de segurança).
+
+1. Em [vercel.com/new](https://vercel.com/new), importe o repositório `ErickLarssen/garagerick`.
+   O framework (Astro) e as configurações são lidos do `vercel.json` — não precisa mudar nada.
+2. Deploy. Cada push em outra branch gera um preview; a `main` vai para produção.
+3. Domínio: em _Settings → Domains_, adicione `garagerick.online` e configure o DNS como a Vercel
+   indicar. Se o domínio for outro, troque `SITE.url` em `src/lib/site.ts` (canonical, Open Graph,
+   sitemap e robots usam esse valor).
+4. Depois do primeiro deploy, rode o Lighthouse na URL de produção e registre os números em
+   [`docs/decisoes.md`](docs/decisoes.md) (ver [`docs/07`](docs/07-qualidade-seo-deploy.md)).
 
 ## Desenvolvimento com o Claude Code
 

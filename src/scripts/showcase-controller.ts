@@ -91,6 +91,7 @@ export class ShowcaseController {
   private readonly prevButton: HTMLElement;
   private readonly nextButton: HTMLElement;
   private readonly counter: HTMLElement;
+  private readonly announcer: HTMLElement; // role="status" com o resumo da troca
   private readonly preloaded = new Set<number>();
   private token = 0; // incrementa a cada troca; etapas atrasadas de trocas antigas são descartadas
 
@@ -107,6 +108,7 @@ export class ShowcaseController {
     this.prevButton = required<HTMLElement>(root, '[data-showcase-prev]');
     this.nextButton = required<HTMLElement>(root, '[data-showcase-next]');
     this.counter = required<HTMLElement>(root, '[data-counter-rank]');
+    this.announcer = required<HTMLElement>(root, '[data-showcase-announcer]');
 
     root.classList.add('is-enhanced'); // CSS mostra as setas só com JS
     this.bindControls();
@@ -273,8 +275,16 @@ export class ShowcaseController {
       .then((shown) => {
         if (shown && vehicle.isTop) this.shineTop();
       });
+    this.announce(vehicle);
     // não polui o histórico; só roda em trocas feitas pelo usuário (nunca na carga)
     history.replaceState(null, '', `${location.pathname}${location.search}#${vehicle.slug}`);
+  }
+
+  /** Leitores de tela: "Volkswagen Nivus, 2023. Posição 2 de 10." (ou "Top 1 de 10."). */
+  private announce(vehicle: ShowcaseVehicle): void {
+    const year = vehicle.year ? `, ${vehicle.year}` : '';
+    const position = vehicle.isTop ? 'Top 1' : `Posição ${vehicle.rank}`;
+    this.announcer.textContent = `${vehicle.brandName} ${vehicle.name}${year}. ${position} de ${vehicle.total}.`;
   }
 
   /**
@@ -435,7 +445,6 @@ class InfoView {
   /** Preenche o bloco com o veículo, sem animação. */
   show(v: ShowcaseVehicle): void {
     this.logo.src = v.logo.src;
-    this.logo.alt = v.brandName;
     this.logo.width = v.logo.width;
     this.logo.height = v.logo.height;
     this.logo.style.height = `${v.logo.height}px`;

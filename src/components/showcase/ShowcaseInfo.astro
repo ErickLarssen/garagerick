@@ -1,6 +1,7 @@
 ---
 // Bloco de informações da vitrine (docs/05): BrandLogo → nome → SpecRow → texto → botões.
-// aria-live="polite": a troca de veículo (Fase 4) é anunciada por leitores de tela.
+// A troca de veículo é anunciada pelo [data-showcase-announcer] da vitrine, não por este bloco
+// (como região viva, ele relia logo, specs, texto e botões a cada troca, e o "Ler mais/menos").
 import PlayIcon from '@/assets/icons/play.svg';
 import SpecsIcon from '@/assets/icons/specs.svg';
 import BrandLogo from '@/components/showcase/BrandLogo.astro';
@@ -15,8 +16,8 @@ interface Props {
 const { vehicle } = Astro.props;
 ---
 
-<div class="info" data-showcase-info aria-live="polite">
-  <BrandLogo brand={vehicle.brand} class="info__logo" />
+<div class="info" data-showcase-info>
+  <BrandLogo brand={vehicle.brand} decorative class="info__logo" />
 
   <h2 class="info__name" data-info-name tabindex="-1">
     <span class="sr-only">{vehicle.brand.name} </span>

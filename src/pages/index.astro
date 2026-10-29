@@ -5,12 +5,19 @@ import RankingList from '@/components/ranking/RankingList.astro';
 import About from '@/components/sections/About.astro';
 import Showcase from '@/components/showcase/Showcase.astro';
 import { RANKING_SEO, getRanking } from '@/lib/rankings';
+import { rankingOgImage, rankingStructuredData } from '@/lib/seo';
 
 const { title, description } = RANKING_SEO.populares;
 const vehicles = await getRanking('populares');
 ---
 
-<BaseLayout title={title} description={description} activeNav="populares">
+<BaseLayout
+  title={title}
+  description={description}
+  ogImage={rankingOgImage(vehicles)}
+  structuredData={rankingStructuredData('populares', vehicles)}
+  activeNav="populares"
+>
   <Showcase vehicles={vehicles} rankingKey="populares" />
   <RankingList vehicles={vehicles} rankingKey="populares" />
   <About />

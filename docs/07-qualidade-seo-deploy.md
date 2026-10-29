@@ -19,12 +19,24 @@
 | JS total enviado | < 40 kB gzip por página |
 | Peso da página inicial | < 600 kB (sem contar imagens lazy da lista) |
 
+### Como medir
+
+`npm run build && npm run preview` e, em outro terminal (relatórios em `.lighthouse/`, ignorada pelo git):
+
+```bash
+npx -y lighthouse@12 http://localhost:4321/esportivos --chrome-flags="--headless=new" --output=json --output=html --output-path=./.lighthouse/esportivos
+```
+
+O perfil padrão já é mobile (Moto G Power, 4G lenta). A 404 só é auditável por `/404.html` (com status 404 o
+Lighthouse recusa a página) e tem SEO baixo **de propósito** (`noindex`).
+
 ## Acessibilidade
 
 - HTML semântico: `header`, `nav`, `main`, `section`, `ol`, `footer`, `dialog`.
 - Um único `<h1>` por página, estático, com o nome do ranking/página; nome do veículo ativo e seções com `<h2>`.
 - Todos os controles alcançáveis por teclado com foco visível (`outline` em `--color-accent`, 2px, offset 3px).
-- `alt` descritivo: "BYD Seal azul em vista dianteira 3/4". Logos: `alt="BYD"`.
+- `alt` descritivo: "BYD Seal azul em vista dianteira 3/4". Logos: `alt="BYD"`, ou `alt=""`
+  (`BrandLogo decorative`) quando o nome ao lado já diz a marca — evita "BYD, BYD Seal".
   Imagens decorativas (camadas do fundo): `alt=""` + `aria-hidden`.
 - Contraste ≥ 4.5:1 para texto normal; ≥ 3:1 para texto grande e ícones.
 - Respeitar `prefers-reduced-motion`.
@@ -34,12 +46,15 @@
 
 - `<title>`: `"Esportivos — Ranking de carros favoritos | Garagerick"`.
 - `meta description` por página; Open Graph e Twitter Card (imagem 1200×630; por página,
-  usar o hero do Top 1 recortado via `getImage`, com fallback `public/og-default.jpg`).
-- `link rel="canonical"`, `@astrojs/sitemap`, `robots.txt`.
+  usar o hero do Top 1 recortado via `getImage` (`lib/seo.ts`); páginas sem ranking (404) usam o
+  Top 1 de Populares — sem imagem estática que fique desatualizada).
+- `link rel="canonical"` (sem `.html` nem barra final), `@astrojs/sitemap`, `robots.txt` (gerado por
+  `pages/robots.txt.ts` a partir de `SITE.url`).
 - Dados estruturados JSON-LD por página: `ItemList` com cada veículo como `ListItem`
   (`position` = rank, `name` = "Marca Modelo").
-- URLs limpas e em português; sem trailing slash (configurar `trailingSlash: 'never'`; na Fase 7
-  confirmar se a Vercel exige `build.format: 'file'` ou `vercel.json`).
+- URLs limpas e em português; sem trailing slash: `trailingSlash: 'never'` + `build.format: 'file'`
+  no Astro e `vercel.json` com `cleanUrls: true` e `trailingSlash: false` (a Vercel serve
+  `esportivos.html` em `/esportivos` e redireciona `/esportivos/` → `/esportivos`).
 
 ## Compatibilidade
 
@@ -59,7 +74,10 @@
 ## Deploy (Vercel)
 
 1. Criar repositório no GitHub (`ErickLarssen/garagerick`).
-2. Importar na Vercel; framework detectado: Astro; build `npm run build`; output `dist`.
+2. Importar na Vercel; tudo vem do `vercel.json`: framework Astro, build `npm run build`, output `dist`,
+   `cleanUrls` + `trailingSlash: false`, `Cache-Control: immutable` (1 ano) em `/_astro/*` (nomes com hash),
+   `/search-index.json` sempre revalidado, e cabeçalhos `X-Content-Type-Options`, `Referrer-Policy`,
+   `X-Frame-Options: DENY` e `Permissions-Policy`. A 404 é servida pelo `404.html` automaticamente.
 3. Cada push em branch gera um preview; `main` vai para produção.
 4. Domínio: apontar `garagerick.online` (ou o escolhido) nas configurações do projeto.
 5. Após o primeiro deploy: rodar Lighthouse na URL de produção e registrar os números em

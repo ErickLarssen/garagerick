@@ -31,6 +31,8 @@ const data = toScriptJson(await buildShowcaseData(vehicles));
     style={`--ambient: ${active.ambientColor}`}
   >
     <h1 class="sr-only">{label} — ranking de favoritos</h1>
+    <!-- anúncio curto de cada troca feita pelo usuário (leitores de tela); preenchido pelo script -->
+    <p class="sr-only" role="status" data-showcase-announcer></p>
     <ShowcaseBackdrop vehicle={active} />
 
     <div class="showcase__inner">

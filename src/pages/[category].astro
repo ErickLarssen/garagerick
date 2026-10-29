@@ -5,6 +5,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import RankingList from '@/components/ranking/RankingList.astro';
 import Showcase from '@/components/showcase/Showcase.astro';
 import { RANKING_SEO, getRanking } from '@/lib/rankings';
+import { rankingOgImage, rankingStructuredData } from '@/lib/seo';
 
 export const getStaticPaths = (() =>
   (['esportivos', 'antigos'] as const).map((category) => ({
@@ -21,7 +22,13 @@ const { title, description } = RANKING_SEO[category];
 const vehicles = await getRanking(category);
 ---
 
-<BaseLayout title={title} description={description} activeNav={category}>
+<BaseLayout
+  title={title}
+  description={description}
+  ogImage={rankingOgImage(vehicles)}
+  structuredData={rankingStructuredData(category, vehicles)}
+  activeNav={category}
+>
   <Showcase vehicles={vehicles} rankingKey={category} />
   <RankingList vehicles={vehicles} rankingKey={category} />
 </BaseLayout>

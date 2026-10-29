@@ -56,7 +56,8 @@ Estrutura:
 <section class="showcase" data-showcase aria-roledescription="vitrine" aria-label="Ranking …">
   <ShowcaseBackdrop />            <!-- 2 camadas de imagem para crossfade -->
   <div class="showcase__main">
-    <ShowcaseInfo />              <!-- aria-live="polite" -->
+    <p role="status" sr-only />   <!-- anuncia a troca: "BMW M2, 2020. Posição 11 de 12." -->
+    <ShowcaseInfo />
   </div>
   <div class="showcase__bar">
     <a href="#ranking" class="showcase__more">RANKING COMPLETO</a>
@@ -156,12 +157,15 @@ Conteúdo na collection `about` (`src/content/about/sobre.md`: `title`, `photo?`
 lido por `lib/about.ts`. Sem foto, mostra as iniciais de `SITE.author` como espaço reservado.
 
 ## 404
-"Saiu da pista." + botão "Voltar para a garagem" → `/`. Mesmo fundo atmosférico, sem imagem pesada.
+"Saiu da pista." + botão "Voltar para a garagem" → `/`. Mesmo fundo atmosférico, sem imagem pesada:
+pista em perspectiva em SVG inline com marcas de pneu saindo dela (desenhadas uma vez) e luzes de freio
+no fim. Links para os 4 rankings. `BaseLayout noindex`: `<meta name="robots" content="noindex">`,
+sem canonical nem `og:url`.
 
 ## Checklist de interação (testar em toda mudança na vitrine)
 
 - [ ] Funciona só com teclado (Tab, ←/→, Enter, Esc)
-- [ ] Leitor de tela anuncia o novo veículo (região `aria-live="polite"` só no bloco de info)
+- [ ] Leitor de tela anuncia o novo veículo (`role="status"` dedicado, preenchido em trocas feitas pelo usuário — o bloco de info não é região viva)
 - [ ] Hash na URL abre o veículo certo
 - [ ] Sem JS: primeiro veículo visível e lista completa navegável
 - [ ] `prefers-reduced-motion` respeitado

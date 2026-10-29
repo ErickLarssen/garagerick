@@ -7,16 +7,18 @@ interface Props {
   brand: RankedVehicle['brand'];
   /** Altura base em px (vitrine: 40; card: menor). */
   baseHeight?: number;
+  /** alt="" quando o texto ao lado já diz a marca (evita "BYD, BYD Seal" no leitor de tela). */
+  decorative?: boolean;
   class?: string;
 }
 
-const { brand, baseHeight = 40, class: className } = Astro.props;
+const { brand, baseHeight = 40, decorative = false, class: className } = Astro.props;
 const logo = await getBrandLogo(brand, baseHeight);
 ---
 
 <img
   src={logo.src}
-  alt={brand.name}
+  alt={decorative ? '' : brand.name}
   width={logo.width}
   height={logo.height}
   style={`height: ${logo.height}px`}

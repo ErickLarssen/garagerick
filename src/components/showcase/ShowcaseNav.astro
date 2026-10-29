@@ -19,7 +19,7 @@ const { vehicle, total } = Astro.props;
     type="button"
     class="nav__arrow"
     data-showcase-prev
-    aria-label="Anterior"
+    aria-label="Veículo anterior"
     aria-disabled="true"
   >
     <ChevronLeft width={26} height={26} aria-hidden="true" />
@@ -28,7 +28,7 @@ const { vehicle, total } = Astro.props;
     <span data-counter-rank>{vehicle.isTop ? 'TOP 1' : formatRank(vehicle.rank)}</span>{' '}
     <span class="nav__total">de {total}</span>
   </p>
-  <button type="button" class="nav__arrow" data-showcase-next aria-label="Próximo">
+  <button type="button" class="nav__arrow" data-showcase-next aria-label="Próximo veículo">
     <ChevronRight width={26} height={26} aria-hidden="true" />
   </button>
 </div>
