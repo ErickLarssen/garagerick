@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-28 — Lighthouse na URL de produção
+- **Contexto:** passo 5 do deploy (docs/07), em https://garagerick.vercel.app, mobile, Lighthouse 12.
+- **Resultado (melhor rodada com CPU estável):** Populares 100/100/100/100 (LCP 1,4 s), Esportivos 99/100/100/100 (LCP 1,7 s), Antigos 99/100/100/100 (LCP 1,6 s, TBT 0), Motos 100/100/100/100 (LCP 1,6 s). CLS ≤ 0,010 em todas.
+- **Variação observada:** algumas rodadas deram 92–96 em desempenho, sempre com TBT de 230–330 ms vindo de "Estilo e layout". O `benchmarkIndex` do próprio relatório explica: 740–1290 nessas rodadas contra 2450–3500 nas boas — a máquina que rodava o teste estava 2–4× mais lenta (CPU disputada). Mesmo site, mesmo JS (~5,7 kB gzip); sem ação no código. Ao reavaliar, rodar 3 vezes e olhar o `benchmarkIndex`.
+- **Impacto:** nenhum arquivo de código.
+
 ### 2026-10-28 — Primeiro deploy na Vercel (domínio provisório)
 - **Contexto:** o Erick autorizou o deploy e, com o domínio ainda indefinido, o uso do endereço provisório da Vercel.
 - **Decisão:** projeto `garagerick` criado na equipe "Elarssen Code Solutions" (`ericksikva`), ligado a `ErickLarssen/garagerick` — cada push na `main` publica em produção, outras branches geram preview. Produção em **https://garagerick.vercel.app** (público). A equipe usa Deployment Protection `all_except_custom_domains`: os endereços longos (`garagerick-ericksikva.vercel.app`, previews) exigem login na Vercel, o curto não — nenhuma configuração foi alterada. `SITE.url` trocado de `garagerick.online` para `garagerick.vercel.app` (canonical, OG, sitemap, robots). Conferido em produção: rotas sem extensão 200, `/esportivos/` e `/esportivos.html` → 308 para `/esportivos`, 404 com status 404, cabeçalhos de segurança presentes e `/_astro/*` com `immutable`. O primeiro build levou ~8 min (252 imagens AVIF sem cache).
