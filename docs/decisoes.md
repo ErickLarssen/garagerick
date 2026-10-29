@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-28 — Preparação do deploy na Vercel
+- **Contexto:** última tarefa da Fase 7. O agente não faz deploy nem mexe em domínio sem confirmação (docs/07).
+- **Decisão:** `vercel.json` completo: `framework`, `buildCommand` e `outputDirectory` explícitos (a importação não depende da detecção), `Cache-Control: public, max-age=31536000, immutable` em `/_astro/*` (a Vercel, por padrão, revalida todo arquivo estático; os de `/_astro/` têm hash no nome), `/search-index.json` com `max-age=0, must-revalidate` (nome fixo, muda com o ranking) e cabeçalhos de segurança básicos (`nosniff`, `strict-origin-when-cross-origin`, `X-Frame-Options: DENY`, `Permissions-Policy` sem câmera/microfone/localização). **Sem CSP** por ora: o CSS embutido, o JSON-LD e os scripts inline exigiriam hashes/nonce — fica para depois, se o Erick quiser. README ganhou a seção "Deploy (Vercel)" e teve dois trechos desatualizados corrigidos (logos não precisam ser SVG monocromático — `logoTreatment`; não existe mais card 3:4). `engines.node >=22.12.0` já estava no `package.json` (a Vercel usa para escolher a versão do Node).
+- **Pendente (Erick):** confirmar o deploy e o domínio — `SITE.url` é `https://garagerick.online` (provisório); canonical, Open Graph, sitemap e robots usam esse valor.
+- **Impacto:** `vercel.json`, `README.md`, `docs/07`.
+
 ### 2026-10-28 — Revisão de acessibilidade (teclado + leitor de tela)
 - **Contexto:** quarta tarefa da Fase 7; pendência antiga: o bloco de info da vitrine era `aria-live` inteiro.
 - **Decisão:** o bloco deixa de ser região viva (a cada troca o leitor relia logo, specs, o texto inteiro, "Vídeo (abre o YouTube…)" e "Ficha técnica", e anunciava o "Ler mais/Ler menos"). No lugar, um `<p role="status" class="sr-only" data-showcase-announcer>` na vitrine, preenchido no `setActive` só em trocas feitas pelo usuário (não na carga): "BMW M2, 2020. Posição 11 de 12." / "Top 1 de 12." — anunciado na hora, sem esperar a animação; trocas rápidas deixam só o último texto. `BrandLogo` ganhou `decorative` (`alt=""`), usado na vitrine e na lista, onde o nome já traz a marca em texto oculto (antes: "BYD, BYD Seal"); o controlador não regrava mais o `alt`. Setas: "Veículo anterior"/"Próximo veículo" (antes "Anterior"/"Próximo", ambíguos fora de contexto). Título da ficha: o `compressHTML` colava "Ficha técnicaBMW M2" → separador oculto ": ".

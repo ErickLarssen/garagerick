@@ -74,7 +74,10 @@ Lighthouse recusa a página) e tem SEO baixo **de propósito** (`noindex`).
 ## Deploy (Vercel)
 
 1. Criar repositório no GitHub (`ErickLarssen/garagerick`).
-2. Importar na Vercel; framework detectado: Astro; build `npm run build`; output `dist`.
+2. Importar na Vercel; tudo vem do `vercel.json`: framework Astro, build `npm run build`, output `dist`,
+   `cleanUrls` + `trailingSlash: false`, `Cache-Control: immutable` (1 ano) em `/_astro/*` (nomes com hash),
+   `/search-index.json` sempre revalidado, e cabeçalhos `X-Content-Type-Options`, `Referrer-Policy`,
+   `X-Frame-Options: DENY` e `Permissions-Policy`. A 404 é servida pelo `404.html` automaticamente.
 3. Cada push em branch gera um preview; `main` vai para produção.
 4. Domínio: apontar `garagerick.online` (ou o escolhido) nas configurações do projeto.
 5. Após o primeiro deploy: rodar Lighthouse na URL de produção e registrar os números em
