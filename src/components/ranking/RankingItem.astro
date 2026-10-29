@@ -36,7 +36,7 @@ const meta = [vehicle.year !== undefined ? String(vehicle.year) : undefined, ...
       <span class="item__rank numeric" aria-hidden="true">
         {rankLabel}
       </span>
-      <BrandLogo brand={vehicle.brand} baseHeight={20} class="item__logo" />
+      <BrandLogo brand={vehicle.brand} baseHeight={20} decorative class="item__logo" />
       <span class="item__name">
         <span class="sr-only">{vehicle.isTop ? 'Top 1' : `Posição ${vehicle.rank}`}: </span>
         <span class="sr-only">{vehicle.brand.name} </span>

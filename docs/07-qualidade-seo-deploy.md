@@ -35,7 +35,8 @@ Lighthouse recusa a página) e tem SEO baixo **de propósito** (`noindex`).
 - HTML semântico: `header`, `nav`, `main`, `section`, `ol`, `footer`, `dialog`.
 - Um único `<h1>` por página, estático, com o nome do ranking/página; nome do veículo ativo e seções com `<h2>`.
 - Todos os controles alcançáveis por teclado com foco visível (`outline` em `--color-accent`, 2px, offset 3px).
-- `alt` descritivo: "BYD Seal azul em vista dianteira 3/4". Logos: `alt="BYD"`.
+- `alt` descritivo: "BYD Seal azul em vista dianteira 3/4". Logos: `alt="BYD"`, ou `alt=""`
+  (`BrandLogo decorative`) quando o nome ao lado já diz a marca — evita "BYD, BYD Seal".
   Imagens decorativas (camadas do fundo): `alt=""` + `aria-hidden`.
 - Contraste ≥ 4.5:1 para texto normal; ≥ 3:1 para texto grande e ícones.
 - Respeitar `prefers-reduced-motion`.

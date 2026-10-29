@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-28 — Revisão de acessibilidade (teclado + leitor de tela)
+- **Contexto:** quarta tarefa da Fase 7; pendência antiga: o bloco de info da vitrine era `aria-live` inteiro.
+- **Decisão:** o bloco deixa de ser região viva (a cada troca o leitor relia logo, specs, o texto inteiro, "Vídeo (abre o YouTube…)" e "Ficha técnica", e anunciava o "Ler mais/Ler menos"). No lugar, um `<p role="status" class="sr-only" data-showcase-announcer>` na vitrine, preenchido no `setActive` só em trocas feitas pelo usuário (não na carga): "BMW M2, 2020. Posição 11 de 12." / "Top 1 de 12." — anunciado na hora, sem esperar a animação; trocas rápidas deixam só o último texto. `BrandLogo` ganhou `decorative` (`alt=""`), usado na vitrine e na lista, onde o nome já traz a marca em texto oculto (antes: "BYD, BYD Seal"); o controlador não regrava mais o `alt`. Setas: "Veículo anterior"/"Próximo veículo" (antes "Anterior"/"Próximo", ambíguos fora de contexto). Título da ficha: o `compressHTML` colava "Ficha técnicaBMW M2" → separador oculto ": ".
+- **Verificado:** Tab percorre, em ordem, pular link → logo → nav → busca → Ficha técnica → Ranking completo → setas → redes → itens da lista → Sobre → rodapé, todos com contorno de foco visível; ←/→ trocam e anunciam; a ficha abre com Enter (foco em "Fechar"), prende o Tab, fecha com Esc e devolve o foco; árvore de acessibilidade do Chrome conferida (um `h1`, nomes de links/botões, `#12` visual oculto e "Posição 12" para leitores). Busca, gaveta e 404 revisadas nas tarefas anteriores.
+- **Impacto:** `src/components/showcase/{Showcase,ShowcaseInfo,ShowcaseNav,BrandLogo,SpecSheet}.astro`, `src/components/ranking/RankingItem.astro`, `src/scripts/showcase-controller.ts`, `docs/05`, `docs/07`.
+
 ### 2026-10-28 — Auditoria Lighthouse (mobile)
 - **Contexto:** terceira tarefa da Fase 7. Lighthouse 12 via `npx -y lighthouse@12` (ferramenta, não dependência do projeto; permissão em `.claude/settings.local.json`, fora do git), perfil mobile padrão, contra `astro preview`. Relatórios em `.lighthouse/` (no `.gitignore`).
 - **Primeira rodada:** Populares 99/100/100/100, Esportivos 98/100/100/100, Antigos 98/100/100/100, Motos 98/100/100/100 (Desempenho/Acessibilidade/Boas práticas/SEO). Apontados: CSS bloqueante (2 arquivos, ~460 ms estimados) e foto da vitrine maior que o necessário (25–48 KiB): em 412 px × DPR 1,75 o navegador pulava de 640 para 1280.

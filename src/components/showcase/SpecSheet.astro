@@ -22,7 +22,7 @@ const { vehicle } = Astro.props;
 >
   <div class="sheet__header">
     <h2 id="spec-sheet-title" class="sheet__title">
-      Ficha técnica
+      Ficha técnica<span class="sr-only">: </span>
       <span class="sheet__vehicle" data-sheet-vehicle>
         {vehicle.brand.name} {vehicle.name}
       </span>

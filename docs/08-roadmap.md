@@ -74,7 +74,7 @@
 - [x] Open Graph por página, JSON-LD `ItemList`, sitemap, robots, canonical
 - [x] Página 404 temática
 - [x] Auditoria Lighthouse mobile ≥ 95 nas 4 categorias; corrigir o que faltar
-- [ ] Revisão de acessibilidade (teclado + leitor de tela)
+- [x] Revisão de acessibilidade (teclado + leitor de tela)
 - [ ] Preparar deploy na Vercel (`docs/07`) e pedir confirmação ao Erick
 
 ## Fase 8 — Opcional (só se o Erick pedir)

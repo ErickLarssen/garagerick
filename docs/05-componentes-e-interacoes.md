@@ -56,7 +56,8 @@ Estrutura:
 <section class="showcase" data-showcase aria-roledescription="vitrine" aria-label="Ranking …">
   <ShowcaseBackdrop />            <!-- 2 camadas de imagem para crossfade -->
   <div class="showcase__main">
-    <ShowcaseInfo />              <!-- aria-live="polite" -->
+    <p role="status" sr-only />   <!-- anuncia a troca: "BMW M2, 2020. Posição 11 de 12." -->
+    <ShowcaseInfo />
   </div>
   <div class="showcase__bar">
     <a href="#ranking" class="showcase__more">RANKING COMPLETO</a>
@@ -164,7 +165,7 @@ sem canonical nem `og:url`.
 ## Checklist de interação (testar em toda mudança na vitrine)
 
 - [ ] Funciona só com teclado (Tab, ←/→, Enter, Esc)
-- [ ] Leitor de tela anuncia o novo veículo (região `aria-live="polite"` só no bloco de info)
+- [ ] Leitor de tela anuncia o novo veículo (`role="status"` dedicado, preenchido em trocas feitas pelo usuário — o bloco de info não é região viva)
 - [ ] Hash na URL abre o veículo certo
 - [ ] Sem JS: primeiro veículo visível e lista completa navegável
 - [ ] `prefers-reduced-motion` respeitado
