@@ -34,12 +34,15 @@
 
 - `<title>`: `"Esportivos — Ranking de carros favoritos | Garagerick"`.
 - `meta description` por página; Open Graph e Twitter Card (imagem 1200×630; por página,
-  usar o hero do Top 1 recortado via `getImage`, com fallback `public/og-default.jpg`).
-- `link rel="canonical"`, `@astrojs/sitemap`, `robots.txt`.
+  usar o hero do Top 1 recortado via `getImage` (`lib/seo.ts`); páginas sem ranking (404) usam o
+  Top 1 de Populares — sem imagem estática que fique desatualizada).
+- `link rel="canonical"` (sem `.html` nem barra final), `@astrojs/sitemap`, `robots.txt` (gerado por
+  `pages/robots.txt.ts` a partir de `SITE.url`).
 - Dados estruturados JSON-LD por página: `ItemList` com cada veículo como `ListItem`
   (`position` = rank, `name` = "Marca Modelo").
-- URLs limpas e em português; sem trailing slash (configurar `trailingSlash: 'never'`; na Fase 7
-  confirmar se a Vercel exige `build.format: 'file'` ou `vercel.json`).
+- URLs limpas e em português; sem trailing slash: `trailingSlash: 'never'` + `build.format: 'file'`
+  no Astro e `vercel.json` com `cleanUrls: true` e `trailingSlash: false` (a Vercel serve
+  `esportivos.html` em `/esportivos` e redireciona `/esportivos/` → `/esportivos`).
 
 ## Compatibilidade
 

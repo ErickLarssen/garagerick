@@ -4,12 +4,19 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import RankingList from '@/components/ranking/RankingList.astro';
 import Showcase from '@/components/showcase/Showcase.astro';
 import { RANKING_SEO, getRanking } from '@/lib/rankings';
+import { rankingOgImage, rankingStructuredData } from '@/lib/seo';
 
 const { title, description } = RANKING_SEO.motos;
 const vehicles = await getRanking('motos');
 ---
 
-<BaseLayout title={title} description={description} activeNav="motos">
+<BaseLayout
+  title={title}
+  description={description}
+  ogImage={rankingOgImage(vehicles)}
+  structuredData={rankingStructuredData('motos', vehicles)}
+  activeNav="motos"
+>
   <Showcase vehicles={vehicles} rankingKey="motos" />
   <RankingList vehicles={vehicles} rankingKey="motos" />
 </BaseLayout>
