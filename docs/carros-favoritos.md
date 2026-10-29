@@ -5,7 +5,7 @@
 1. **BYD** *Seal* (2025/AWD)
 2. **Volkswagen** *Nivus* (2025/Highline 200 TSI)
 3. **RAM** *Rampage* (2027/RT 2.0 Turbo Flex)
-4. **Ford** *Maverick* (2024/Lariat)
+4. **Ford** *Maverick* (2024/Lariat, 2.0 EcoBoost)
 5. **Hyundai** *Creta* (2021/Attitude)
 6. **Volkswagen** *Fusca* (2019/ 2.0 TSI)
 7. **Chevrolet** *Onix* (2022/1.0 Plus)

@@ -5,7 +5,8 @@ rank: 4
 category: populares
 year: 2024
 version: Lariat
-powertrain: combustao # TODO: confirmar (a Maverick também tem versão híbrida)
+powertrain: combustao
+engine: 2.0 EcoBoost
 heroImage: ../../assets/vehicles/maverick.webp
 cardImage: ../../assets/vehicles/maverick.webp
 heroFitMobile: contain

@@ -15,6 +15,11 @@
 
 ---
 
+### 2026-10-28 — Ford Maverick 2024 Lariat: combustão
+- **Contexto:** pendência de 2026-10-10 (a linha Lariat tem versões a combustão e híbrida).
+- **Decisão:** o Erick confirmou a combustão, 2.0 EcoBoost → `engine: 2.0 EcoBoost` e TODO do `powertrain` removido. Com o motor preenchido, a linha principal da vitrine mostra "2.0 EcoBoost" no lugar de "Lariat" (regra do `quickSpecs`); a versão segue na ficha. O `<!-- TODO: confirmar ficha técnica -->` continua (potência, torque etc. não informados).
+- **Impacto:** `src/content/cars/ford-maverick.md`.
+
 ### 2026-10-28 — Lighthouse na URL de produção
 - **Contexto:** passo 5 do deploy (docs/07), em https://garagerick.vercel.app, mobile, Lighthouse 12.
 - **Resultado (melhor rodada com CPU estável):** Populares 100/100/100/100 (LCP 1,4 s), Esportivos 99/100/100/100 (LCP 1,7 s), Antigos 99/100/100/100 (LCP 1,6 s, TBT 0), Motos 100/100/100/100 (LCP 1,6 s). CLS ≤ 0,010 em todas.
