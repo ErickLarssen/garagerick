@@ -79,7 +79,8 @@ Escala (fluida com `clamp`):
   branco sobre o accent dá só 3,56:1) e ícone ▶; secundário `--color-surface` com
   borda sutil. Altura 44px, raio 4px (cantos quase retos, como a referência).
 - **Navegação da vitrine** (`ShowcaseNav`): setas circulares de 44px com borda sutil + contador
-  `#07 de 12` em Rajdhani (dourado no Top 1), no centro da barra inferior.
+  `#07 de 12` em Rajdhani (dourado no Top 1), no centro da barra inferior; no celular, sobre a base da
+  foto, numa pílula escura translúcida (com blur).
 - **Busca**: ícone de lupa + campo sem caixa, só com sublinhado de 1px.
 - **Ícones**: traço de 1.5–2px, estilo linear, em SVG próprio (`src/assets/icons/`).
   Ícone de **motocicleta** no lugar do ícone de casa.

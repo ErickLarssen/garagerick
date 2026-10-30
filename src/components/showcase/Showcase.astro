@@ -178,6 +178,33 @@ const data = toScriptJson(await buildShowcaseData(vehicles));
     }
   }
 
+  /* Celular: a navegação (◀ #07 de 12 ▶) sai da barra inferior — que textos longos empurravam
+     para fora da tela — e fica na base da foto, logo acima das informações (que começam em 46svh).
+     Assim as setas estão sempre visíveis e indicam que dá para trocar. No tablet a tela é alta, a
+     barra não some, e a navegação sobre a foto cairia no meio do carro. */
+  @media (max-width: 639px) {
+    .showcase :global([data-showcase-nav]) {
+      position: absolute;
+      top: calc(46svh - 44px - 1rem);
+      left: 50%;
+      translate: -50% 0;
+      padding: 0.25rem;
+      border-radius: 999px;
+      background: rgb(7 9 12 / 0.6);
+    }
+
+    @supports (backdrop-filter: blur(1px)) {
+      .showcase :global([data-showcase-nav]) {
+        background: rgb(7 9 12 / 0.4);
+        backdrop-filter: blur(8px);
+      }
+    }
+
+    .showcase__bar {
+      grid-template-columns: 1fr auto;
+    }
+  }
+
   /* Desktop (≥ 1024px): info ocupa ~5/12 da largura, à esquerda; a foto fica à direita */
   @media (min-width: 1024px) {
     .showcase__main > :global(*) {

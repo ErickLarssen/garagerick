@@ -95,7 +95,10 @@ Abre **sem JS** via Invoker Commands (`command="show-modal" commandfor="spec-she
 invocador (evento `command`) e devolve o foco a ele se ele se perder (Safari não foca botões no clique).
 
 ### `ShowcaseNav.astro` (substitui `CoverflowCarousel` + `VehicleCard`, removidos em 2026-10-11)
-- Setas ◀ ▶ (`aria-label="Anterior"/"Próximo"`) + contador `#07 de 12` (posição do ranking, não índice;
+- Celular (< 640px): a navegação fica na base da foto, numa pílula translúcida logo acima das informações
+  (`top: calc(46svh - 44px - 1rem)`), para nunca sair da tela com textos longos; no tablet e no desktop,
+  no centro da barra inferior.
+- Setas ◀ ▶ (`aria-label="Veículo anterior"/"Próximo veículo"`) + contador `#07 de 12` (posição do ranking, não índice;
   "TOP 1" no primeiro). "Próximo" (▶ / →) avança **em direção ao #1** (índice +1 no array decrescente).
 - Nas pontas, `aria-disabled="true"` (não `disabled`, para não perder o foco). Sem JS as setas ficam
   ocultas (só aparecem com `.is-enhanced` na vitrine); o contador continua.

@@ -15,6 +15,12 @@
 
 ---
 
+### 2026-10-30 — Setas da vitrine sobre a foto no celular
+- **Contexto:** com os textos "por que eu gosto", as informações cresceram e empurraram a barra inferior (◀ #07 de 12 ▶) para fora da tela em celulares comuns (375×667, 360×640 — até a M2, de texto curto, em 360×640). O Erick apontou que muitos visitantes não sabem que dá para deslizar, então as setas precisam estar sempre visíveis.
+- **Opções discutidas:** (1) navegação na base da foto; (2) setas nas laterais da foto; (3) barra fixa no rodapé. Escolhida a 1.
+- **Decisão:** abaixo de 640px, `[data-showcase-nav]` passa a `position: absolute` em `top: calc(46svh - 44px - 1rem)`, centralizada, numa pílula `rgb(7 9 12 / 0.4)` + `backdrop-filter: blur(8px)` (fallback 0.6 sem blur) — sempre visível, logo acima do logo (8–14px de folga medidos em 375×667 e 390×844) e sem cobrir o carro. A barra inferior fica só com "Ranking completo". Só CSS; o controlador não mudou. **Tablet fica como estava:** em 768×1024 a pílula caía no meio da carroceria e lá a barra nunca sumia.
+- **Impacto:** `src/components/showcase/Showcase.astro`, `docs/04`, `docs/05`.
+
 ### 2026-10-30 — M2 sem corte no celular e logo Honda Motos
 - **Contexto:** pedido do Erick: a M2 era cortada no celular; a CB650R deve usar o logo `honda-motos` (ele trocou `honda.svg` por `honda-motos.svg`).
 - **Decisão:** `bmw-m2.md` ganhou `heroFitMobile: contain` (como os outros 23). `brands/honda.json` aponta para `honda-motos.svg` (a marca Honda só é usada pela CB650R). O SVG tinha um retângulo branco cobrindo o fundo (viraria um quadrado branco) — removido, e o `viewBox` foi recortado à área da asa (medido com o sharp), como as margens cortadas dos outros logos. `honda.png` fica na pasta sem uso. O original está fora do repositório (scratchpad).
