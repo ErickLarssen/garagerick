@@ -15,7 +15,12 @@
 
 ---
 
-### 2026-10-30 — Setas da vitrine sobre a foto no celular
+### 2026-10-30 — Setas discretas nas bordas laterais no celular (substitui a pílula)
+- **Contexto:** vendo na prática, o Erick achou que a pílula ◀ #07 de 12 ▶ na base da foto tapava informações visuais importantes dos carros; pediu setas discretas, com opacidade ajustada, nas extremidades laterais.
+- **Decisão:** abaixo de 640px, só as setas saem da barra: `position: absolute` nas bordas (`left`/`right: 0.375rem`), à meia altura da área da foto (`top: calc((var(--header-h) + 46svh) / 2 - 22px)`), área de toque de 44px, fundo `rgb(7 9 12 / 0.42)`, borda `rgb(255 255 255 / 0.18)` e opacidade 0,85 (a primeira tentativa, 0,28/0,75, sumia em fotos movimentadas como Seal e Shelby). Na ponta do ranking a seta inativa fica em 0,15 (continua focável por `aria-disabled`). O contador volta para a barra inferior (pode ficar abaixo da dobra com textos longos — as setas é que precisam estar sempre visíveis). Tablet e desktop sem mudança.
+- **Impacto:** `src/components/showcase/Showcase.astro`, `docs/04`, `docs/05`.
+
+### 2026-10-30 — Setas da vitrine sobre a foto no celular (substituída no mesmo dia — ver acima)
 - **Contexto:** com os textos "por que eu gosto", as informações cresceram e empurraram a barra inferior (◀ #07 de 12 ▶) para fora da tela em celulares comuns (375×667, 360×640 — até a M2, de texto curto, em 360×640). O Erick apontou que muitos visitantes não sabem que dá para deslizar, então as setas precisam estar sempre visíveis.
 - **Opções discutidas:** (1) navegação na base da foto; (2) setas nas laterais da foto; (3) barra fixa no rodapé. Escolhida a 1.
 - **Decisão:** abaixo de 640px, `[data-showcase-nav]` passa a `position: absolute` em `top: calc(46svh - 44px - 1rem)`, centralizada, numa pílula `rgb(7 9 12 / 0.4)` + `backdrop-filter: blur(8px)` (fallback 0.6 sem blur) — sempre visível, logo acima do logo (8–14px de folga medidos em 375×667 e 390×844) e sem cobrir o carro. A barra inferior fica só com "Ranking completo". Só CSS; o controlador não mudou. **Tablet fica como estava:** em 768×1024 a pílula caía no meio da carroceria e lá a barra nunca sumia.
