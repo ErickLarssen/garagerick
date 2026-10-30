@@ -14,4 +14,4 @@ tags: [dodge, esportivos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+Sempre gostei dos muscle cars americanos, com aquela potência cinematográfica e a fama de "badass". O Charger me lembra muito a aura do Toretto em Velozes e Furiosos.

@@ -14,4 +14,4 @@ tags: [volkswagen, populares]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+Considero o Taos o irmão mais velho e robusto do Nivus e do T-Cross, uma espécie de consolidação da Volkswagen. É um dos carros mais bonitos da marca atualmente e, com certeza, o mais sofisticado.

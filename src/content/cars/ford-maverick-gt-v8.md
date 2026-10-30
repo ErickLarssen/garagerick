@@ -13,4 +13,4 @@ tags: [ford, antigos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+Esse é aquele carro que, quando eu era criança, eu olhava e sentia vontade de sair viajando por aí com uma mulher do lado.

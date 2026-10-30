@@ -14,4 +14,4 @@ tags: [hyundai, populares]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+Amo a vibe que o Creta me transmite: ele é extremamente bonito, confortável e me dá vontade de ter uma família. É o melhor SUV que a Hyundai já fez.

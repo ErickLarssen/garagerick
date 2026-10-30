@@ -13,4 +13,4 @@ tags: [lamborghini, esportivos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+O Aventador tem um lugar especial no meu coração: é o melhor carro que a Lamborghini já criou. É ultraveloz, mas o que mais me fascina nesse touro é o visual inconfundível dos Lamborghini, junto com um ronco V12 único.

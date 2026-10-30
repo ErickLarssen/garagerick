@@ -12,4 +12,4 @@ tags: [bmw, esportivos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+Para mim, a BMW tem as melhores frentes de todos os carros, e a M2 é o melhor modelo da marca.

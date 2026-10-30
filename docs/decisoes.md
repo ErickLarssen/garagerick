@@ -15,6 +15,11 @@
 
 ---
 
+### 2026-10-29 — Textos "por que eu gosto": revisão dos carros e rascunho das motos
+- **Contexto:** o Erick escreveu os textos dos 27 carros e **pediu explicitamente** (exceção prevista na regra 4 do CLAUDE.md) que o agente os melhorasse e escrevesse os das 7 motos em primeira pessoa, no mesmo tom.
+- **Decisão:** carros: só ortografia, pontuação, ritmo e termos, mantendo ideias e voz. Correções factuais sinalizadas a ele: 458 Itália tem V8 (não V12); Rampage e Maverick 2024 são picapes (não SUVs); o Huracán sucedeu o Gallardo, não o Murciélago (texto passou a "me lembra o Murciélago"); o Lancer Evolution foi vendido no Brasil ("proibido" → "raro e caro por aqui"). Motos: escritas a partir do perfil dos textos dele (visual, ronco, cinema, identidade da marca; Fat Boy ↔ Exterminador do Futuro 2), **sem inventar vivências** (pilotar, ter tido a moto). Só o "Sobre mim" segue com TODO.
+- **Impacto:** `src/content/cars/*.md` (27), `src/content/motorcycles/*.md` (7).
+
 ### 2026-10-28 — Ford Maverick 2024 Lariat: combustão
 - **Contexto:** pendência de 2026-10-10 (a linha Lariat tem versões a combustão e híbrida).
 - **Decisão:** o Erick confirmou a combustão, 2.0 EcoBoost → `engine: 2.0 EcoBoost` e TODO do `powertrain` removido. Com o motor preenchido, a linha principal da vitrine mostra "2.0 EcoBoost" no lugar de "Lariat" (regra do `quickSpecs`); a versão segue na ficha. O `<!-- TODO: confirmar ficha técnica -->` continua (potência, torque etc. não informados).

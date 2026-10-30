@@ -12,4 +12,4 @@ tags: [ferrari, esportivos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+A 458 Itália é, para mim, o carro mais icônico da Ferrari. Ela mistura um design que só a Ferrari consegue ter com aquele ronco característico do V8 italiano.

@@ -11,4 +11,4 @@ tags: [harley-davidson, motos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+Não tem como olhar para a Fat Boy e não lembrar do Exterminador do Futuro 2. É uma moto icônica, robusta e com aquele visual pesado e cromado que virou sinônimo de Harley-Davidson.

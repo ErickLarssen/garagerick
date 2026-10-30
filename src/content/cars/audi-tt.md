@@ -13,4 +13,4 @@ tags: [audi, esportivos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+O TT é o meu favorito porque é um compacto com visual extremamente esportivo, mas sem aquele ar de carro caro e fora do meu alcance. Ainda por cima é da Audi, minha marca de carros favorita, e tem um ronco simplesmente sensacional.

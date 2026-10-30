@@ -11,4 +11,4 @@ tags: [harley-davidson, motos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+A Fat Bob é a minha moto favorita porque pega tudo o que eu gosto nos muscle cars americanos e coloca em duas rodas: visual agressivo, um farol diferente de tudo e aquele ronco grave de Harley. É uma custom com cara de brava, e isso me conquista.

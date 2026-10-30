@@ -13,4 +13,4 @@ tags: [volkswagen, antigos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+Não tem como não amar esse carro nostálgico. Por muitos anos ele foi a cara do Brasil e é o xodó da Volkswagen, com um visual único e simplesmente memorável.

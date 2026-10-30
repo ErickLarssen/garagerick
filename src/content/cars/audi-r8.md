@@ -13,4 +13,4 @@ tags: [audi, esportivos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+Gosto do R8 porque ele tem um visual moderno e esportivo sem abandonar o tradicional — é futurista na medida certa. E o ronco dele é simplesmente arrepiante.

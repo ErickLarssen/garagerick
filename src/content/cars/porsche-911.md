@@ -13,4 +13,4 @@ tags: [porsche, esportivos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+Gosto da Porsche porque ela é única: segue um padrão visual muito bonito, com faróis circulares que tornam seus carros inconfundíveis. Adoro esse traço, e o modelo que melhor o representa é o 911.

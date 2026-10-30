@@ -12,4 +12,4 @@ tags: [ford, antigos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+O Mustang é um dos melhores modelos já feitos, porque está entre os mais bonitos desde a versão antiga até as mais recentes: uma evolução que segue um padrão de excelência imbatível. Lembro dele em Velozes e Furiosos: Desafio em Tóquio — desde que o vi pela primeira vez, nenhum outro ocupou o primeiro lugar entre os antigos.

@@ -15,4 +15,4 @@ tags: [volkswagen, populares]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+O Nivus é a criação mais maravilhosa da Volkswagen. Tem aquela cara de "carro de pai" e, ao mesmo tempo, um ar de aventura. Gosto muito do painel — acredito que seja o mais bonito já criado.

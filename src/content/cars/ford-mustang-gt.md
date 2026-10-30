@@ -13,4 +13,4 @@ tags: [ford, esportivos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+O Mustang é o meu muscle car americano favorito. Tem o visual mais único de todos — nenhum carro se compara a ele em design — e um ronco simplesmente lendário.

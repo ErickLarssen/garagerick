@@ -14,4 +14,4 @@ tags: [chevrolet, antigos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+Cresci com a imagem de que esse carro era uma fera enjaulada. Gosto dele por ser o antigo popular com mais potência e robustez.

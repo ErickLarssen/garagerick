@@ -13,4 +13,4 @@ tags: [lamborghini, esportivos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+O Huracán me lembra o Murciélago, meu Lamborghini favorito na infância, e é simplesmente sensacional. É como o irmão menos bonito do Aventador: reúne as ótimas características dele, é muito parecido com ele e, ainda assim, tem traços visuais só seus.

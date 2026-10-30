@@ -10,4 +10,4 @@ tags: [triumph, motos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+A Scrambler 400X tem aquele visual aventureiro de moto que encara asfalto e terra sem perder o charme clássico da Triumph. É a porta de entrada perfeita para o estilo que eu mais gosto nas motos.

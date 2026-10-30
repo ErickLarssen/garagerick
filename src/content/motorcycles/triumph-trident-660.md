@@ -11,4 +11,4 @@ tags: [triumph, motos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+A Trident 660 é a prova de que a Triumph também sabe ser moderna. Tem um visual limpo e esportivo, sem exageros, e o motor de três cilindros dá a ela um ronco com personalidade própria.

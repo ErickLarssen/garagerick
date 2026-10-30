@@ -14,4 +14,4 @@ tags: [ram, populares]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+A Rampage merecia um prêmio de picape mais bonita já feita na história. É uma picape perfeita — dá vontade de morar nela.

@@ -13,4 +13,4 @@ tags: [jaguar, esportivos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+O orgulho britânico. Sempre gostei muito da Jaguar, uma marca charmosa e com um padrão visual único, principalmente na frente dos carros. É a prova de que a Inglaterra sabe fazer bons carros, e o F-Type é simplesmente o mais lindo da marca.

@@ -15,4 +15,4 @@ tags: [ford, populares]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+Esse carro é maravilhoso. Ele carrega o nome de um titã icônico da Ford, mas a versão contemporânea consegue ser muito diferente — e, ainda assim, top. Gosto dele por ser uma picape que não é tão grande.

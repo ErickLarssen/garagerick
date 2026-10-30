@@ -14,4 +14,4 @@ tags: [hyundai, populares]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+Nunca entendi por que o público da Hyundai sempre preferiu modelos como HB20, i30 e Sonata. Visualmente, o Elantra reúne os melhores atributos de todos os carros da marca e mistura, na medida certa, esportividade, luxo e um pé no popular.

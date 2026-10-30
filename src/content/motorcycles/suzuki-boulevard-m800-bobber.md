@@ -10,4 +10,4 @@ tags: [suzuki, motos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+Gosto da Boulevard M800 Bobber porque ela leva o estilo bobber para uma marca de onde eu não esperava. Tem aquele visual escuro e baixo, com cara de moto de estrada, que dá vontade de sair rodando sem destino.

@@ -13,4 +13,4 @@ tags: [mclaren, esportivos]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+Como bom brasileiro amante de F1 e fã do Senna, não tem como não gostar da McLaren — e a 600LT Spider é a joia da coroa da marca. É um modelo único e inconfundível; lembra um pouco o R8 da Audi, mas com características muito especiais.

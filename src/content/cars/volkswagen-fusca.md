@@ -15,4 +15,4 @@ tags: [volkswagen, populares]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+O Fusca teve a evolução mais fiel de todos os tempos: manteve o visual icônico e compacto, e a versão moderna ficou simplesmente perfeita. Amo esse carro.

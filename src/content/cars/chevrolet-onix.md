@@ -14,4 +14,4 @@ tags: [chevrolet, populares]
 
 <!-- TODO: confirmar ficha técnica -->
 
-TODO: escreva por que você gosta deste veículo.
+Sempre achei que o Onix merecia um prêmio de melhor visual entre os carros populares. O ponto forte dele está na traseira: a mais bonita que já vi num popular a combustão.
