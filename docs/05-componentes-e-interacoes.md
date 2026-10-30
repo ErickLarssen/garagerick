@@ -94,6 +94,18 @@ Abre **sem JS** via Invoker Commands (`command="show-modal" commandfor="spec-she
 `<form method="dialog">`; clique fora via `closedby="any"` (com reserva em JS). Um script pequeno guarda o
 invocador (evento `command`) e devolve o foco a ele se ele se perder (Safari não foca botões no clique).
 
+### `ShowcaseIntro.astro` (slide de introdução, 2026-10-30)
+- Slide 0 da vitrine nas 4 páginas: "Ranking de favoritos", nome do ranking (visual; o `h1` continua o
+  `sr-only`), a descrição de `RANKING_SEO`, "10 carros · do #10 ao Top 1 · o Top 1 fica para o final",
+  botão "Começar pelo #10" (`data-intro-start`; sem JS é um link para `#ranking`) e a dica de uso.
+- Estado pela classe `.is-intro` na vitrine (vem do servidor): mostra a intro, esconde o bloco do veículo,
+  e o fundo exibe só o teaser (`data-backdrop-teaser`: hero do Top 1 em 640px, `blur(14px)`,
+  `brightness(0.4)`, `--ambient` do Top 1). Contador "INTRO", seta anterior inativa.
+- Controlador: índice `-1`. Avançar troca com a mesma animação (a intro sai, as informações entram) e o
+  teaser dá lugar à foto; ← no último colocado volta à intro (limpa o hash, anuncia "Introdução do
+  ranking Populares"). O botão leva o foco ao nome do veículo. Um `<script is:inline>` remove
+  `.is-intro` antes da primeira pintura quando o hash é de um veículo (sem lampejo da intro).
+
 ### `ShowcaseNav.astro` (substitui `CoverflowCarousel` + `VehicleCard`, removidos em 2026-10-11)
 - Celular (< 640px): as setas saem da barra e ficam discretas nas bordas laterais da tela, à meia altura
   da foto (`top: calc((var(--header-h) + 46svh) / 2 - 22px)`), para nunca sumirem com textos longos; o
@@ -110,7 +122,7 @@ invocador (evento `command`) e devolve o foco a ele se ele se perder (Safari nã
 Uma classe/módulo pequeno, iniciado pelo `<script>` do `Showcase`:
 
 ```ts
-interface ShowcaseState { index: number }   // índice no array (0 = último colocado)
+interface ShowcaseState { index: number }   // índice no array (0 = último colocado; -1 = introdução)
 
 init(root: HTMLElement): void
   - lê #showcase-data, marca a vitrine com .is-enhanced

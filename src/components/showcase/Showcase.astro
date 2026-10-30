@@ -6,6 +6,7 @@ import ArrowDownCircle from '@/assets/icons/arrow-down-circle.svg';
 import SocialLinks from '@/components/layout/SocialLinks.astro';
 import ShowcaseBackdrop from '@/components/showcase/ShowcaseBackdrop.astro';
 import ShowcaseInfo from '@/components/showcase/ShowcaseInfo.astro';
+import ShowcaseIntro from '@/components/showcase/ShowcaseIntro.astro';
 import ShowcaseNav from '@/components/showcase/ShowcaseNav.astro';
 import SpecSheet from '@/components/showcase/SpecSheet.astro';
 import { RANKING_LABELS, type RankedVehicle, type RankingKey } from '@/lib/rankings';
@@ -17,26 +18,28 @@ interface Props {
 }
 
 const { vehicles, rankingKey } = Astro.props;
-const active = vehicles[0]; // a vitrine abre no último colocado (docs/01); o hash é tratado no cliente
+const active = vehicles[0]; // primeiro slide depois da intro: o último colocado (docs/01)
+const top = vehicles.at(-1) ?? active; // Top 1: teaser e tom ambiente da introdução
 const label = RANKING_LABELS[rankingKey];
 const data = toScriptJson(await buildShowcaseData(vehicles));
 ---
 
-{active && (
+{active && top && (
   <section
-    class="showcase"
+    class="showcase is-intro"
     data-showcase
     aria-roledescription="vitrine"
     aria-label={`Ranking ${label}`}
-    style={`--ambient: ${active.ambientColor}`}
+    style={`--ambient: ${top.ambientColor}`}
   >
     <h1 class="sr-only">{label} — ranking de favoritos</h1>
     <!-- anúncio curto de cada troca feita pelo usuário (leitores de tela); preenchido pelo script -->
     <p class="sr-only" role="status" data-showcase-announcer></p>
-    <ShowcaseBackdrop vehicle={active} />
+    <ShowcaseBackdrop vehicle={active} teaser={top} />
 
     <div class="showcase__inner">
       <div class="showcase__main">
+        <ShowcaseIntro rankingKey={rankingKey} total={vehicles.length} firstRank={active.rank} />
         <ShowcaseInfo vehicle={active} />
       </div>
 
@@ -45,7 +48,7 @@ const data = toScriptJson(await buildShowcaseData(vehicles));
           <ArrowDownCircle width={40} height={40} aria-hidden="true" />
           <span class="showcase__more-label">Ranking completo</span>
         </a>
-        <ShowcaseNav vehicle={active} total={vehicles.length} />
+        <ShowcaseNav vehicle={active} total={vehicles.length} intro />
         <SocialLinks class="showcase__social" />
       </div>
     </div>
@@ -53,6 +56,18 @@ const data = toScriptJson(await buildShowcaseData(vehicles));
     <script type="application/json" id="showcase-data" data-showcase-data set:html={data} />
   </section>
 )}
+
+<!-- Link direto para um veículo (/esportivos#audi-tt): sai da intro antes da primeira pintura, sem
+     esperar o módulo do controlador (que é adiado) — evita a intro piscar antes do veículo. -->
+<script is:inline>
+  (() => {
+    const root = document.querySelector('[data-showcase]');
+    const data = root?.querySelector('[data-showcase-data]')?.textContent;
+    const slug = decodeURIComponent(location.hash.slice(1));
+    if (!root || !data || !slug) return;
+    if (JSON.parse(data).some((v) => v.slug === slug)) root.classList.remove('is-intro');
+  })();
+</script>
 
 <script>
   import { initShowcase } from '@/scripts/showcase-controller';
@@ -77,6 +92,11 @@ const data = toScriptJson(await buildShowcaseData(vehicles));
     flex-direction: column;
     min-height: 100svh;
     padding: calc(var(--header-h) + 1.5rem) clamp(1.5rem, 5vw, 6rem) 1.25rem;
+  }
+
+  /* Introdução: o bloco do veículo some (a intro aparece no lugar — ShowcaseIntro) */
+  .showcase.is-intro :global([data-showcase-info]) {
+    display: none;
   }
 
   .showcase__main {

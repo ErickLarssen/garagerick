@@ -1,0 +1,98 @@
+---
+// Slide de introdução da vitrine (slide 0, pedido do Erick em 2026-10-30): explica a página antes
+// do último colocado. Visível com a classe .is-intro na vitrine; o controlador alterna. Sem JS, o
+// botão leva à lista do ranking (#ranking).
+import ChevronRight from '@/assets/icons/chevron-right.svg';
+import Button from '@/components/ui/Button.astro';
+import { formatRank } from '@/lib/format';
+import { RANKING_LABELS, RANKING_SEO, type RankingKey } from '@/lib/rankings';
+
+interface Props {
+  rankingKey: RankingKey;
+  total: number;
+  firstRank: number; // rank do último colocado (o primeiro slide depois da intro)
+}
+
+const { rankingKey, total, firstRank } = Astro.props;
+const noun = rankingKey === 'motos' ? 'motos' : 'carros';
+const first = formatRank(firstRank);
+// montado aqui: quebrado em linhas no template, o compressHTML colaria '10carros'
+const meta = `${total} ${noun} · do ${first} ao Top 1 · `;
+---
+
+<div class="intro" data-showcase-intro>
+  <p class="intro__kicker">Ranking de favoritos</p>
+  <p class="intro__title" aria-hidden="true">
+    {RANKING_LABELS[rankingKey]}
+  </p>
+  <p class="intro__lead">{RANKING_SEO[rankingKey].description}</p>
+  <p class="intro__meta numeric">
+    {meta}
+    <span class="intro__teaser">o Top 1 fica para o final</span>
+  </p>
+  <Button href="#ranking" class="intro__start" data-intro-start>
+    Começar pelo {first}
+    <ChevronRight width={18} height={18} aria-hidden="true" />
+  </Button>
+  <p class="intro__hint">Use as setas ou deslize para o lado</p>
+</div>
+
+<style>
+  .intro {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    max-width: 40rem;
+  }
+
+  /* Só aparece no estado de introdução; o bloco do veículo some (ver Showcase.astro) */
+  :global(.showcase.is-intro) .intro {
+    display: flex;
+  }
+
+  .intro__kicker {
+    color: var(--color-text-muted);
+    font-size: var(--text-button);
+    font-weight: var(--text-button--font-weight);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .intro__title {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    font-weight: 700;
+    line-height: var(--text-display--line-height);
+    text-transform: uppercase;
+  }
+
+  .intro__lead {
+    max-width: 34ch;
+    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+    line-height: 1.45;
+  }
+
+  .intro__meta {
+    color: var(--color-text-muted);
+    font-size: 1.15rem;
+  }
+
+  .intro__teaser {
+    color: var(--color-gold);
+  }
+
+  .intro :global(.intro__start) {
+    margin-top: 0.5rem;
+  }
+
+  .intro__hint {
+    color: var(--color-text-muted);
+    font-size: 0.8125rem;
+  }
+
+  /* Sem JS não há setas nem swipe: a dica não se aplica */
+  :global(.showcase:not(.is-enhanced)) .intro__hint {
+    display: none;
+  }
+</style>

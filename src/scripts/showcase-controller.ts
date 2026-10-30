@@ -83,9 +83,10 @@ function required<T extends Element>(parent: ParentNode, selector: string): T {
 export class ShowcaseController {
   readonly root: HTMLElement;
   readonly vehicles: ShowcaseVehicle[];
-  index = 0; // índice no array (0 = último colocado)
+  index = -1; // índice no array (0 = último colocado); -1 = slide de introdução
 
   private readonly layers: [HTMLImageElement, HTMLImageElement];
+  private readonly intro: HTMLElement; // slide 0 (ShowcaseIntro), visível com .is-intro
   private readonly info: InfoView;
   private readonly sheet: SheetView;
   private readonly prevButton: HTMLElement;
@@ -103,6 +104,7 @@ export class ShowcaseController {
       required<HTMLImageElement>(root, '[data-backdrop-layer="a"]'),
       required<HTMLImageElement>(root, '[data-backdrop-layer="b"]'),
     ];
+    this.intro = required<HTMLElement>(root, '[data-showcase-intro]');
     this.info = new InfoView(required<HTMLElement>(root, '[data-showcase-info]'));
     this.sheet = new SheetView(required<HTMLDialogElement>(root, '[data-spec-sheet]'));
     this.prevButton = required<HTMLElement>(root, '[data-showcase-prev]');
@@ -132,9 +134,11 @@ export class ShowcaseController {
     return i >= 0 ? i : undefined;
   }
 
-  /** Vai para o índice `i` (limitado às pontas). */
+  /** Vai para o índice `i` (limitado às pontas; -1 é a introdução). */
   go(i: number): void {
-    this.setActive(Math.max(0, Math.min(i, this.vehicles.length - 1)));
+    const target = Math.max(-1, Math.min(i, this.vehicles.length - 1));
+    if (target < 0) this.showIntro();
+    else this.setActive(target);
   }
 
   /** Próximo = em direção ao #1 (índice +1 no array decrescente). */
@@ -150,6 +154,11 @@ export class ShowcaseController {
   private bindControls(): void {
     this.prevButton.addEventListener('click', () => this.prev());
     this.nextButton.addEventListener('click', () => this.next());
+    // "Começar pelo #10" da introdução (sem JS, o link leva à lista #ranking)
+    this.intro.querySelector('[data-intro-start]')?.addEventListener('click', (event) => {
+      event.preventDefault();
+      this.setActive(0, { focusName: true });
+    });
 
     // ex.: a busca navegando para outro veículo na mesma página
     window.addEventListener('hashchange', () => {
@@ -231,21 +240,27 @@ export class ShowcaseController {
     return this.root.contains(active);
   }
 
-  /** Contador (posição no ranking, não índice) e setas desabilitadas nas pontas. */
+  /** Contador (posição no ranking, não índice; "INTRO" na introdução) e setas nas pontas. */
   private updateNavigation(): void {
     const vehicle = this.vehicles[this.index];
-    if (vehicle) this.counter.textContent = vehicle.isTop ? 'TOP 1' : formatRank(vehicle.rank);
-    this.prevButton.setAttribute('aria-disabled', String(this.index === 0));
+    this.counter.textContent = !vehicle
+      ? 'INTRO'
+      : vehicle.isTop
+        ? 'TOP 1'
+        : formatRank(vehicle.rank);
+    this.prevButton.setAttribute('aria-disabled', String(this.index < 0));
     this.nextButton.setAttribute('aria-disabled', String(this.index === this.vehicles.length - 1));
   }
 
   /**
    * Ativa o veículo de índice `i`: tom ambiente, fundo, informações e ficha.
    * `instant`: sem animação e sem mexer na URL (carga inicial vinda do hash).
+   * `focusName`: ao exibir, leva o foco ao nome do veículo (o botão da intro some ao ser usado).
    */
-  setActive(i: number, { instant = false } = {}): void {
+  setActive(i: number, { instant = false, focusName = false } = {}): void {
     const vehicle = this.vehicles[i];
     if (i === this.index || !vehicle) return;
+    const fromIntro = this.index < 0;
     this.index = i;
     const token = ++this.token;
 
@@ -256,6 +271,7 @@ export class ShowcaseController {
     this.sheet.render(vehicle);
 
     if (instant) {
+      this.root.classList.remove('is-intro');
       this.showBackdropNow(vehicle);
       this.info.show(vehicle);
       if (vehicle.isTop) this.shineTop();
@@ -270,14 +286,55 @@ export class ShowcaseController {
       READY_MAX_MS,
     );
     const isCurrent = () => token === this.token;
+    // Saindo da intro, quem sai de cena é o bloco da intro; ao trocar, a classe .is-intro cai e o
+    // teaser dá lugar à foto do veículo (crossfade do CSS)
+    const commit = () => {
+      if (fromIntro) this.root.classList.remove('is-intro');
+      this.commitBackdrop(next, current);
+    };
     void this.info
-      .swap(vehicle, isCurrent, ready, () => this.commitBackdrop(next, current))
+      .swap(vehicle, isCurrent, ready, commit, fromIntro ? this.intro : undefined)
       .then((shown) => {
         if (shown && vehicle.isTop) this.shineTop();
+        if (shown && focusName) {
+          this.root.querySelector<HTMLElement>('[data-info-name]')?.focus({ preventScroll: true });
+        }
       });
     this.announce(vehicle);
     // não polui o histórico; só roda em trocas feitas pelo usuário (nunca na carga)
     history.replaceState(null, '', `${location.pathname}${location.search}#${vehicle.slug}`);
+  }
+
+  /** Volta ao slide de introdução (seta "anterior" a partir do último colocado). */
+  private showIntro(): void {
+    if (this.index < 0) return;
+    this.index = -1;
+    const token = ++this.token;
+
+    this.updateNavigation();
+    const top = this.vehicles.at(-1);
+    if (top) this.root.style.setProperty('--ambient', top.ambientColor);
+    this.root.classList.remove('is-top');
+    const title = this.intro.querySelector('.intro__title')?.textContent?.trim();
+    this.announcer.textContent = `Introdução${title ? ` do ranking ${title}` : ''}.`;
+    history.replaceState(null, '', `${location.pathname}${location.search}`);
+
+    void this.info.leave(
+      () => token === this.token,
+      () => {
+        // uma saída da intro interrompida no meio deixaria a animação (fill) escondendo o bloco
+        this.intro.getAnimations().forEach((animation) => animation.cancel());
+        this.root.classList.add('is-intro');
+        if (prefersReducedMotion()) return;
+        this.intro.animate(
+          [
+            { opacity: 0, transform: 'translateY(12px)' },
+            { opacity: 1, transform: 'none' },
+          ],
+          { duration: INFO_IN_MS, easing: EASE },
+        );
+      },
+    );
   }
 
   /** Leitores de tela: "Volkswagen Nivus, 2023. Posição 2 de 10." (ou "Top 1 de 10."). */
@@ -406,11 +463,13 @@ class InfoView {
     isCurrent: () => boolean,
     ready: Promise<void>,
     commit: () => void,
+    outgoing: HTMLElement = this.root, // quem sai: este bloco ou, saindo da intro, o bloco da intro
   ): Promise<boolean> {
     this.root.getAnimations({ subtree: true }).forEach((animation) => animation.cancel());
+    outgoing.getAnimations().forEach((animation) => animation.cancel());
     const reduced = prefersReducedMotion();
 
-    const out = this.root.animate(
+    const out = outgoing.animate(
       reduced
         ? [{ opacity: 1 }, { opacity: 0 }]
         : [
@@ -440,6 +499,28 @@ class InfoView {
       ),
     );
     return true;
+  }
+
+  /**
+   * Saída sem conteúdo novo (volta para a introdução): anima a saída e, se nada a substituiu no
+   * meio, chama `onLeft` (que esconde o bloco) antes de desfazer a animação — sem piscar.
+   */
+  async leave(isCurrent: () => boolean, onLeft: () => void): Promise<void> {
+    this.root.getAnimations({ subtree: true }).forEach((animation) => animation.cancel());
+    const reduced = prefersReducedMotion();
+    const out = this.root.animate(
+      reduced
+        ? [{ opacity: 1 }, { opacity: 0 }]
+        : [
+            { opacity: 1, transform: 'none' },
+            { opacity: 0, transform: 'translateY(-8px)' },
+          ],
+      { duration: reduced ? 75 : INFO_OUT_MS, easing: EASE, fill: 'forwards' },
+    );
+    await settled(out, INFO_OUT_MS);
+    if (!isCurrent()) return;
+    onLeft();
+    out.cancel();
   }
 
   /** Preenche o bloco com o veículo, sem animação. */

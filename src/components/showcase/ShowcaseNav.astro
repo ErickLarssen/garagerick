@@ -9,9 +9,12 @@ import type { RankedVehicle } from '@/lib/rankings';
 interface Props {
   vehicle: RankedVehicle; // ativo na carga
   total: number;
+  /** A vitrine abre na introdução (slide 0): o contador mostra "INTRO". */
+  intro?: boolean;
 }
 
-const { vehicle, total } = Astro.props;
+const { vehicle, total, intro = false } = Astro.props;
+const counter = intro ? 'INTRO' : vehicle.isTop ? 'TOP 1' : formatRank(vehicle.rank);
 ---
 
 <div class="nav" data-showcase-nav>
@@ -25,8 +28,7 @@ const { vehicle, total } = Astro.props;
     <ChevronLeft width={26} height={26} aria-hidden="true" />
   </button>
   <p class="nav__counter numeric" data-showcase-counter>
-    <span data-counter-rank>{vehicle.isTop ? 'TOP 1' : formatRank(vehicle.rank)}</span>{' '}
-    <span class="nav__total">de {total}</span>
+    <span data-counter-rank>{counter}</span> <span class="nav__total">de {total}</span>
   </p>
   <button type="button" class="nav__arrow" data-showcase-next aria-label="Próximo veículo">
     <ChevronRight width={26} height={26} aria-hidden="true" />
@@ -80,5 +82,10 @@ const { vehicle, total } = Astro.props;
 
   .nav__total {
     color: var(--color-text-muted);
+  }
+
+  /* Na introdução o contador mostra só "INTRO" */
+  :global(.showcase.is-intro) .nav__total {
+    display: none;
   }
 </style>
