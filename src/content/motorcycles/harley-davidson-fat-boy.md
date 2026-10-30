@@ -3,9 +3,9 @@ name: Fat Boy
 brand: harley-davidson
 rank: 3
 powertrain: combustao
-heroImage: ../../assets/vehicles/fat-boy.jpg
-cardImage: ../../assets/vehicles/fat-boy.jpg
-heroFocus: '50% 74%'
+heroImage: ../../assets/vehicles/fat-boy.webp
+cardImage: ../../assets/vehicles/fat-boy.webp
+heroFitMobile: contain
 tags: [harley-davidson, motos]
 ---
 

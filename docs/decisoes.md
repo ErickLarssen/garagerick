@@ -15,6 +15,11 @@
 
 ---
 
+### 2026-10-30 — Nova foto da Fat Boy
+- **Contexto:** a foto antiga era em retrato (1080×1512) e com pouca nitidez; o Erick trocou por `fat-boy.webp` (1920×1080) e apagou `fat-boy.jpg`.
+- **Decisão:** `heroImage`/`cardImage` → `fat-boy.webp`; removido o `heroFocus: 50% 74%` (ajuste da foto em retrato; volta ao padrão `center`); `heroFitMobile: contain` (a moto ocupa quase toda a largura e seria cortada no celular, como os carros). Fundo de estúdio cinza, como algumas fotos de carros.
+- **Impacto:** `src/content/motorcycles/harley-davidson-fat-boy.md`, `src/assets/vehicles/fat-boy.webp` (`fat-boy.jpg` removido).
+
 ### 2026-10-30 — Slide de introdução da vitrine (Fase 8)
 - **Contexto:** o Erick achou estranho o visitante entrar direto no "#10 Lancer" sem contexto; pediu um slide de apresentação como o do Cinerick. Escolheu: intro nas 4 páginas, com teaser do Top 1 ao fundo.
 - **Decisão:** `ShowcaseIntro.astro` como slide 0 (índice `-1` no controlador), dentro da própria vitrine — não uma página nova. Textos de site (não opinião pessoal), rascunhados pelo agente para o Erick aprovar: "Ranking de favoritos", nome do ranking, a descrição já existente em `RANKING_SEO` (sem duplicar), "N carros/motos · do #N ao Top 1 · o Top 1 fica para o final", "Começar pelo #N", "Use as setas ou deslize para o lado". Fundo: nova camada `backdrop__teaser` com o hero do Top 1 em 640px AVIF desfocado/escurecido por CSS e `mask-image` na base (a escala de 1.08 criava uma faixa cinza no celular); ela ganha o `fetchpriority="high"` (antes na camada A). `--ambient` inicial = Top 1. Estado por `.is-intro` (servidor); script inline tira a classe antes da pintura em links diretos. Saindo da intro, `InfoView.swap` recebe o bloco da intro como "quem sai"; voltando, `InfoView.leave`. Foco vai ao nome do veículo ao usar o botão (antes caía no `body`). O `h1` segue `sr-only` (a intro some em links diretos; um `h1` dentro dela sumiria junto); o título visual é `aria-hidden`. `{total} {noun}` montado no frontmatter (o `compressHTML` colava "10carros").
