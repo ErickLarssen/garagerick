@@ -2,20 +2,37 @@
 // Fundo da vitrine (docs/04 e docs/05). Camadas, de baixo para cima:
 // 1. imagem hero (duas <img> A/B para o crossfade da Fase 4)
 // 2. degradê lateral tingido por --ambient   3. degradê inferior   4. vinheta + ruído
+// Na introdução (.is-intro) só aparece o teaser: a foto do Top 1 escura e desfocada.
+import { getImage } from 'astro:assets';
 import { getHeroImage } from '@/lib/images';
 import type { RankedVehicle } from '@/lib/rankings';
 
 interface Props {
   vehicle: RankedVehicle; // veículo ativo na carga (o último colocado, ou o do hash na Fase 4)
+  teaser: RankedVehicle; // Top 1, mostrado desfocado no slide de introdução
 }
 
-const { vehicle } = Astro.props;
+const { vehicle, teaser } = Astro.props;
 const hero = await getHeroImage(vehicle.heroImage);
 const fit = vehicle.heroFitMobile === 'contain';
+// Desfocada, a foto não precisa de resolução: 640 px bastam e a intro carrega leve
+const teaserImage = await getImage({ src: teaser.heroImage, width: 640, format: 'avif' });
 ---
 
 <div class="backdrop" aria-hidden="true">
-  <!-- Camada A: visível; é o LCP da página, então nada de lazy -->
+  <!-- Teaser do Top 1 (só na introdução): é o que aparece na carga, então tem a prioridade -->
+  <img
+    class="backdrop__img backdrop__teaser"
+    data-backdrop-teaser
+    src={teaserImage.src}
+    width={teaserImage.attributes.width}
+    height={teaserImage.attributes.height}
+    style={`object-position: ${teaser.heroFocus}`}
+    alt=""
+    fetchpriority="high"
+    decoding="async"
+  />
+  <!-- Camada A: o veículo ativo (fica pronta por trás da intro para a primeira troca) -->
   <img
     class:list={['backdrop__img is-active', { 'backdrop__img--fit': fit }]}
     data-backdrop-layer="a"
@@ -26,7 +43,6 @@ const fit = vehicle.heroFitMobile === 'contain';
     height={hero.height}
     style={`object-position: ${vehicle.heroFocus}`}
     alt=""
-    fetchpriority="high"
     decoding="async"
   />
   <!-- Camada B: recebe a próxima imagem na troca (mesma URL agora → vem do cache) -->
@@ -76,6 +92,23 @@ const fit = vehicle.heroFitMobile === 'contain';
   }
 
   .backdrop__img.is-active {
+    opacity: 1;
+  }
+
+  /* Introdução: as camadas do veículo somem e o teaser do Top 1 aparece, escuro e desfocado
+     (escala maior para as bordas do desfoque não aparecerem). Fora da intro, o inverso. */
+  .backdrop__teaser {
+    filter: blur(14px) brightness(0.4) saturate(0.85);
+    transform: scale(1.08);
+    /* a escala faz a base passar do degradê inferior (faixa cinza no celular): dissolve antes */
+    mask-image: linear-gradient(180deg, #000 55%, transparent 92%);
+  }
+
+  :global(.showcase.is-intro) .backdrop__img {
+    opacity: 0;
+  }
+
+  :global(.showcase.is-intro) .backdrop__teaser {
     opacity: 1;
   }
 

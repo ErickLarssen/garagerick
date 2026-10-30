@@ -51,8 +51,10 @@ Cada página de ranking tem a mesma estrutura:
 
 ## Experiência do ranking (contagem regressiva)
 
-- A vitrine **abre no último colocado** (ex.: #10) e o usuário avança em direção ao #1,
-  criando suspense como no Cinerick.
+- A vitrine abre num **slide de introdução** (o que é a página, quantos veículos, "o Top 1 fica para o
+  final", botão "Começar pelo #10"), com o Top 1 escuro e desfocado ao fundo; depois vem o **último
+  colocado** (ex.: #10) e o usuário avança em direção ao #1, criando suspense como no Cinerick.
+  Links diretos (`/esportivos#audi-tt`), a busca e a lista pulam a introdução.
 - Um indicador mostra o progresso: `#07 de 10`.
 - O **Top 1** recebe tratamento especial (selo dourado "TOP 1", leve brilho no card).
 - O estado é refletido na URL via hash (`/esportivos#porsche-911`) para permitir compartilhar

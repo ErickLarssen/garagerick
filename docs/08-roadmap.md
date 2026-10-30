@@ -79,6 +79,7 @@
 
 ## Fase 8 — Opcional (só se o Erick pedir)
 
+- [x] Slide de introdução (slide 0) nas 4 páginas, com teaser do Top 1 desfocado ao fundo, botão "Começar pelo #N" e navegação/hash/busca/lista funcionando a partir dele (pedido em 2026-10-30) 🛑
 - [ ] Página individual por veículo `/veiculos/[slug]` com galeria
 - [ ] Botão "ouvir o ronco" (áudio curto do motor, só para veículos que tiverem o arquivo)
 - [ ] Comparar dois veículos lado a lado

@@ -9,7 +9,8 @@
 de Erick Silva — designer gráfico e desenvolvedor front-end de São Paulo — que expõe seus
 **carros e motos favoritos em formato de ranking decrescente** (do último colocado até o **Top 1**).
 
-Cada veículo aparece numa vitrine em tela cheia inspirada em interfaces de streaming:
+Cada página abre num slide de introdução (o Top 1 desfocado ao fundo, "o Top 1 fica para o final") e
+depois cada veículo aparece numa vitrine em tela cheia inspirada em interfaces de streaming:
 logo da marca + nome do modelo em destaque, linha de especificações (ano, cv, motor…),
 um texto em primeira pessoa sobre por que o Erick gosta dele, e navegação por setas
 (◀ #07 de 12 ▶), teclado e swipe pelos demais veículos do ranking — sem cards.
