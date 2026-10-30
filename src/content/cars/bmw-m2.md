@@ -7,6 +7,7 @@ year: 2020
 powertrain: combustao
 heroImage: ../../assets/vehicles/m2.avif
 cardImage: ../../assets/vehicles/m2.avif
+heroFitMobile: contain
 tags: [bmw, esportivos]
 ---
 

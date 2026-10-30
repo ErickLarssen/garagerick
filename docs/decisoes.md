@@ -15,6 +15,11 @@
 
 ---
 
+### 2026-10-30 — M2 sem corte no celular e logo Honda Motos
+- **Contexto:** pedido do Erick: a M2 era cortada no celular; a CB650R deve usar o logo `honda-motos` (ele trocou `honda.svg` por `honda-motos.svg`).
+- **Decisão:** `bmw-m2.md` ganhou `heroFitMobile: contain` (como os outros 23). `brands/honda.json` aponta para `honda-motos.svg` (a marca Honda só é usada pela CB650R). O SVG tinha um retângulo branco cobrindo o fundo (viraria um quadrado branco) — removido, e o `viewBox` foi recortado à área da asa (medido com o sharp), como as margens cortadas dos outros logos. `honda.png` fica na pasta sem uso. O original está fora do repositório (scratchpad).
+- **Impacto:** `src/content/cars/bmw-m2.md`, `src/content/brands/honda.json`, `src/assets/brands/honda-motos.svg` (`honda.svg` removido).
+
 ### 2026-10-29 — Textos "por que eu gosto": revisão dos carros e rascunho das motos
 - **Contexto:** o Erick escreveu os textos dos 27 carros e **pediu explicitamente** (exceção prevista na regra 4 do CLAUDE.md) que o agente os melhorasse e escrevesse os das 7 motos em primeira pessoa, no mesmo tom.
 - **Decisão:** carros: só ortografia, pontuação, ritmo e termos, mantendo ideias e voz. Correções factuais sinalizadas a ele: 458 Itália tem V8 (não V12); Rampage e Maverick 2024 são picapes (não SUVs); o Huracán sucedeu o Gallardo, não o Murciélago (texto passou a "me lembra o Murciélago"); o Lancer Evolution foi vendido no Brasil ("proibido" → "raro e caro por aqui"). Motos: escritas a partir do perfil dos textos dele (visual, ronco, cinema, identidade da marca; Fat Boy ↔ Exterminador do Futuro 2), **sem inventar vivências** (pilotar, ter tido a moto). Só o "Sobre mim" segue com TODO.
