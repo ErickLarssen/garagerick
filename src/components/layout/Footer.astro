@@ -1,12 +1,12 @@
 ---
 // Rodapé (docs/01 e docs/05): links para o Cinerick, o portfólio e as redes. Dados de SITE.
 import SocialLinks from '@/components/layout/SocialLinks.astro';
-import { SITE } from '@/lib/site';
+import { SITE, hostOf } from '@/lib/site';
 
 const year = new Date().getFullYear();
 const external = [
   { href: SITE.links.cinerick, label: 'Cinerick', hint: 'meus filmes favoritos' },
-  { href: SITE.links.portfolio, label: 'Portfólio', hint: 'ericksilva.dev' },
+  { href: SITE.links.portfolio, label: 'Portfólio', hint: hostOf(SITE.links.portfolio) },
 ];
 ---
 

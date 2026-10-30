@@ -47,7 +47,7 @@ Cada página de ranking tem a mesma estrutura:
 2. **Ranking completo** — lista/grade de todos os itens em ordem decrescente (#N → #1),
    para quem prefere rolar como no Cinerick. Clicar num item volta à vitrine com ele ativo.
 3. **Sobre mim** (apenas em `/`) — bloco curto no espírito do Cinerick, com foto e texto do Erick.
-4. **Rodapé** — links para o Cinerick, portfólio (ericksilva.dev) e redes sociais.
+4. **Rodapé** — links para o Cinerick, portfólio (ericksilva.site) e redes sociais.
 
 ## Experiência do ranking (contagem regressiva)
 

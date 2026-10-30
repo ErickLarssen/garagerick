@@ -6,9 +6,12 @@ export const SITE = {
   description: 'Meus carros e motos favoritos em contagem regressiva até o Top 1.',
   links: {
     cinerick: 'https://cinerick.online',
-    portfolio: 'https://ericksilva.dev',
+    portfolio: 'https://ericksilva.site',
     instagram: 'https://www.instagram.com/elarssen.design/',
     linkedin: 'https://www.linkedin.com/in/ericklarssen/',
     github: 'https://github.com/ErickLarssen/',
   },
 } as const;
+
+/** Domínio sem protocolo para exibir em links (ex.: "ericksilva.site"). */
+export const hostOf = (url: string): string => new URL(url).host;

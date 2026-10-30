@@ -15,6 +15,11 @@
 
 ---
 
+### 2026-10-30 — "Sobre mim" com texto e foto do Erick; portfólio em ericksilva.site
+- **Contexto:** o Erick escreveu a apresentação e adicionou a foto; o domínio do portfólio mudou de `ericksilva.dev` para `ericksilva.site`.
+- **Decisão:** foto movida de `src/content/about/` (onde o build não a encontraria) para `src/assets/about/erick.jpg` (retrato P&B 1861×2507; recorte 4:5 mantém o rosto). `photoAlt` descreve a foto real (o exemplo "sorrindo, de camiseta preta" não batia). Texto revisado só na forma ("design gráfico" → "designer gráfico"). Comentário de instrução removido do frontmatter. `SITE.links.portfolio` → `https://ericksilva.site`; o domínio exibido no rodapé e no "Sobre mim" deixou de ser escrito à mão nos componentes: novo `hostOf()` em `lib/site.ts` (regra 6, fonte única).
+- **Impacto:** `src/content/about/sobre.md`, `src/assets/about/erick.jpg`, `src/lib/site.ts`, `src/components/{sections/About,layout/Footer}.astro`, `docs/01`, `docs/05`, `docs/06`.
+
 ### 2026-10-30 — Setas discretas nas bordas laterais no celular (substitui a pílula)
 - **Contexto:** vendo na prática, o Erick achou que a pílula ◀ #07 de 12 ▶ na base da foto tapava informações visuais importantes dos carros; pediu setas discretas, com opacidade ajustada, nas extremidades laterais.
 - **Decisão:** abaixo de 640px, só as setas saem da barra: `position: absolute` nas bordas (`left`/`right: 0.375rem`), à meia altura da área da foto (`top: calc((var(--header-h) + 46svh) / 2 - 22px)`), área de toque de 44px, fundo `rgb(7 9 12 / 0.42)`, borda `rgb(255 255 255 / 0.18)` e opacidade 0,85 (a primeira tentativa, 0,28/0,75, sumia em fotos movimentadas como Seal e Shelby). Na ponta do ranking a seta inativa fica em 0,15 (continua focável por `aria-disabled`). O contador volta para a barra inferior (pode ficar abaixo da dobra com textos longos — as setas é que precisam estar sempre visíveis). Tablet e desktop sem mudança.

@@ -3,7 +3,7 @@
 // para o Cinerick e o portfólio. Sem foto, mostra as iniciais do autor como espaço reservado.
 import { getImage } from 'astro:assets';
 import { getAbout } from '@/lib/about';
-import { SITE } from '@/lib/site';
+import { SITE, hostOf } from '@/lib/site';
 
 const about = await getAbout();
 const photo = about.photo
@@ -17,7 +17,7 @@ const initials = SITE.author
   .toUpperCase();
 const links = [
   { href: SITE.links.cinerick, label: 'Cinerick', hint: 'meus filmes favoritos' },
-  { href: SITE.links.portfolio, label: 'Portfólio', hint: 'ericksilva.dev' },
+  { href: SITE.links.portfolio, label: 'Portfólio', hint: hostOf(SITE.links.portfolio) },
 ];
 ---
 

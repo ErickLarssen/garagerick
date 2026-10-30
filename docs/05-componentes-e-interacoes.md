@@ -42,7 +42,7 @@ e link "Pular para o conteúdo".
 
 ### `Footer.astro` / `SocialLinks.astro`
 Dados vindos de `lib/site.ts`: Instagram (`elarssen.design`), LinkedIn (`ericklarssen`) e
-GitHub (`ErickLarssen`), nessa ordem; links para o Cinerick e para `ericksilva.dev`.
+GitHub (`ErickLarssen`), nessa ordem; links para o Cinerick e para o portfólio (`ericksilva.site`; o texto exibido vem de `hostOf(SITE.links.portfolio)`).
 Sempre `target="_blank" rel="noopener"` com `aria-label` descritivo.
 
 ## A vitrine (`components/showcase/`)
